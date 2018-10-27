@@ -22,8 +22,16 @@
     get data
   </button>
 
+  <button (click)="getSenseBoxes()" ion-button color="secondary">
+    get all SenseBoxes
+  </button>
+
+  <button (click)="getClosestSenseBox()" ion-button color="secondary">
+    get the nearest SenseBoxes
+  </button>
+
   <div *ngIf="boxData">
-    <h1>{{boxData.name}}</h1>
+    <h1>{{boxData.model}}</h1>
     <ion-list>
       <div ion-item *ngFor="let sensor of boxData.sensors">
         <h3>{{sensor.title}}</h3>

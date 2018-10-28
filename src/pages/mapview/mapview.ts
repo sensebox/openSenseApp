@@ -45,9 +45,6 @@ export class MapviewPage {
       }).on('locationerror', (err) => {
         alert(err.message);
     })
-
   }
-
-
 
 }

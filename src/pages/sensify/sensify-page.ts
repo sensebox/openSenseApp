@@ -1,10 +1,10 @@
-import { ApiProvider } from './../../providers/api/api';
-import { Location } from './../../providers/model';
+import { ApiProvider } from '../../providers/api/api';
+import { Location } from '../../providers/model';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the SenseBoxPage page.
+ * Generated class for the SensifyPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -12,21 +12,20 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-sense-box',
-  templateUrl: 'sense-box.html',
+  selector: 'page-sensify',
+  templateUrl: 'sensify-page.html',
 })
-export class SenseBoxPage {
+export class SensifyPage {
 
   boxData: any;
   allBoxes: any;
-  closesz
   closestBoxes: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad SenseBoxPage');
+    console.log('ionViewDidLoad SensifyPage');
   }
 
   getData(){
@@ -49,23 +48,11 @@ export class SenseBoxPage {
       longitude : 7.6261347, 
       latitude : 51.9606649
     }
-    let closestSenseBoxes = [];
-    this.api.getAllSenseBoxes().subscribe(res => {
-      let allBoxes : any = res;
-      allBoxes.forEach(element => {
-        let boxLocation : Location = {
-          latitude : element.currentLocation.coordinates[1], 
-          longitude : element.currentLocation.coordinates[0]
-        };
-        let distance : number = this.api.calculateDistance(myLocation, boxLocation);
-        if (distance <= 50) {
-          closestSenseBoxes.push(element);
-        }
-      });
-       
-      this.closestBoxes = closestSenseBoxes;
+
+    this.api.getClosestSenseBoxes(myLocation).subscribe(res => {       
+      this.closestBoxes = res;
+      console.log('loaded closest boxes');
       console.log(this.closestBoxes);
-     
     });
 
   }

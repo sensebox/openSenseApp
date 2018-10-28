@@ -16,7 +16,8 @@ export class openSenseApp {
   pages: Array<{title: string, component: any}> = [
     { title: 'Home', component: HomePage },
     { title: 'About', component: 'AboutPage' },
-    { title: 'senseBox', component: 'SenseBoxPage' }
+    { title: 'senseBox', component: 'SenseBoxPage' },
+    { title: 'sensify', component: 'SensifyPage' }
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

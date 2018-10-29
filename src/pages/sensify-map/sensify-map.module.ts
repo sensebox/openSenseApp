@@ -15,6 +15,9 @@ import { Geolocation} from "@ionic-native/geolocation";
   ],
   providers: [
     Geolocation
+  ],
+  exports: [
+    SensifyMapPage
   ]
 })
 export class MapPageModule {}

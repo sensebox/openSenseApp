@@ -9,7 +9,7 @@ import { Location } from "../../providers/model";
 
 @IonicPage()
 @Component({
-  selector: 'page-map',
+  selector: 'ion-page-map',
   templateUrl: 'sensify-map.html',
 })
 export class SensifyMapPage {
@@ -61,7 +61,7 @@ export class SensifyMapPage {
         this.currentPos = pos;
         this.userLat = this.currentPos.coords.latitude;
         this.userLng = this.currentPos.coords.longitude;
-        this.loadPositionOnMap();
+        if (this.map) { this.loadPositionOnMap(); };
       }, (err: PositionError) => {
         console.log("ERROR: " + err.message)
       })

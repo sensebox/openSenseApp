@@ -9,9 +9,9 @@ import * as L from "leaflet";
 @IonicPage()
 @Component({
   selector: 'page-map',
-  templateUrl: 'map.html',
+  templateUrl: 'sensify-map.html',
 })
-export class MapPage {
+export class SensifyMapPage {
 
   options : GeolocationOptions;
   currentPos : Geoposition;

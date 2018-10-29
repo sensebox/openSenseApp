@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
-import { MapPage } from './map';
+import { SensifyMapPage } from './sensify-map';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { Geolocation} from "@ionic-native/geolocation";
 
 @NgModule({
   declarations: [
-    MapPage,
+    SensifyMapPage,
   ],
   imports: [
-    IonicPageModule.forChild(MapPage),
+    IonicPageModule.forChild(SensifyMapPage),
     LeafletModule,
     LeafletModule.forRoot()
   ],

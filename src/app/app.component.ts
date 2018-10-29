@@ -18,7 +18,8 @@ export class openSenseApp {
     { title: 'About', component: 'AboutPage' },
     { title: 'senseBox', component: 'SenseBoxPage' },
     { title: 'sensify', component: 'SensifyPage' },
-    { title: 'Map', component: 'SensifyMapPage'}
+    { title: 'Sensify-Map', component: 'SensifyMapPage'},
+    { title: 'Sensify-Start', component: 'SensifyStartPage'}
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

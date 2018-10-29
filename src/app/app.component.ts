@@ -4,6 +4,7 @@ import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -19,7 +20,8 @@ export class openSenseApp {
     { title: 'senseBox', component: 'SenseBoxPage' },
     { title: 'sensify', component: 'SensifyPage' },
     { title: 'Sensify-Map', component: 'SensifyMapPage'},
-    { title: 'Sensify-Start', component: 'SensifyStartPage'}
+    { title: 'Sensify-Start', component: 'SensifyStartPage'},
+    { title: 'Sensify-About', component: 'SensifyAboutPage'},
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

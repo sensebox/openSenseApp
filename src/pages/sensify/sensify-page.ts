@@ -3,12 +3,6 @@ import { Location } from '../../providers/model';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
-/**
- * Generated class for the SensifyPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -54,6 +48,6 @@ export class SensifyPage {
       console.log('loaded closest boxes');
       console.log(this.closestBoxes);
     });
-
   }
+  
 }

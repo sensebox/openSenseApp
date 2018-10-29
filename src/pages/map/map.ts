@@ -5,12 +5,6 @@ import { latLng, tileLayer} from "leaflet";
 import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 
-/**
- * Generated class for the MapPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
 
 @IonicPage()
 @Component({
@@ -25,8 +19,7 @@ export class MapPage {
   public userLng: number;
   public userLat: number;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public LM: LeafletModule, private geolocation: Geolocation) {
-  }
+  constructor(public navCtrl: NavController, public navParams: NavParams, public LM: LeafletModule, private geolocation: Geolocation) {}
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MapPage');

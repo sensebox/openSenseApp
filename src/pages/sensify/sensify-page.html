@@ -9,11 +9,34 @@
 
 <ion-content padding>
 
-  <ion-page-map></ion-page-map>
+  <div class="selectedPage" *ngIf="(tabSelector === 'start')">
+    <!-- <p>start selected</p> -->
+    <sensify-page-start></sensify-page-start>
+  </div>
+  <div class="selectedPage" *ngIf="(tabSelector === 'map')">
+    <!-- <p>map selected</p> -->
+    <sensify-page-map></sensify-page-map>
+  </div>
+  <div class="selectedPage" *ngIf="(tabSelector === 'about')">
+    <sensify-page-about></sensify-page-about>
+    <!-- <p>about selected</p> -->
+  </div>
 
 </ion-content>
 
-<ion-tabs>
-  <ion-tab [root]="tab1Root" tabTitle="Sensify-Start" tabIcon="home"></ion-tab>
-  <ion-tab [root]="tab2Root" tabTitle="Sensify-Map" tabIcon="map"></ion-tab>
-</ion-tabs>
+<ion-footer>
+  <!-- <ion-toolbar> -->
+    <!-- *ngIf="demo != 'Title'" -->
+    <ion-segment (click)="changeTab(tabSelector)" [(ngModel)]="tabSelector">
+      <ion-segment-button style="color:black" value="start">
+        Start
+      </ion-segment-button>
+      <ion-segment-button style="color:black" value="map">
+        Map
+      </ion-segment-button>
+      <ion-segment-button style="color:black" value="about">
+        About
+      </ion-segment-button>
+    </ion-segment>
+  <!-- </ion-toolbar> -->
+</ion-footer>

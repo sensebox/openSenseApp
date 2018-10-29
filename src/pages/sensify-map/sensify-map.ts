@@ -9,7 +9,7 @@ import { Location } from "../../providers/model";
 
 @IonicPage()
 @Component({
-  selector: 'ion-page-map',
+  selector: 'sensify-page-map',
   templateUrl: 'sensify-map.html',
 })
 export class SensifyMapPage {

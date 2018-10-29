@@ -1,7 +1,9 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { SensifyPage } from './sensify-page';
-import { MapPageModule } from '../sensify-map/sensify-map.module';
+import { SensifyStartPageModule } from '../sensify-start/sensify-start.module';
+import { SensifyMapPageModule } from '../sensify-map/sensify-map.module';
+import { SensifyAboutPageModule } from '../sensify-about/sensify-about.module';
 
 @NgModule({
   declarations: [
@@ -9,7 +11,9 @@ import { MapPageModule } from '../sensify-map/sensify-map.module';
   ],
   imports: [
     IonicPageModule.forChild(SensifyPage),
-    MapPageModule
+    SensifyStartPageModule,
+    SensifyMapPageModule,
+    SensifyAboutPageModule,
   ]
 })
 export class SensifyPageModule {}

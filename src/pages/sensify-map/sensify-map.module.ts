@@ -20,4 +20,4 @@ import { Geolocation} from "@ionic-native/geolocation";
     SensifyMapPage
   ]
 })
-export class MapPageModule {}
+export class SensifyMapPageModule {}

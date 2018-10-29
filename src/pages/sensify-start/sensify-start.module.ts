@@ -9,5 +9,8 @@ import { SensifyStartPage } from './sensify-start';
   imports: [
     IonicPageModule.forChild(SensifyStartPage),
   ],
+  exports: [
+    SensifyStartPage
+  ]
 })
 export class SensifyStartPageModule {}

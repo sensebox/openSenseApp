@@ -9,5 +9,8 @@ import { SensifyAboutPage } from './sensify-about';
   imports: [
     IonicPageModule.forChild(SensifyAboutPage),
   ],
+  exports: [
+    SensifyAboutPage
+  ]
 })
 export class SensifyAboutPageModule {}

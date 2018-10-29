@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-sensify-about',
+  selector: 'sensify-page-about',
   templateUrl: 'sensify-about.html',
 })
 export class SensifyAboutPage {

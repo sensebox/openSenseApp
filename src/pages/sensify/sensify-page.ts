@@ -6,22 +6,29 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-sensify',
+  selector: 'sensify-page',
   templateUrl: 'sensify-page.html',
 })
 export class SensifyPage {
 
   tab: String;
+  tabSelector: String;
+  start: boolean;
+  map: boolean;
+  about: boolean;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad SensifyPage');
+    this.tabSelector = 'start';
+
   }
 
-  changeTab(tab){
-    this.tab = tab;
+  public changeTab(tab) {
+    console.log(tab);
+    this.tabSelector = tab;
   }
   
 }

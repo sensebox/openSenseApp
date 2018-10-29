@@ -3,7 +3,7 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-sensify-start',
+  selector: 'sensify-page-start',
   templateUrl: 'sensify-start.html',
 })
 export class SensifyStartPage {

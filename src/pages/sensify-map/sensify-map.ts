@@ -5,7 +5,7 @@ import { latLng, tileLayer} from "leaflet";
 import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { ApiProvider } from '../../providers/api/api';
-import {Location} from "../../providers/model";
+import { Location } from "../../providers/model";
 
 @IonicPage()
 @Component({
@@ -24,6 +24,30 @@ export class SensifyMapPage {
   public senseBoxesSet: boolean = false;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public LM: LeafletModule, private geolocation: Geolocation, private api: ApiProvider) {}
+
+  public greenIcon = L.icon({
+    iconUrl: '../../assets/imgs/greenMarker.png',
+
+    iconSize:     [25, 40],
+    iconAnchor:   [12, 40],
+    popupAnchor:  [-3, -76]
+  });
+
+  public redIcon = L.icon({
+    iconUrl: '../../assets/imgs/redMarker.png',
+
+    iconSize:     [40, 40],
+    iconAnchor:   [20, 37],
+    popupAnchor:  [-3, -76]
+  });
+
+  public posIcon = L.icon({
+    iconUrl: '../../assets/imgs/positionMarker.png',
+
+    iconSize: [50, 50],
+    iconAnchor: [25, 48],
+    popupAnchor: [-3, -76]
+  });
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MapPage');
@@ -63,7 +87,7 @@ export class SensifyMapPage {
       this.map.removeLayer(this.posMarker);
     }
     this.map.panTo(new L.LatLng(this.userLat, this.userLng));
-    this.posMarker = L.marker([this.userLat, this.userLng]).on('click', () => {
+    this.posMarker = L.marker([this.userLat, this.userLng], {icon: this.posIcon}).on('click', () => {
       alert('user: lat:'+ this.userLat +", lon:"+ this.userLng);
     });
     this.posMarker.addTo(this.map);
@@ -111,11 +135,49 @@ export class SensifyMapPage {
   addNearestSenseboxes(){
     this.senseBoxesSet = true;
     for(let i = 0; i < this.closestBoxes.length; i++){
-      let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude]).on('click', () => {
+      let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], {icon: this.greenIcon}).on('click', () => {
         alert('senseBox: lat:'+ this.userLat +", lon:"+ this.userLng);
       });
       this.closestBoxesMarkers.push(marker);
       this.closestBoxesMarkers[i].addTo(this.map);
+      if(i >= this.closestBoxes.length - 1){
+        this.nearestSensebox();
+      }
     }
+  }
+
+  // Find the nearest senseBox
+  nearestSensebox(){
+    let nearestBox;
+    let nearestDistance;
+    for(let i = 0; i < this.closestBoxes.length; i++){
+      let userLocation: Location = {
+        latitude: this.userLat,
+        longitude: this.userLng
+      };
+      let boxLocation: Location = {
+        latitude: this.closestBoxes[i].coordinates.latitude,
+        longitude: this.closestBoxes[i].coordinates.longitude
+      }
+      let distance = this.api.calculateDistance(userLocation, boxLocation);
+      if(nearestDistance == undefined || distance < nearestDistance){
+        nearestBox = i;
+        nearestDistance = distance;
+      }
+      if(i >= this.closestBoxes.length - 1){
+        console.log(nearestDistance + "   " + nearestBox);
+        this.connectToBox(nearestBox, this.closestBoxes[nearestBox].coordinates.latitude, this.closestBoxes[nearestBox].coordinates.longitude);
+      }
+    }
+  }
+
+  // Mark the nearest box on the map
+  connectToBox(index, lat, lng){
+    this.map.removeLayer(this.closestBoxesMarkers[index]);
+
+    this.closestBoxesMarkers[index] = L.marker([lat, lng], {icon: this.redIcon}).on('click', () => {
+      alert('senseBox: lat:'+ this.userLat +", lon:"+ this.userLng);
+    });
+    this.closestBoxesMarkers[index].addTo(this.map);
   }
 }

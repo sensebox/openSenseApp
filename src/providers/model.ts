@@ -20,4 +20,5 @@ export interface SenseBox {
 	createdAt: String;
 	updatedAt: String;
 	sensors: Sensor[];
+	_id: String;
 }

@@ -86,9 +86,8 @@ export class SensifyMapPage {
       this.map.removeLayer(this.posMarker);
     }
     this.map.panTo(new L.LatLng(this.userLat, this.userLng));
-    this.posMarker = L.marker([this.userLat, this.userLng], {icon: this.posIcon}).on('click', () => {
-      alert('user: lat:'+ this.userLat +", lon:"+ this.userLng);
-    });
+    this.posMarker = L.marker([this.userLat, this.userLng], {icon: this.posIcon})
+      .bindPopup("<b>Your position:</b> <br> Latitude: " + this.userLat + " <br> Longitude: " + this.userLng);
     this.posMarker.addTo(this.map);
     this.findNearestSenseBoxes();
   }
@@ -111,6 +110,7 @@ export class SensifyMapPage {
 
     this.api.getClosestSenseBoxes(myLocation).subscribe(res => {
       this.closestBoxes = res;
+      console.log(this.closestBoxes);
       if(this.senseBoxesSet){
         this.deleteNearestSenseboxes();
       } else {
@@ -134,9 +134,8 @@ export class SensifyMapPage {
   addNearestSenseboxes(){
     this.senseBoxesSet = true;
     for(let i = 0; i < this.closestBoxes.length; i++){
-      let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], {icon: this.greenIcon}).on('click', () => {
-        alert('senseBox: lat:'+ this.userLat +", lon:"+ this.userLng);
-      });
+      let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], {icon: this.greenIcon})
+        .bindPopup("<b>" + this.closestBoxes[i].name + "</b><br>Temperatur: " + this.closestBoxes[i].sensors[0] + "<br>Rel. Luftfeuchte: " + this.closestBoxes[i].sensors[1]);
       this.closestBoxesMarkers.push(marker);
       this.closestBoxesMarkers[i].addTo(this.map);
       if(i >= this.closestBoxes.length - 1){
@@ -157,14 +156,13 @@ export class SensifyMapPage {
       let boxLocation: Location = {
         latitude: this.closestBoxes[i].coordinates.latitude,
         longitude: this.closestBoxes[i].coordinates.longitude
-      }
+      };
       let distance = this.api.calculateDistance(userLocation, boxLocation);
       if(nearestDistance == undefined || distance < nearestDistance){
         nearestBox = i;
         nearestDistance = distance;
       }
       if(i >= this.closestBoxes.length - 1){
-        console.log(nearestDistance + "   " + nearestBox);
         this.connectToBox(nearestBox, this.closestBoxes[nearestBox].coordinates.latitude, this.closestBoxes[nearestBox].coordinates.longitude);
       }
     }

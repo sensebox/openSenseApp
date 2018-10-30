@@ -57,7 +57,8 @@ export class ApiProvider {
 						description: element.description,
 						createdAt: element.createdAt,
 						updatedAt: element.updatedAt,
-						sensors: element.sensors
+						sensors: element.sensors,
+            _id: element._id
 					}
 
 					closestSenseBoxes.push(box);

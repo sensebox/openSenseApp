@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { NavController, NavParams } from 'ionic-angular';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { latLng, tileLayer} from "leaflet";
 import { Geolocation ,GeolocationOptions ,Geoposition ,PositionError } from "@ionic-native/geolocation";
 import * as L from "leaflet";
-import { ApiProvider } from '../../providers/api/api';
-import { Location } from "../../providers/model";
+import { ApiProvider } from '../../../providers/api/api';
+import { Location } from "../../../providers/model";
 
-@IonicPage()
 @Component({
   selector: 'sensify-page-map',
   templateUrl: 'sensify-map.html',

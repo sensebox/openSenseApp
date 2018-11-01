@@ -89,7 +89,7 @@ export class SensifyMapPage {
     this.posMarker = L.marker([this.userLat, this.userLng], {icon: this.posIcon})
       .bindPopup("<b>Your position:</b> <br> Latitude: " + this.userLat + " <br> Longitude: " + this.userLng);
     this.posMarker.addTo(this.map);
-    this.findNearestSenseBoxes();
+    this.findclosestSenseboxes();
   }
 
   // Watch the user position
@@ -98,11 +98,11 @@ export class SensifyMapPage {
       this.userLat = position.coords.latitude;
       this.userLng = position.coords.longitude;
       this.loadPositionOnMap();
-      this.findNearestSenseBoxes();
+      this.findclosestSenseboxes();
     });
 
   // Search the nearest senseBoxes
-  findNearestSenseBoxes(){
+  findclosestSenseboxes(){
     let myLocation : Location = {
       longitude : this.userLng,
       latitude : this.userLat
@@ -110,28 +110,27 @@ export class SensifyMapPage {
 
     this.api.getClosestSenseBoxes(myLocation).subscribe(res => {
       this.closestBoxes = res;
-      console.log(this.closestBoxes);
       if(this.senseBoxesSet){
-        this.deleteNearestSenseboxes();
+        this.deleteclosestSenseboxes();
       } else {
-        this.addNearestSenseboxes();
+        this.addClosestSenseboxes();
       }
     });
   }
 
   // Delete existing senseBoxes
-  deleteNearestSenseboxes(){
+  deleteclosestSenseboxes(){
     for(let i = 0; i < this.closestBoxesMarkers.length; i++){
       this.map.removeLayer(this.closestBoxesMarkers[i]);
       if(i >= this.closestBoxesMarkers.length - 1){
         this.closestBoxesMarkers = [];
-        this.addNearestSenseboxes();
+        this.addClosestSenseboxes();
       }
     }
   }
 
   // Add senseBoxes to Map
-  addNearestSenseboxes(){
+  addClosestSenseboxes(){
     this.senseBoxesSet = true;
     for(let i = 0; i < this.closestBoxes.length; i++){
       let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], {icon: this.greenIcon})
@@ -139,33 +138,22 @@ export class SensifyMapPage {
       this.closestBoxesMarkers.push(marker);
       this.closestBoxesMarkers[i].addTo(this.map);
       if(i >= this.closestBoxes.length - 1){
-        this.nearestSensebox();
+        this.closestSensebox();
       }
     }
   }
 
   // Find the nearest senseBox
-  nearestSensebox(){
-    let nearestBox;
-    let nearestDistance;
-    for(let i = 0; i < this.closestBoxes.length; i++){
+  closestSensebox(){
       let userLocation: Location = {
         latitude: this.userLat,
         longitude: this.userLng
       };
-      let boxLocation: Location = {
-        latitude: this.closestBoxes[i].coordinates.latitude,
-        longitude: this.closestBoxes[i].coordinates.longitude
-      };
-      let distance = this.api.calculateDistance(userLocation, boxLocation);
-      if(nearestDistance == undefined || distance < nearestDistance){
-        nearestBox = i;
-        nearestDistance = distance;
-      }
-      if(i >= this.closestBoxes.length - 1){
-        this.connectToBox(nearestBox, this.closestBoxes[nearestBox].coordinates.latitude, this.closestBoxes[nearestBox].coordinates.longitude);
-      }
-    }
+      let closestBox : any = this.api.getclosestSenseBox(this.closestBoxes, userLocation);
+      this.connectToBox(closestBox.index, closestBox.box.coordinates.latitude, closestBox.box.coordinates.longitude)
+
+      //Test for Validation!!! Can be called from anywhere via API
+      this.api.validateSenseBoxTemperature(closestBox.box, this.closestBoxes)
   }
 
   // Mark the nearest box on the map

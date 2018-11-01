@@ -22,5 +22,17 @@ export class WeatherAppPage {
     console.log('ionViewDidLoad WeatherAppPage');
   }
 
-
+  refresh_click(){
+    console.log('Refresh was clicked');
+  }
+  
+  locate_click(){
+    console.log('Locate was clicked');
+  }
+  
+  search_click(){
+    console.log('Search was clicked');
+  }
+  
+  
 }

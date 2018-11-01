@@ -10,6 +10,7 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { SensifyComponentModule } from './sensify-components/sensify-component.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
+import { LocalNotifications } from '@ionic-native/local-Notifications';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { LeafletModule } from '@asymmetrik/ngx-leaflet';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider
+    ApiProvider,
+    LocalNotifications
   ]
 })
 export class AppModule {}

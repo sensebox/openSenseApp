@@ -21,3 +21,29 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+
+<ion-grid>
+    <ion-row>
+      <ion-col width-100>
+        <ion-item>
+          <strong>Settings</strong>
+        </ion-item>
+        <ion-item>
+          <ion-label color="primary" floating>Radius (in km)</ion-label>
+          <ion-input type="number" min="0"  [(ngModel)]="newRadius"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="primary" floating>Temp Validation Range (in °C)</ion-label>
+          <ion-input type="number" min="0" [(ngModel)]="newValidationRange"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label color="primary" floating>SenseBox ID</ion-label>
+          <ion-input [(ngModel)]="newSenseboxID"></ion-input>
+        </ion-item>
+      </ion-col>
+    </ion-row>
+    <button ion-button round outline (click)="test()">Confirm Changes</button>
+  </ion-grid>
+  
+
+

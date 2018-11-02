@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications'
+import { GlobalProvider } from '../../../providers/global/global';
+
 
 @Component({
   selector: 'sensify-page-about',
@@ -11,7 +13,8 @@ export class SensifyAboutPage {
   newValidationRange : any;
   newSenseboxID : any
 
-  constructor(public navCtrl: NavController,public alertCrtl: AlertController ,public navParams: NavParams,private plt: Platform ,private localNotifications: LocalNotifications) {
+
+  constructor(public global : GlobalProvider, public navCtrl: NavController,public alertCrtl: AlertController ,public navParams: NavParams,private plt: Platform ,private localNotifications: LocalNotifications) {
     //if testing on device  (because notifications cant be tested on browser)
     if (this.plt.is('cordova')) {
       this.plt.ready().then(rdy =>{
@@ -46,6 +49,16 @@ export class SensifyAboutPage {
   //-show current settings in the fields
   //-Think about other setting options that we need
   test(){
-    alert("radius:"+this.newRadius+",       validationRange:"+this.newValidationRange+",        SenseBoxID:"+this.newSenseboxID)
+    if(this.newRadius){ 
+      this.global.radius = this.newRadius;
+    }
+    if(this.newValidationRange ){
+      this.global.tempRange = this.newValidationRange;
+    }
+    if(this.newSenseboxID){
+      this.global.senseboxID = this.newSenseboxID;
+    }
+    
+    alert("New Settings: \n radius:"+this.global.radius+", \n validationRange:"+this.global.tempRange+", \n SenseBoxID:"+this.global.senseboxID)
   }
 }

@@ -11,6 +11,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { SensifyComponentModule } from './sensify-components/sensify-component.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LocalNotifications } from '@ionic-native/local-Notifications';
+import { GlobalProvider } from '../providers/global/global';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { LocalNotifications } from '@ionic-native/local-Notifications';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider,
-    LocalNotifications
+    LocalNotifications,
+    GlobalProvider
   ]
 })
 export class AppModule {}

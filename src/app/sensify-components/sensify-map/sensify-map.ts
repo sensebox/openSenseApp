@@ -7,6 +7,7 @@ import * as L from "leaflet";
 import { ApiProvider } from '../../../providers/api/api';
 import { Location } from "../../../providers/model";
 
+
 @Component({
   selector: 'sensify-page-map',
   templateUrl: 'sensify-map.html',

@@ -3,6 +3,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import { Location, SenseBox } from '../model';
+import { GlobalProvider } from '../global/global';
+
 
 @Injectable()
 export class ApiProvider {
@@ -11,7 +13,7 @@ export class ApiProvider {
 	private sumTemp : any = 0;
 	private nSensors : any = 0;
 
-	constructor(public http: HttpClient) {
+	constructor(public http: HttpClient, public global : GlobalProvider) {
 		console.log('Hello ApiProvider Provider');
 	}
 
@@ -39,7 +41,7 @@ export class ApiProvider {
 					longitude: element.currentLocation.coordinates[0]
 				};
 				let distance: number = this.calculateDistance(userLocation, boxLocation);
-				if (distance <= 20) {
+				if (distance <= this.global.radius) {
 
 					let box: SenseBox = {
 						name: element.name,
@@ -144,7 +146,7 @@ export class ApiProvider {
 		let closestBox = cBox;
 		let closestBoxes = cBoxes;
 		let meanTemperature :any = this.getMeanTemp(closestBoxes);
-		let range : any = 5; // +/- degree celsius
+		let range : any = this.global.tempRange; // +/- degree celsius
 
 		if(meanTemperature){
 			this.getBoxMeasurements(closestBox._id).subscribe(res => {

@@ -134,8 +134,16 @@ export class SensifyMapPage {
   addClosestSenseboxes(){
     this.senseBoxesSet = true;
     for(let i = 0; i < this.closestBoxes.length; i++){
+      // Generate popup-description
+      let popupTextSensors = "";
+      for(let s = 0; s < this.closestBoxes[i].sensors.length; s++){
+        if (this.closestBoxes[i].sensors[s].lastMeasurement != null) {
+          popupTextSensors += this.closestBoxes[i].sensors[s].title + ": " + this.closestBoxes[i].sensors[s].lastMeasurement.value + "<br>";
+        }
+      }
+      // Generate Popup with description
       let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], {icon: this.greenIcon})
-        .bindPopup("<b>" + this.closestBoxes[i].name + "</b><br>Temperatur: " + this.closestBoxes[i].sensors[0] + "<br>Rel. Luftfeuchte: " + this.closestBoxes[i].sensors[1]);
+        .bindPopup("<b>" + this.closestBoxes[i].name + "</b><br>" + popupTextSensors);
       this.closestBoxesMarkers.push(marker);
       this.closestBoxesMarkers[i].addTo(this.map);
       if(i >= this.closestBoxes.length - 1){

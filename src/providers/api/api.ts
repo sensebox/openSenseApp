@@ -118,7 +118,6 @@ export class ApiProvider {
 			i++; 
 		});
 		let box : SenseBox = boxes[index];
-		console.log(box);
 		return box;
 	}
 

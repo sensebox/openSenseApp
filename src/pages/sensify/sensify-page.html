@@ -8,20 +8,15 @@
 </ion-header>
 
 <ion-content>
-
   <div class="selectedPage" *ngIf="(tabSelector === 'start')">
-    <!-- <p>start selected</p> -->
     <sensify-page-start></sensify-page-start>
   </div>
   <div class="selectedPage" *ngIf="(tabSelector === 'map')">
-    <!-- <p>map selected</p> -->
     <sensify-page-map></sensify-page-map>
   </div>
   <div class="selectedPage" *ngIf="(tabSelector === 'about')">
     <sensify-page-about></sensify-page-about>
-    <!-- <p>about selected</p> -->
   </div>
-
 </ion-content>
 
 <ion-footer>

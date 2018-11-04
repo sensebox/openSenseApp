@@ -1,6 +1,6 @@
 <ion-content class="start">
     <ion-grid>
-        <ion-row (click)="collapse()">
+        <ion-row>
 
             <img id="img_1" src="./../../../assets/imgs/test.png" style="width : 100% ; height : 120px" >
 
@@ -16,7 +16,18 @@
                 <h2>Air pressure: {{pressure}} hPa</h2>
                 <h2>UV Intensity: {{UV}} pW/m^3</h2>
                 <h2>Illuminance: {{lumen}} 1x</h2>
-            </div> 
+            </div>
+            
+            
+            <div *ngIf="currBox">
+                <h1>{{currBox.model}}</h1>
+                <ion-list>
+                <div ion-item *ngFor="let sensor of currBox.sensors">
+                    <h3>{{sensor.title}}</h3>
+                    <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+                </div>
+                </ion-list>
+            </div>
         </ion-row>
     </ion-grid>
 </ion-content>

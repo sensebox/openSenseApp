@@ -52,7 +52,7 @@ export class ApiProvider {
 						createdAt: element.createdAt,
 						updatedAt: element.updatedAt,
 						sensors: element.sensors,
-            _id: element._id
+            			_id: element._id
 					}
 
 					closestSenseBoxes.push(box);
@@ -98,6 +98,28 @@ export class ApiProvider {
 			index : index
 		}
 		return closestSenseBox;
+	}
+
+	getclosestSenseBoxTest(boxes : SenseBox[], location : Location): any {
+		let index : any = 0;
+		let minDistance : any = Number.MAX_VALUE;
+		let i = 0;
+		boxes.forEach(box => {
+			let boxLocation: Location = {
+				latitude: box.coordinates.latitude,
+				longitude: box.coordinates.longitude
+			};
+			
+			let distance = this.calculateDistance(location, boxLocation)
+			if(distance < minDistance){
+				index = i;
+				minDistance = distance;
+			}
+			i++; 
+		});
+		let box : SenseBox = boxes[index];
+		console.log(box);
+		return box;
 	}
 
 	getBoxMeasurements(box_id : String){

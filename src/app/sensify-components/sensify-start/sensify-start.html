@@ -1,1 +1,22 @@
-<h1>This is as starting page as directive.</h1>
+<ion-content class="start">
+    <ion-grid>
+        <ion-row (click)="collapse()">
+
+            <img id="img_1" src="./../../../assets/imgs/test.png" style="width : 100% ; height : 120px" >
+
+            <div class="Overlay_Name">
+                <h1 class="h"> {{boxName}}</h1>
+                <h1 class="h"> {{day}} : {{hour}}</h1>
+            </div> 
+            <div class="Overlay_Temp">
+                <h1 class="h"> {{temperature}} °C</h1>
+            </div> 
+            <div id= "overlay1" class="Overlay_extra">
+                <h2>Humidity: {{relHumidity}} %</h2>
+                <h2>Air pressure: {{pressure}} hPa</h2>
+                <h2>UV Intensity: {{UV}} pW/m^3</h2>
+                <h2>Illuminance: {{lumen}} 1x</h2>
+            </div> 
+        </ion-row>
+    </ion-grid>
+</ion-content>

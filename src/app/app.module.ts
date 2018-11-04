@@ -12,6 +12,7 @@ import { SensifyComponentModule } from './sensify-components/sensify-component.m
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LocalNotifications } from '@ionic-native/local-Notifications';
 import { GlobalProvider } from '../providers/global/global';
+import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { GlobalProvider } from '../providers/global/global';
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider,
     LocalNotifications,
+    NativeGeocoder,
     GlobalProvider
   ]
 })

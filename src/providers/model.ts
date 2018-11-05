@@ -22,3 +22,19 @@ export interface SenseBox {
     sensors: Sensor[];
     _id: String;
 }
+
+export interface Settings {
+    gps: boolean;
+    location?: Location;
+    radius: number;
+    mySenseBox?: String;
+    ranges: {
+        temperature: number;
+    };
+}
+
+export interface Metadata {
+    settings: Settings;
+    senseBoxes: SenseBox[];
+    closestSenseBoxes: SenseBox;
+}

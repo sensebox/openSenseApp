@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications'
 import { GlobalProvider } from '../../../providers/global/global';
+import { Settings } from '../../../providers/model';
 
 
 @Component({
@@ -9,10 +10,16 @@ import { GlobalProvider } from '../../../providers/global/global';
     templateUrl: 'sensify-about.html',
 })
 export class SensifyAboutPage {
+
+    @Input()
+    public settings: Settings;
+
+    @Output()
+    public onSettingsChange: EventEmitter<Settings> = new EventEmitter();
+
     newRadius: any;
     newValidationRange: any;
-    newSenseboxID: any
-
+    newSenseboxID: any;
 
     constructor(public global: GlobalProvider, public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private plt: Platform, private localNotifications: LocalNotifications) {
         //if testing on device  (because notifications cant be tested on browser)
@@ -50,15 +57,15 @@ export class SensifyAboutPage {
     //-Think about other setting options that we need
     test() {
         if (this.newRadius) {
-            this.global.radius = this.newRadius;
+            this.settings.radius = this.newRadius;
         }
         if (this.newValidationRange) {
-            this.global.tempRange = this.newValidationRange;
+            this.settings.ranges.temperature = this.newValidationRange;
         }
         if (this.newSenseboxID) {
-            this.global.senseboxID = this.newSenseboxID;
+            this.settings.mySenseBox = this.newSenseboxID;
         }
 
-        alert("New Settings: \n radius:" + this.global.radius + ", \n validationRange:" + this.global.tempRange + ", \n SenseBoxID:" + this.global.senseboxID)
+        this.onSettingsChange.emit(this.settings);
     }
 }

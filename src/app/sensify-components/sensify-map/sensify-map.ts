@@ -1,33 +1,38 @@
-import { Component } from '@angular/core';
+import { Component, Input, SimpleChange } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { latLng, tileLayer } from "leaflet";
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { ApiProvider } from '../../../providers/api/api';
-import { Location } from "../../../providers/model";
-
+import { Location, Settings } from "../../../providers/model";
+import { SensifyPage } from "../../../pages/sensify/sensify-page";
+import {OnChanges} from '@angular/core';
 
 @Component({
     selector: 'sensify-page-map',
     templateUrl: 'sensify-map.html',
 })
-export class SensifyMapPage {
+export class SensifyMapPage implements OnChanges {
 
-    options: GeolocationOptions;
-    currentPos: Geoposition;
+    @Input()
+    public settings: Settings;
+    public options: GeolocationOptions;
+    public currentPos: Geoposition;
     public posMarker;
-    public userLng: number;
-    public userLat: number;
     public closestBoxes: any;
     public closestBoxesMarkers: any[] = [];
     public senseBoxesSet: boolean = false;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, public LM: LeafletModule, private geolocation: Geolocation, private api: ApiProvider) { }
+    constructor(
+        public navCtrl: NavController,
+        public navParams: NavParams,
+        public LM: LeafletModule,
+        private api: ApiProvider,
+        public sensifyPage : SensifyPage) { }
 
     public greenIcon = L.icon({
         iconUrl: '../../assets/imgs/greenMarker.png',
-
         iconSize: [25, 40],
         iconAnchor: [12, 40],
         popupAnchor: [-3, -76]
@@ -35,7 +40,6 @@ export class SensifyMapPage {
 
     public redIcon = L.icon({
         iconUrl: '../../assets/imgs/redMarker.png',
-
         iconSize: [40, 40],
         iconAnchor: [20, 37],
         popupAnchor: [-3, -76]
@@ -43,7 +47,6 @@ export class SensifyMapPage {
 
     public posIcon = L.icon({
         iconUrl: '../../assets/imgs/positionMarker.png',
-
         iconSize: [50, 50],
         iconAnchor: [25, 48],
         popupAnchor: [-3, -76]
@@ -51,20 +54,12 @@ export class SensifyMapPage {
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad MapPage');
-        this.getUserPosition();
     }
 
-    // Get the current location
-    getUserPosition() {
-        this.geolocation.getCurrentPosition(this.options)
-            .then((pos: Geoposition) => {
-                this.currentPos = pos;
-                this.userLat = this.currentPos.coords.latitude;
-                this.userLng = this.currentPos.coords.longitude;
-                if (this.map) { this.loadPositionOnMap(); };
-            }, (err: PositionError) => {
-                console.log("ERROR: " + err.message)
-            })
+    ngOnChanges(changes): void {
+        if (changes.settings && this.map) {
+            this.addUserLocationToMap();
+        }
     }
 
     // load the map, load the layer
@@ -79,37 +74,26 @@ export class SensifyMapPage {
     };
     onMapReady(map: L.Map) {
         this.map = map;
+        this.addUserLocationToMap();
     }
 
     // Center the map on the user-position
-    loadPositionOnMap() {
+    addUserLocationToMap() {
         if (this.posMarker != undefined) {
             this.map.removeLayer(this.posMarker);
         }
-        this.map.panTo(new L.LatLng(this.userLat, this.userLng));
-        this.posMarker = L.marker([this.userLat, this.userLng], { icon: this.posIcon })
-            .bindPopup("<b>Your position:</b> <br> Latitude: " + this.userLat + " <br> Longitude: " + this.userLng);
+        // TODO: check Leaflet Documentation for LatLng object --> maybe adapt
+        this.map.panTo(new L.LatLng(this.settings.location.latitude, this.settings.location.longitude));
+        this.posMarker = L.marker([this.settings.location.latitude, this.settings.location.longitude], { icon: this.posIcon })
+            .bindPopup("<b>Your position:</b> <br> Latitude: " + this.settings.location.latitude + " <br> Longitude: " + this.settings.location.longitude);
         this.posMarker.addTo(this.map);
         this.findclosestSenseboxes();
     }
 
-    // Watch the user position
-    subscription = this.geolocation.watchPosition()
-        .subscribe(position => {
-            this.userLat = position.coords.latitude;
-            this.userLng = position.coords.longitude;
-            this.loadPositionOnMap();
-            this.findclosestSenseboxes();
-        });
-
+    
     // Search the nearest senseBoxes
     findclosestSenseboxes() {
-        let myLocation: Location = {
-            longitude: this.userLng,
-            latitude: this.userLat
-        };
-
-        this.api.getClosestSenseBoxes(myLocation).subscribe(res => {
+        this.api.getClosestSenseBoxes(this.settings.location).subscribe(res => {
             this.closestBoxes = res;
             if (this.senseBoxesSet) {
                 this.deleteclosestSenseboxes();
@@ -154,11 +138,7 @@ export class SensifyMapPage {
 
     // Find the nearest senseBox
     closestSensebox() {
-        let userLocation: Location = {
-            latitude: this.userLat,
-            longitude: this.userLng
-        };
-        let closestBox: any = this.api.getclosestSenseBox(this.closestBoxes, userLocation);
+        let closestBox: any = this.api.getclosestSenseBox(this.closestBoxes, this.settings.location);
         this.connectToBox(closestBox.index, closestBox.box.coordinates.latitude, closestBox.box.coordinates.longitude)
 
         //Test for Validation!!! Can be called from anywhere via API
@@ -170,7 +150,7 @@ export class SensifyMapPage {
         this.map.removeLayer(this.closestBoxesMarkers[index]);
 
         this.closestBoxesMarkers[index] = L.marker([lat, lng], { icon: this.redIcon }).on('click', () => {
-            alert('senseBox: lat:' + this.userLat + ", lon:" + this.userLng);
+            alert('senseBox: lat:' + this.settings.location.latitude + ", lon:" + this.settings.location.longitude);
         });
         this.closestBoxesMarkers[index].addTo(this.map);
     }

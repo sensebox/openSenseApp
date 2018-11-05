@@ -9,13 +9,13 @@
 
 <ion-content>
     <div class="selectedPage" *ngIf="(tabSelector === 'start')">
-        <sensify-page-start></sensify-page-start>
+        <sensify-page-start [settings]="settings"></sensify-page-start>
     </div>
     <div class="selectedPage" *ngIf="(tabSelector === 'map')">
-        <sensify-page-map></sensify-page-map>
+        <sensify-page-map [settings]="settings"></sensify-page-map>
     </div>
     <div class="selectedPage" *ngIf="(tabSelector === 'about')">
-        <sensify-page-about></sensify-page-about>
+        <sensify-page-about [settings]="settings" (onSettingsChange)="setSettings($event)"></sensify-page-about>
     </div>
 </ion-content>
 

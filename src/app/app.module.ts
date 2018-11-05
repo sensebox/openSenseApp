@@ -10,33 +10,33 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { SensifyComponentModule } from './sensify-components/sensify-component.module';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-import { LocalNotifications } from '@ionic-native/local-Notifications';
+import { LocalNotifications } from '@ionic-native/local-notifications';
 import { GlobalProvider } from '../providers/global/global';
 import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
 
 @NgModule({
-  declarations: [
-    openSenseApp,
-    HomePage,
-  ],
-  imports: [
-    HttpClientModule,
-    BrowserModule,
-    IonicModule.forRoot(openSenseApp)
-  ],
-  bootstrap: [IonicApp],
-  entryComponents: [
-    openSenseApp,
-    HomePage
-  ],
-  providers: [
-    StatusBar,
-    SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider,
-    LocalNotifications,
-    NativeGeocoder,
-    GlobalProvider
-  ]
+    declarations: [
+        openSenseApp,
+        HomePage,
+    ],
+    imports: [
+        HttpClientModule,
+        BrowserModule,
+        IonicModule.forRoot(openSenseApp)
+    ],
+    bootstrap: [IonicApp],
+    entryComponents: [
+        openSenseApp,
+        HomePage
+    ],
+    providers: [
+        StatusBar,
+        SplashScreen,
+        { provide: ErrorHandler, useClass: IonicErrorHandler },
+        ApiProvider,
+        LocalNotifications,
+        NativeGeocoder,
+        GlobalProvider
+    ]
 })
-export class AppModule {}
+export class AppModule { }

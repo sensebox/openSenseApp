@@ -1,15 +1,17 @@
 <ion-content class="start">
     <ion-grid>
-        <ion-row>       
+        <ion-row>
             <div *ngIf="currBox">
-                <h1>{{currBox.model}}</h1>
+                <h1>{{currBox.name}}</h1>
                 <ion-list>
-                <div ion-item *ngFor="let sensor of currBox.sensors">
-                    <h3>{{sensor.title}}</h3>
-                    <div *ngIf="sensor.lastMeasurement">
-                        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+                    <div *ngIf="currBox.sensors">
+                        <div ion-item *ngFor="let sensor of currBox.sensors">
+                            <h3>{{sensor.title}}</h3>
+                            <div *ngIf="sensor.lastMeasurement">
+                                <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+                            </div>
+                        </div>
                     </div>
-                </div>
                 </ion-list>
             </div>
         </ion-row>

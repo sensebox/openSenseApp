@@ -9,12 +9,12 @@ import { Injectable } from '@angular/core';
 */
 @Injectable()
 export class GlobalProvider {
-  public radius : number = 20;      //In kilometers
-  public tempRange : number = 5;    //In °Celsius
-  public senseboxID : String = "";  //Personalized SenseBox ID
+    public radius: number = 20;      //In kilometers
+    public tempRange: number = 5;    //In °Celsius
+    public senseboxID: String = "";  //Personalized SenseBox ID
 
-  constructor(public http: HttpClient) {
-    console.log('Hello GlobalProvider Provider');
-  }
+    constructor(public http: HttpClient) {
+        console.log('Hello GlobalProvider Provider');
+    }
 
 }

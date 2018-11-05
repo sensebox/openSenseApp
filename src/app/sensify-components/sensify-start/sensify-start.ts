@@ -22,7 +22,8 @@ export class SensifyStartPage{
     platform.ready().then(() => {
       this.geolocation.getCurrentPosition(this.options).then((pos: Geoposition) => {
         this.api.getClosestSenseBoxes(pos.coords).subscribe(boxes =>{
-          this.currBox = this.api.getclosestSenseBoxTest(boxes,pos.coords);
+          this.currBox = this.api.getclosestSenseBoxTest(boxes, pos.coords)
+          console.log(this.currBox)
         }); 
       }).catch(e => {
         console.log(e);

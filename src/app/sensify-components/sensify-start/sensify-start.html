@@ -6,7 +6,9 @@
                 <ion-list>
                 <div ion-item *ngFor="let sensor of currBox.sensors">
                     <h3>{{sensor.title}}</h3>
-                    <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+                    <div *ngIf="sensor.lastMeasurement">
+                        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+                    </div>
                 </div>
                 </ion-list>
             </div>

@@ -74,30 +74,25 @@ export class ApiProvider {
 		return dist;
 	};
 
-	getclosestSenseBox(boxes: SenseBox[], location: Location) {
-		let closestBoxes: any = boxes;
-		let userLocation: any = location;
-		let index: any = 0;
+	getclosestSenseBox(boxes: SenseBox[], location: Location): SenseBox {
+		// TODO: Error Handling for SenseBox.length = 0
+		let index = 0;
 		let minDistance: any = Number.MAX_VALUE;
 		let i = 0;
-		closestBoxes.forEach(box => {
+		boxes.forEach(box => {
 			let boxLocation: Location = {
 				latitude: box.coordinates.latitude,
 				longitude: box.coordinates.longitude
 			};
 
-			let distance = this.calculateDistance(userLocation, boxLocation)
+			let distance = this.calculateDistance(location, boxLocation)
 			if (distance < minDistance) {
 				index = i;
 				minDistance = distance;
 			}
 			i++;
 		});
-		let closestSenseBox = {
-			box: closestBoxes[index],
-			index: index
-		}
-		return closestSenseBox;
+		return boxes[index];
 	}
 
 	getclosestSenseBoxTest(boxes: SenseBox[], location: Location): any {

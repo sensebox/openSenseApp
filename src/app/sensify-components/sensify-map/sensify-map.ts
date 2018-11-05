@@ -5,7 +5,7 @@ import { latLng, tileLayer } from "leaflet";
 import { Geolocation, GeolocationOptions, Geoposition, PositionError } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { ApiProvider } from '../../../providers/api/api';
-import { Location, Settings } from "../../../providers/model";
+import { Location, Metadata } from "../../../providers/model";
 import { SensifyPage } from "../../../pages/sensify/sensify-page";
 import {OnChanges} from '@angular/core';
 
@@ -16,7 +16,8 @@ import {OnChanges} from '@angular/core';
 export class SensifyMapPage implements OnChanges {
 
     @Input()
-    public settings: Settings;
+    public metadata: Metadata;
+
     public options: GeolocationOptions;
     public currentPos: Geoposition;
     public posMarker;
@@ -57,7 +58,7 @@ export class SensifyMapPage implements OnChanges {
     }
 
     ngOnChanges(changes): void {
-        if (changes.settings && this.map) {
+        if (changes.metadata && this.map) {
             this.addUserLocationToMap();
         }
     }
@@ -83,26 +84,14 @@ export class SensifyMapPage implements OnChanges {
             this.map.removeLayer(this.posMarker);
         }
         // TODO: check Leaflet Documentation for LatLng object --> maybe adapt
-        this.map.panTo(new L.LatLng(this.settings.location.latitude, this.settings.location.longitude));
-        this.posMarker = L.marker([this.settings.location.latitude, this.settings.location.longitude], { icon: this.posIcon })
-            .bindPopup("<b>Your position:</b> <br> Latitude: " + this.settings.location.latitude + " <br> Longitude: " + this.settings.location.longitude);
+        this.map.panTo(new L.LatLng(this.metadata.settings.location.latitude, this.metadata.settings.location.longitude));
+        this.posMarker = L.marker([this.metadata.settings.location.latitude, this.metadata.settings.location.longitude], { icon: this.posIcon })
+            .bindPopup("<b>Your position:</b> <br> Latitude: " + this.metadata.settings.location.latitude + " <br> Longitude: " + this.metadata.settings.location.longitude);
         this.posMarker.addTo(this.map);
-        this.findclosestSenseboxes();
+        //this.findclosestSenseboxes();
     }
 
-    
-    // Search the nearest senseBoxes
-    findclosestSenseboxes() {
-        this.api.getClosestSenseBoxes(this.settings.location).subscribe(res => {
-            this.closestBoxes = res;
-            if (this.senseBoxesSet) {
-                this.deleteclosestSenseboxes();
-            } else {
-                this.addClosestSenseboxes();
-            }
-        });
-    }
-
+    // TODO: Group Makers into single Layer instead of individual layers
     // Delete existing senseBoxes
     deleteclosestSenseboxes() {
         for (let i = 0; i < this.closestBoxesMarkers.length; i++) {
@@ -117,41 +106,33 @@ export class SensifyMapPage implements OnChanges {
     // Add senseBoxes to Map
     addClosestSenseboxes() {
         this.senseBoxesSet = true;
-        for (let i = 0; i < this.closestBoxes.length; i++) {
+        for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
             // Generate popup-description
             let popupTextSensors = "";
-            for (let s = 0; s < this.closestBoxes[i].sensors.length; s++) {
-                if (this.closestBoxes[i].sensors[s].lastMeasurement != null) {
-                    popupTextSensors += this.closestBoxes[i].sensors[s].title + ": " + this.closestBoxes[i].sensors[s].lastMeasurement.value + "<br>";
+            for (let s = 0; s < this.metadata.senseBoxes[i].sensors.length; s++) {
+                if (this.metadata.senseBoxes[i].sensors[s].lastMeasurement != null) {
+                    popupTextSensors += this.metadata.senseBoxes[i].sensors[s].title + ": " + this.metadata.senseBoxes[i].sensors[s].lastMeasurement.value + "<br>";
                 }
             }
             // Generate Popup with description
-            let marker = L.marker([this.closestBoxes[i].coordinates.latitude, this.closestBoxes[i].coordinates.longitude], { icon: this.greenIcon })
-                .bindPopup("<b>" + this.closestBoxes[i].name + "</b><br>" + popupTextSensors);
+            let marker = L.marker([this.metadata.senseBoxes[i].coordinates.latitude, this.metadata.senseBoxes[i].coordinates.longitude], { icon: this.greenIcon })
+                .bindPopup("<b>" + this.metadata.senseBoxes[i].name + "</b><br>" + popupTextSensors);
             this.closestBoxesMarkers.push(marker);
             this.closestBoxesMarkers[i].addTo(this.map);
-            if (i >= this.closestBoxes.length - 1) {
-                this.closestSensebox();
-            }
         }
+        this.connectToBox();
     }
 
-    // Find the nearest senseBox
-    closestSensebox() {
-        let closestBox: any = this.api.getclosestSenseBox(this.closestBoxes, this.settings.location);
-        this.connectToBox(closestBox.index, closestBox.box.coordinates.latitude, closestBox.box.coordinates.longitude)
-
-        //Test for Validation!!! Can be called from anywhere via API
-        this.api.validateSenseBoxTemperature(closestBox.box, this.closestBoxes)
-    }
 
     // Mark the nearest box on the map
-    connectToBox(index, lat, lng) {
+    connectToBox() {
+
+        console.log(this.map);/*
         this.map.removeLayer(this.closestBoxesMarkers[index]);
 
         this.closestBoxesMarkers[index] = L.marker([lat, lng], { icon: this.redIcon }).on('click', () => {
-            alert('senseBox: lat:' + this.settings.location.latitude + ", lon:" + this.settings.location.longitude);
+            alert('senseBox: lat:' + this.metadata.settings.location.latitude + ", lon:" + this.metadata.settings.location.longitude);
         });
-        this.closestBoxesMarkers[index].addTo(this.map);
+        this.closestBoxesMarkers[index].addTo(this.map);*/
     }
 }

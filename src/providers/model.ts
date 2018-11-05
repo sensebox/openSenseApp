@@ -6,7 +6,9 @@ export interface Location {
 export interface Sensor {
     title: String;
     unit: String;
-    lastMeasurement: String;
+    lastMeasurement: {
+        value: String;
+    };
     sensorType: String;
     id: String;
 }
@@ -35,6 +37,6 @@ export interface Settings {
 
 export interface Metadata {
     settings: Settings;
-    senseBoxes: SenseBox[];
-    closestSenseBoxes: SenseBox;
+    senseBoxes?: SenseBox[]; // Contains Closest SenseBoxes defined by radius and user location
+    closestSenseBox?: SenseBox;
 }

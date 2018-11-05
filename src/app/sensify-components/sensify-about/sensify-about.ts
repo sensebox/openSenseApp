@@ -2,7 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications'
 import { GlobalProvider } from '../../../providers/global/global';
-import { Settings } from '../../../providers/model';
+import { Settings, Metadata } from '../../../providers/model';
 
 
 @Component({
@@ -12,10 +12,10 @@ import { Settings } from '../../../providers/model';
 export class SensifyAboutPage {
 
     @Input()
-    public settings: Settings;
+    public metadata: Metadata;
 
     @Output()
-    public onSettingsChange: EventEmitter<Settings> = new EventEmitter();
+    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
 
     newRadius: any;
     newValidationRange: any;
@@ -57,15 +57,15 @@ export class SensifyAboutPage {
     //-Think about other setting options that we need
     test() {
         if (this.newRadius) {
-            this.settings.radius = this.newRadius;
+            this.metadata.settings.radius = this.newRadius;
         }
         if (this.newValidationRange) {
-            this.settings.ranges.temperature = this.newValidationRange;
+            this.metadata.settings.ranges.temperature = this.newValidationRange;
         }
         if (this.newSenseboxID) {
-            this.settings.mySenseBox = this.newSenseboxID;
+            this.metadata.settings.mySenseBox = this.newSenseboxID;
         }
 
-        this.onSettingsChange.emit(this.settings);
+        this.onMetadataChange.emit(this.metadata);
     }
 }

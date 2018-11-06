@@ -10,7 +10,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiProvider {
 
-  private API_URL = 'https://api.testing.opensensemap.org'
+  private API_URL = 'https://api.opensensemap.org/boxes/';
+  private boxId ='5a687677411a790019444133';
 
   constructor(public http: HttpClient) {
     console.log('Hello ApiProvider Provider');
@@ -18,7 +19,7 @@ export class ApiProvider {
 
 
   getData(){
-    return this.http.get(`${this.API_URL}/boxes/5b0d436fd40a290019ef444d`);
+    return this.http.get(`${this.API_URL} ${this.boxId}`);
   }
 
 }

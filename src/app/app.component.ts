@@ -18,7 +18,14 @@ export class openSenseApp {
     { title: 'Home', component: HomePage },
     { title: 'About', component: 'AboutPage' },
     { title: 'senseBox', component: 'SenseBoxPage' },
-    { title: 'weatherApp', component:'WeatherAppPage' },
+    { title: 'WeatherApp', component:'WeatherAppPage' },
+  ];
+  weatherPages: Array<{title: string, component: any}> = [
+    { title: 'OpenSensePage', component: HomePage },
+    { title: 'WeatherApp', component:'WeatherAppPage' },
+    { title: 'Forecast', component:'ForecastPage' },
+    { title: 'Analytics', component:'GraphsPage' },
+    { title: 'About', component:'AboutWeatherPage' }
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -35,6 +42,16 @@ export class openSenseApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
+    if(page.component==="WeatherAppPage" || page.component==="ForecastPage" || page.component==="GraphsPage" || page.component==="AboutWeatherPage"){
+      document.getElementById('homeNavList').hidden=true;
+      document.getElementById('navList').hidden=false;
+
+    }else {
+
+      document.getElementById('navList').hidden=true;
+      document.getElementById('homeNavList').hidden=false;
+    }
+
   }
 }
 

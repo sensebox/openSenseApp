@@ -3,9 +3,9 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>senseBox name</ion-title>
+    <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
     <ion-buttons start>
-      <button ion-button (click)="refresh_click()" icon-only>
+      <button ion-button (click)="refresh_data()" icon-only>
         <ion-icon name="refresh"></ion-icon>
       </button>
     </ion-buttons>
@@ -22,6 +22,7 @@
   </ion-navbar>
 </ion-header>
 
+
 <ion-content padding class="buttons-components-page">
   <ion-card>
     <ion-card-content>
@@ -36,29 +37,13 @@
     </ion-item>
   </ion-card>
 
-  <ion-list>
-    <ion-item>
-      <ion-icon name="thermometer"></ion-icon>
-      Temperature
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="cloud"></ion-icon>
-      Real Air Humidity
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="speedometer"></ion-icon>
-      Air Pressure
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="sunny"></ion-icon>
-      Illumination
-    </ion-item>
-  </ion-list>
-  
-
-
+  <div *ngIf="boxData">
+    <ion-list>
+      <div ion-item *ngFor="let sensor of boxData.sensors">
+        <h3>{{sensor.title}}</h3>
+        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+      </div>
+    </ion-list>
+  </div>
 
 </ion-content>

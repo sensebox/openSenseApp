@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
-import { SenseBoxPage } from '../sense-box/sense-box';
+import { LeafletPage } from '../leaflet/leaflet';
 
 /**
  * Generated class for the WeatherAppPage page.
@@ -24,7 +24,7 @@ export class WeatherAppPage {
   }
 
   presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(SenseBoxPage);
+    let popover = this.popoverCtrl.create( LeafletPage, {} , { cssClass: 'custom_popover' });
     popover.present({
       ev: myEvent
     });

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { IonicPageModule } from 'ionic-angular';
 import { WeatherAppPage } from './weather-app';
-import { SenseBoxPageModule } from '../sense-box/sense-box.module';
+import { LeafletPageModule } from '../leaflet/leaflet.module';
 
 @NgModule({
   declarations: [
@@ -9,7 +9,7 @@ import { SenseBoxPageModule } from '../sense-box/sense-box.module';
   ],
   imports: [
     IonicPageModule.forChild(WeatherAppPage),
-    SenseBoxPageModule,
+    LeafletPageModule
   ],
 })
 export class WeatherAppPageModule {}

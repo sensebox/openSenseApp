@@ -90,3 +90,20 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+
+ion-popover{
+  ion-backdrop{
+  opacity: 0.5 !important;
+  }
+  .popover-wrapper{
+  .popover-content{
+  width: 97vw;
+  height: 100vw;
+  }
+  }
+  }
+
+  .scroll-content {
+    overflow-y: auto;
+}

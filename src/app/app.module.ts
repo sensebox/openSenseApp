@@ -8,6 +8,8 @@ import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
+import { SenseBoxPage } from '../pages/sense-box/sense-box';
+import { SenseBoxPageModule } from '../pages/sense-box/sense-box.module';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     HttpClientModule,
     BrowserModule,
-    IonicModule.forRoot(openSenseApp)
+    IonicModule.forRoot(openSenseApp),
+    SenseBoxPageModule, 
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     openSenseApp,
-    HomePage
+    HomePage,
+    SenseBoxPage,
   ],
   providers: [
     StatusBar,

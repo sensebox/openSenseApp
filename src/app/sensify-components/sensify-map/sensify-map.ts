@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
-import { latLng, tileLayer } from "leaflet";
+import { tileLayer } from "leaflet";
 import { GeolocationOptions, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Metadata, SenseBox } from "../../../providers/model";
@@ -30,12 +30,14 @@ export class SensifyMapPage implements OnChanges {
             tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
         ],
         zoom: 13,
-        center: latLng(0, 0)
+        center: [0, 0]
     };
     public layersControl = {
         baselayers: null,
         overlays: {},
-        position: 'topleft'
+        options: {
+            position: 'bottomleft'
+        }
     };
     public userLocationMarker: L.Marker;
     public userLocationMarkerLayer: L.LayerGroup;    
@@ -87,8 +89,12 @@ export class SensifyMapPage implements OnChanges {
 
     onMapReady(map: L.Map) {
         this.map = map;
-        this.map.addControl(L.control.zoom({ position: 'topright' }));
+        // this.map.removeControl();
+        // this.map.addControl(L.control.zoom({ position: 'topleft' }));
         this.addUserLocationToMap();
+        if (this.metadata && this.metadata.senseBoxes) {
+            this.addSenseboxMarkerToMap();
+        }
     }
 
     public addUserLocationToMap() {

@@ -10,6 +10,7 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
+import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 
 @NgModule({
     declarations: [
@@ -19,7 +20,8 @@ import { NativeGeocoder } from '@ionic-native/native-geocoder';
     imports: [
         HttpClientModule,
         BrowserModule,
-        IonicModule.forRoot(openSenseApp)
+        IonicModule.forRoot(openSenseApp),
+        LeafletModule
     ],
     bootstrap: [IonicApp],
     entryComponents: [

@@ -28,7 +28,7 @@ export class ApiProvider {
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,unknown`);
 	}
 
-	getClosestSenseBoxes(userLocation: L.LatLng, radius: number): Observable<SenseBox[]> {
+	getClosestSenseBoxes(userLocation: L.LatLng, radius: number): Promise<SenseBox[]> {
 		let closestSenseBoxes = [];
 
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor, unknown`).map(res => {
@@ -54,7 +54,9 @@ export class ApiProvider {
 				}
 			});
 			return closestSenseBoxes;
-		})
+		}).toPromise().then(closestSenseBoxes => {
+			return closestSenseBoxes;
+		});
 	}
 
 	getclosestSenseBox(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {

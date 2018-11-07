@@ -44,10 +44,14 @@ export class SensifyPage {
 
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
+        let closestBox : SenseBox;
         try {
             this.metadata.settings.location = await this.getUserPosition();
-            this.metadata.senseBoxes = await this.api.getClosestSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius);
-            const closestBox = await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location);
+            await this.api.getClosestSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius).then(res =>{
+                this.metadata.senseBoxes = res;
+                closestBox = this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location);
+            });
+
             this.metadata = {
                 settings: this.metadata.settings,
                 senseBoxes: this.metadata.senseBoxes,

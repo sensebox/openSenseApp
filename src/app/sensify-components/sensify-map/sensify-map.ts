@@ -82,6 +82,7 @@ export class SensifyMapPage implements OnChanges {
                 this.addUserLocationToMap();
             }
             if (this.metadata.senseBoxes) {
+                this.removeMarkers();
                 this.addSenseboxMarkerToMap();
             }
         }
@@ -115,11 +116,8 @@ export class SensifyMapPage implements OnChanges {
         // Add userLocationMarker to Overlay Layer "Me"
         this.layersControl.overlays['Me'] = L.layerGroup([this.userLocationMarker]);
         this.layersControl.overlays['Me'].addTo(this.map);
-
-        // TODO: check Leaflet Documentation for LatLng object --> maybe adapt
     }
  
-    // TODO: Group Makers into single Layer instead of individual layers
     // TODO: write delete function or better UPDATE function
     // Delete existing senseBoxes
     public deleteclosestSenseboxes() {
@@ -127,7 +125,6 @@ export class SensifyMapPage implements OnChanges {
             this.map.removeLayer(this.closestBoxesMarkers[i]);
             if (i >= this.closestBoxesMarkers.length - 1) {
                 this.closestBoxesMarkers = [];
-                this.addSenseboxMarkerToMap();
             }
         }
     }
@@ -139,12 +136,24 @@ export class SensifyMapPage implements OnChanges {
             // Generate marker-description
             let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
             // Generate marker
-            let marker = L.marker(this.metadata.senseBoxes[i].location, 
-                { icon: this.greenIcon })
-                .bindPopup(popupDescription);
-            // Add marker to map
-            this.closestBoxesMarkers.push(marker);
+            if(this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location){
+                let marker = L.marker(this.metadata.senseBoxes[i].location, 
+                    { icon: this.greenIcon })
+                    .bindPopup(popupDescription);
+                // Add marker to map
+                this.closestBoxesMarkers.push(marker);
+            }else{//ClosestSenseBox Marker
+                let marker = L.marker(this.metadata.senseBoxes[i].location, 
+                    { icon: this.redIcon })
+                    .bindPopup(popupDescription);
+                // Add marker to map
+                this.closestBoxesMarkers.push(marker);
+            }
         }
+        //line from user to closest box
+        let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]]
+        let polyline = L.polyline(lineCoords, {color:'red'})
+        this.closestBoxesMarkers.push(polyline);
         this.senseboxMarkersLayer = L.layerGroup(this.closestBoxesMarkers);
         this.layersControl.overlays['SenseBoxes'] = this.senseboxMarkersLayer;
         this.layersControl.overlays['SenseBoxes'].addTo(this.map);
@@ -154,16 +163,19 @@ export class SensifyMapPage implements OnChanges {
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription : any;
         for (let i = 0; i < sensebox.sensors.length; i++) {
-            if (sensebox.sensors[i].lastMeasurement != null) {
+            if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
                 sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
             }
         }
         return sensorTitle + "<br>" + sensorsDescription;
     }
 
+    public removeMarkers(){
+  
+    }
 
     // Mark the nearest box on the map
-    public connectToBox() {
+
         // TODO: connect box and user on map = draw line
     /*
         console.log(this.map);
@@ -175,5 +187,5 @@ export class SensifyMapPage implements OnChanges {
         });
         this.closestBoxesMarkers[index].addTo(this.map);
     */
-    }
+    
 }

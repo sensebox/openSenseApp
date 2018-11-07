@@ -1,8 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { NavController, NavParams, AlertController, Platform } from 'ionic-angular';
 import { LocalNotifications } from '@ionic-native/local-notifications'
-import { GlobalProvider } from '../../../providers/global/global';
-import { Settings, Metadata } from '../../../providers/model';
+import { Metadata } from '../../../providers/model';
 
 
 @Component({
@@ -21,7 +20,7 @@ export class SensifyAboutPage {
     newValidationRange: any;
     newSenseboxID: any;
 
-    constructor(public global: GlobalProvider, public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private plt: Platform, private localNotifications: LocalNotifications) {
+    constructor(public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private plt: Platform, private localNotifications: LocalNotifications) {
         //if testing on device  (because notifications cant be tested on browser)
         if (this.plt.is('cordova')) {
             this.plt.ready().then(rdy => {
@@ -36,7 +35,7 @@ export class SensifyAboutPage {
         console.log('ionViewDidLoad SensifyAboutPage');
     }
 
-    testNotifications() {
+    public testNotifications() {
         if (this.plt.is('cordova')) {
             this.localNotifications.schedule({
                 id: 1,
@@ -55,7 +54,7 @@ export class SensifyAboutPage {
     //-save inputs in other variables on button press so that they dont vanish when switching between tabs
     //-show current settings in the fields
     //-Think about other setting options that we need
-    test() {
+    public changeSettings() {
         if (this.newRadius) {
             this.metadata.settings.radius = this.newRadius;
         }

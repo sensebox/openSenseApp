@@ -2,9 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import { Location, SenseBox } from '../model';
-import { GlobalProvider } from '../global/global';
-
+import { SenseBox } from '../model';
+import * as L from "leaflet";
 
 @Injectable()
 export class ApiProvider {
@@ -13,7 +12,7 @@ export class ApiProvider {
 	private sumTemp: any = 0;
 	private nSensors: any = 0;
 
-	constructor(public http: HttpClient, public global: GlobalProvider) {
+	constructor(public http: HttpClient) {
 		console.log('Hello ApiProvider Provider');
 	}
 
@@ -29,23 +28,19 @@ export class ApiProvider {
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,unknown`);
 	}
 
-	getClosestSenseBoxes(userLocation: Location): Observable<SenseBox[]> {
+	getClosestSenseBoxes(userLocation: L.LatLng, radius: number): Observable<SenseBox[]> {
 		let closestSenseBoxes = [];
 
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor, unknown`).map(res => {
 			let allBoxes: any = res;
-
 			allBoxes.forEach(element => {
-				let boxLocation: Location = {
-					latitude: element.currentLocation.coordinates[1],
-					longitude: element.currentLocation.coordinates[0]
-				};
-				let distance: number = this.calculateDistance(userLocation, boxLocation);
-				if (distance <= this.global.radius) {
+				let boxLocation: L.LatLng = new L.LatLng(element.currentLocation.coordinates[1], element.currentLocation.coordinates[0]);
+				let distance: number = boxLocation.distanceTo(userLocation) / 1000; // distanceTo returns meters, not kilometers
+				if (distance <= radius) {
 
 					let box: SenseBox = {
 						name: element.name,
-						coordinates: boxLocation,
+						location: boxLocation,
 						model: element.model,
 						grouptag: element.grouptag,
 						description: element.description,
@@ -62,30 +57,13 @@ export class ApiProvider {
 		})
 	}
 
-	calculateDistance(userLocation: Location, senseBoxLocation: Location) {
-		// Deg --> Rad
-		let lat1 = userLocation.latitude * Math.PI / 180;
-		let lat2 = senseBoxLocation.latitude * Math.PI / 180;
-		let lng1 = userLocation.longitude * Math.PI / 180;
-		let lng2 = senseBoxLocation.longitude * Math.PI / 180;
-		// distance calculation:
-		let cosG = Math.sin(lat1) * Math.sin(lat2) + Math.cos(lat1) * Math.cos(lat2) * Math.cos(lng2 - lng1);
-		let dist = 6378.388 * Math.acos(cosG);
-		return dist;
-	};
-
-	getclosestSenseBox(boxes: SenseBox[], location: Location): SenseBox {
+	getclosestSenseBox(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {
 		// TODO: Error Handling for SenseBox.length = 0
 		let index = 0;
 		let minDistance: any = Number.MAX_VALUE;
 		let i = 0;
 		boxes.forEach(box => {
-			let boxLocation: Location = {
-				latitude: box.coordinates.latitude,
-				longitude: box.coordinates.longitude
-			};
-
-			let distance = this.calculateDistance(location, boxLocation)
+			let distance = box.location.distanceTo(userLocation);
 			if (distance < minDistance) {
 				index = i;
 				minDistance = distance;
@@ -95,25 +73,19 @@ export class ApiProvider {
 		return boxes[index];
 	}
 
-	getclosestSenseBoxTest(boxes: SenseBox[], location: Location): any {
+	getclosestSenseBoxTest(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {
 		let index: any = 0;
 		let minDistance: any = Number.MAX_VALUE;
 		let i = 0;
 		boxes.forEach(box => {
-			let boxLocation: Location = {
-				latitude: box.coordinates.latitude,
-				longitude: box.coordinates.longitude
-			};
-
-			let distance = this.calculateDistance(location, boxLocation)
+			let distance = box.location.distanceTo(userLocation);
 			if (distance < minDistance) {
 				index = i;
 				minDistance = distance;
 			}
 			i++;
 		});
-		let box: SenseBox = boxes[index];
-		return box;
+		return boxes[index];
 	}
 
 	getBoxMeasurements(box_id: String) {
@@ -121,8 +93,7 @@ export class ApiProvider {
 		return this.http.get(url);
 	}
 
-	getMeanTemp(cBoxes: SenseBox[]) {
-		let closestBoxes: any = cBoxes;
+	getMeanTemp(closestBoxes: SenseBox[]): number {
 		//dateused to look for sensors that provided measurements of TODAY
 		let date = new Date();
 		let dayOfMonth = date.getUTCDate();
@@ -153,16 +124,16 @@ export class ApiProvider {
 				}
 			});
 		});
-		let meanTemp: any = this.sumTemp / this.nSensors;
+		let meanTemp: number = this.sumTemp / this.nSensors;
 		return meanTemp;
 	}
 
 	//!!!! What should be the return statement? For now, only console output is given. Return statement should be discussed!
-	validateSenseBoxTemperature(cBox: SenseBox, cBoxes: SenseBox[]) {
+	validateSenseBoxTemperature(cBox: SenseBox, cBoxes: SenseBox[], tempRange: number) {
 		let closestBox = cBox;
 		let closestBoxes = cBoxes;
-		let meanTemperature: any = this.getMeanTemp(closestBoxes);
-		let range: any = this.global.tempRange; // +/- degree celsius
+		let meanTemperature: number = this.getMeanTemp(closestBoxes);
+		let range: any = tempRange; // +/- degree celsius
 
 		if (meanTemperature) {
 			this.getBoxMeasurements(closestBox._id).subscribe(res => {

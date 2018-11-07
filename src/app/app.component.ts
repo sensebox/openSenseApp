@@ -12,7 +12,7 @@ export class openSenseApp {
 
     @ViewChild(Nav) nav: Nav;
 
-    rootPage: any = HomePage;
+    public rootPage: any = HomePage;
 
     pages: Array<{ title: string, component: any }> = [
         { title: 'Home', component: HomePage },

@@ -8,11 +8,8 @@ import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
-import { SensifyComponentModule } from './sensify-components/sensify-component.module';
-import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { GlobalProvider } from '../providers/global/global';
-import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResult, NativeGeocoderOptions } from '@ionic-native/native-geocoder';
+import { NativeGeocoder } from '@ionic-native/native-geocoder';
 
 @NgModule({
     declarations: [
@@ -35,8 +32,7 @@ import { NativeGeocoder, NativeGeocoderReverseResult, NativeGeocoderForwardResul
         { provide: ErrorHandler, useClass: IonicErrorHandler },
         ApiProvider,
         LocalNotifications,
-        NativeGeocoder,
-        GlobalProvider
+        NativeGeocoder
     ]
 })
 export class AppModule { }

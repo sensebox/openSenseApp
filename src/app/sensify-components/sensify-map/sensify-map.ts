@@ -1,11 +1,10 @@
-import { Component, Input, SimpleChange } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { NavController, NavParams } from 'ionic-angular';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 import { latLng, tileLayer } from "leaflet";
-import { Geolocation, GeolocationOptions, Geoposition, PositionError } from "@ionic-native/geolocation";
+import { GeolocationOptions, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
-import { ApiProvider } from '../../../providers/api/api';
-import { Location, Metadata } from "../../../providers/model";
+import { Metadata, SenseBox } from "../../../providers/model";
 import { SensifyPage } from "../../../pages/sensify/sensify-page";
 import {OnChanges} from '@angular/core';
 
@@ -20,17 +19,35 @@ export class SensifyMapPage implements OnChanges {
 
     public options: GeolocationOptions;
     public currentPos: Geoposition;
-    public posMarker;
     public closestBoxes: any;
     public closestBoxesMarkers: any[] = [];
     public senseBoxesSet: boolean = false;
+
+    // Leaflet Config Values
+    public map: L.Map;
+    public LeafletOptions = {
+        layers: [
+            tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
+        ],
+        zoom: 13,
+        center: latLng(0, 0)
+    };
+    public layersControl = {
+        baselayers: null,
+        overlays: {},
+        position: 'topleft'
+    };
+    public userLocationMarker: L.Marker;
+    public userLocationMarkerLayer: L.LayerGroup;    
+    public senseboxMarkersLayer: L.LayerGroup;
+
+    public controllJSON;
 
     constructor(
         public navCtrl: NavController,
         public navParams: NavParams,
         public LM: LeafletModule,
-        private api: ApiProvider,
-        public sensifyPage : SensifyPage) { }
+        public sensifyPage : SensifyPage) {}
 
     public greenIcon = L.icon({
         iconUrl: '../../assets/imgs/greenMarker.png',
@@ -59,80 +76,98 @@ export class SensifyMapPage implements OnChanges {
 
     ngOnChanges(changes): void {
         if (changes.metadata && this.map) {
-            this.addUserLocationToMap();
+            if (this.metadata.settings.location) {
+                this.addUserLocationToMap();
+            }
+            if (this.metadata.senseBoxes) {
+                this.addSenseboxMarkerToMap();
+            }
         }
     }
 
-    // load the map, load the layer
-    map: L.Map;
-    // Leafet Map options
-    LeafletOptions = {
-        layers: [
-            tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
-        ],
-        zoom: 13,
-        center: latLng(0, 0)
-    };
     onMapReady(map: L.Map) {
         this.map = map;
+        this.map.addControl(L.control.zoom({ position: 'topright' }));
         this.addUserLocationToMap();
     }
 
-    // Center the map on the user-position
-    addUserLocationToMap() {
-        if (this.posMarker != undefined) {
-            this.map.removeLayer(this.posMarker);
-        }
-        // TODO: check Leaflet Documentation for LatLng object --> maybe adapt
-        this.map.panTo(new L.LatLng(this.metadata.settings.location.latitude, this.metadata.settings.location.longitude));
-        this.posMarker = L.marker([this.metadata.settings.location.latitude, this.metadata.settings.location.longitude], { icon: this.posIcon })
-            .bindPopup("<b>Your position:</b> <br> Latitude: " + this.metadata.settings.location.latitude + " <br> Longitude: " + this.metadata.settings.location.longitude);
-        this.posMarker.addTo(this.map);
-        //this.findclosestSenseboxes();
-    }
+    public addUserLocationToMap() {
+        // Center map on user location
+        this.map.panTo(this.metadata.settings.location);
 
+        // Remove user location layer from map
+        if (this.userLocationMarkerLayer != undefined) {
+            this.map.removeLayer(this.userLocationMarkerLayer);
+        }
+
+        // Create marker with user location + description
+        let popupDescription = "<b>Your position is:</b><br>Latitude: " + this.metadata.settings.location.toString();
+        this.userLocationMarker = L.marker(this.metadata.settings.location, 
+            { icon: this.posIcon })
+            .bindPopup(popupDescription);
+        
+        // Add userLocationMarker to Overlay Layer "Me"
+        this.layersControl.overlays['Me'] = L.layerGroup([this.userLocationMarker]);
+        this.layersControl.overlays['Me'].addTo(this.map);
+
+        // TODO: check Leaflet Documentation for LatLng object --> maybe adapt
+    }
+ 
     // TODO: Group Makers into single Layer instead of individual layers
+    // TODO: write delete function or better UPDATE function
     // Delete existing senseBoxes
-    deleteclosestSenseboxes() {
+    public deleteclosestSenseboxes() {
         for (let i = 0; i < this.closestBoxesMarkers.length; i++) {
             this.map.removeLayer(this.closestBoxesMarkers[i]);
             if (i >= this.closestBoxesMarkers.length - 1) {
                 this.closestBoxesMarkers = [];
-                this.addClosestSenseboxes();
+                this.addSenseboxMarkerToMap();
             }
         }
     }
-
+ 
     // Add senseBoxes to Map
-    addClosestSenseboxes() {
-        this.senseBoxesSet = true;
+    public addSenseboxMarkerToMap() {
+        // this.senseBoxesSet = true;
         for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
-            // Generate popup-description
-            let popupTextSensors = "";
-            for (let s = 0; s < this.metadata.senseBoxes[i].sensors.length; s++) {
-                if (this.metadata.senseBoxes[i].sensors[s].lastMeasurement != null) {
-                    popupTextSensors += this.metadata.senseBoxes[i].sensors[s].title + ": " + this.metadata.senseBoxes[i].sensors[s].lastMeasurement.value + "<br>";
-                }
-            }
-            // Generate Popup with description
-            let marker = L.marker([this.metadata.senseBoxes[i].coordinates.latitude, this.metadata.senseBoxes[i].coordinates.longitude], { icon: this.greenIcon })
-                .bindPopup("<b>" + this.metadata.senseBoxes[i].name + "</b><br>" + popupTextSensors);
+            // Generate marker-description
+            let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
+            // Generate marker
+            let marker = L.marker(this.metadata.senseBoxes[i].location, 
+                { icon: this.greenIcon })
+                .bindPopup(popupDescription);
+            // Add marker to map
             this.closestBoxesMarkers.push(marker);
-            this.closestBoxesMarkers[i].addTo(this.map);
         }
-        this.connectToBox();
+        this.senseboxMarkersLayer = L.layerGroup(this.closestBoxesMarkers);
+        this.layersControl.overlays['SenseBoxes'] = this.senseboxMarkersLayer;
+        this.layersControl.overlays['SenseBoxes'].addTo(this.map);
+    }
+
+    public getSenseboxPopupDescription(sensebox: SenseBox): string{
+        let sensorTitle = "<b>" + sensebox.name + "</b>";
+        let sensorsDescription : any;
+        for (let i = 0; i < sensebox.sensors.length; i++) {
+            if (sensebox.sensors[i].lastMeasurement != null) {
+                sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
+            }
+        }
+        return sensorTitle + "<br>" + sensorsDescription;
     }
 
 
     // Mark the nearest box on the map
-    connectToBox() {
-
-        console.log(this.map);/*
+    public connectToBox() {
+        // TODO: connect box and user on map = draw line
+    /*
+        console.log(this.map);
+        
         this.map.removeLayer(this.closestBoxesMarkers[index]);
 
         this.closestBoxesMarkers[index] = L.marker([lat, lng], { icon: this.redIcon }).on('click', () => {
             alert('senseBox: lat:' + this.metadata.settings.location.latitude + ", lon:" + this.metadata.settings.location.longitude);
         });
-        this.closestBoxesMarkers[index].addTo(this.map);*/
+        this.closestBoxesMarkers[index].addTo(this.map);
+    */
     }
 }

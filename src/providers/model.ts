@@ -1,8 +1,3 @@
-export interface Location {
-    latitude: number;
-    longitude: number;
-}
-
 export interface Sensor {
     title: String;
     unit: String;
@@ -15,7 +10,7 @@ export interface Sensor {
 
 export interface SenseBox {
     name: String;
-    coordinates: Location;
+    location: L.LatLng;
     model: String;
     grouptag: String;
     description: String;
@@ -27,7 +22,7 @@ export interface SenseBox {
 
 export interface Settings {
     gps: boolean;
-    location?: Location;
+    location?: L.LatLng;
     radius: number;
     mySenseBox?: String;
     ranges: {

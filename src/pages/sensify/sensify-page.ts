@@ -1,9 +1,9 @@
 import { ApiProvider } from '../../providers/api/api';
-import { Location, Settings, Metadata } from '../../providers/model';
+import { Metadata, SenseBox } from '../../providers/model';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Geolocation, GeolocationOptions, Geoposition, PositionError } from "@ionic-native/geolocation";
-import { Observable } from 'rxjs/Observable';
+import { Geolocation, Geoposition } from "@ionic-native/geolocation";
+import * as L from "leaflet";
 
 
 @IonicPage()
@@ -35,8 +35,10 @@ export class SensifyPage {
         }
         this.getUserPosition().then(
             res => {
-                if (res) {
+                console.log('res: ' + res);
+                if ('res 1: ' + res) {
                     this.setClosestSenseboxes().then(res2 => {
+                        console.log('res 2: ' + res2);
                         if (res2) {
                             this.setClosestSensebox();
                         }
@@ -52,7 +54,6 @@ export class SensifyPage {
     }
 
     public changeTab(tab) {
-        console.log(tab);
         this.tabSelector = tab;
     }
 
@@ -72,10 +73,7 @@ export class SensifyPage {
         // TODO: check if this.settings.gps === true
         return this.geolocation.getCurrentPosition()
             .then((pos: Geoposition) => {
-                this.metadata.settings.location = {
-                    latitude: pos.coords.latitude,
-                    longitude: pos.coords.longitude
-                }
+                this.metadata.settings.location =  new L.LatLng(pos.coords.latitude, pos.coords.longitude);
                 return true;
             }, (error) => {
                 return false;
@@ -85,10 +83,7 @@ export class SensifyPage {
     // Watch the user position
     subscription = this.geolocation.watchPosition()
         .subscribe(pos => {
-            let location = {
-                latitude: pos.coords.latitude,
-                longitude: pos.coords.longitude
-            }
+            let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
             // necessary to re-define this.settings to trigger ngOnChanges in sensify.map.ts
             this.metadata = {
                 settings: {
@@ -105,7 +100,7 @@ export class SensifyPage {
     // Search the nearest senseBoxes
     setClosestSenseboxes() {
         return new Promise(resolve => {
-            this.api.getClosestSenseBoxes(this.metadata.settings.location).subscribe(res => {
+            this.api.getClosestSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius).subscribe(res => {
                 this.metadata.senseBoxes = res;
                 resolve(true);
             });
@@ -115,17 +110,15 @@ export class SensifyPage {
 
     // Find the nearest senseBox
     setClosestSensebox() {
-        let closestBox: any = this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location);
+        let closestBox: SenseBox = this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location);
         this.metadata = {
             settings: this.metadata.settings,
             senseBoxes: this.metadata.senseBoxes,
             closestSenseBox: closestBox
         }
-
         //Test for Validation!!! Can be called from anywhere via API
-        this.api.validateSenseBoxTemperature(this.metadata.closestSenseBox, this.metadata.senseBoxes)
+        this.api.validateSenseBoxTemperature(this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature);
     }
-
 
     // TODO: getClosestSenseBoxes (only in sensify-page.ts) & set metadata.closestSenseBoxes
     // this.metadata.senseBoxes = this.api. requests

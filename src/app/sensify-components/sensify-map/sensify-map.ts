@@ -99,9 +99,10 @@ export class SensifyMapPage implements OnChanges {
         this.userLocationMarker = L.marker(this.metadata.settings.location, 
             { icon: this.posIcon })
             .bindPopup(popupDescription);
-        
+
+        this.userLocationMarkerLayer = L.layerGroup([this.userLocationMarker]);
         // Add userLocationMarker to Overlay Layer "Me"
-        this.layersControl.overlays['Me'] = L.layerGroup([this.userLocationMarker]);
+        this.layersControl.overlays['Me'] = this.userLocationMarkerLayer;
         this.layersControl.overlays['Me'].addTo(this.map);
     }
  

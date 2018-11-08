@@ -17,11 +17,7 @@ export class SensifyMapPage implements OnChanges {
     @Input()
     public metadata: Metadata;
 
-    public options: GeolocationOptions;
-    public currentPos: Geoposition;
-    public closestBoxes: any;
     public closestBoxesMarkers: any[] = [];
-    public senseBoxesSet: boolean = false;
 
     // Leaflet Config Values
     public map: L.Map;
@@ -43,13 +39,8 @@ export class SensifyMapPage implements OnChanges {
     public userLocationMarkerLayer: L.LayerGroup;    
     public senseboxMarkersLayer: L.LayerGroup;
 
-    public controllJSON;
-
     constructor(
-        public navCtrl: NavController,
-        public navParams: NavParams,
-        public LM: LeafletModule,
-        public sensifyPage : SensifyPage) {}
+        public navCtrl: NavController) {}
 
     public greenIcon = L.icon({
         iconUrl: '../../assets/imgs/greenMarker.png',
@@ -82,7 +73,6 @@ export class SensifyMapPage implements OnChanges {
                 this.addUserLocationToMap();
             }
             if (this.metadata.senseBoxes) {
-                this.removeMarkers();
                 this.addSenseboxMarkerToMap();
             }
         }
@@ -118,23 +108,17 @@ export class SensifyMapPage implements OnChanges {
         this.layersControl.overlays['Me'].addTo(this.map);
     }
  
-    // TODO: write delete function or better UPDATE function
-    // Delete existing senseBoxes
-    public deleteclosestSenseboxes() {
-        for (let i = 0; i < this.closestBoxesMarkers.length; i++) {
-            this.map.removeLayer(this.closestBoxesMarkers[i]);
-            if (i >= this.closestBoxesMarkers.length - 1) {
-                this.closestBoxesMarkers = [];
-            }
-        }
-    }
- 
     // Add senseBoxes to Map
     public addSenseboxMarkerToMap() {
-        // this.senseBoxesSet = true;
+        // Check if markers were already set; delete them if yes -> update markers
+        if(this.senseboxMarkersLayer != undefined){
+            this.map.removeLayer(this.senseboxMarkersLayer);
+            this.senseboxMarkersLayer = undefined;
+        }
+
         for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
             // Generate marker-description
-            let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
+            let popupDescription = SensifyMapPage.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
             // Generate marker
             if(this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location){
                 let marker = L.marker(this.metadata.senseBoxes[i].location, 
@@ -151,15 +135,15 @@ export class SensifyMapPage implements OnChanges {
             }
         }
         //line from user to closest box
-        let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]]
-        let polyline = L.polyline(lineCoords, {color:'red'})
+        let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
+        let polyline = L.polyline(lineCoords, {color:'red'});
         this.closestBoxesMarkers.push(polyline);
         this.senseboxMarkersLayer = L.layerGroup(this.closestBoxesMarkers);
         this.layersControl.overlays['SenseBoxes'] = this.senseboxMarkersLayer;
         this.layersControl.overlays['SenseBoxes'].addTo(this.map);
     }
 
-    public getSenseboxPopupDescription(sensebox: SenseBox): string{
+    static getSenseboxPopupDescription(sensebox: SenseBox): string{
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription : any;
         for (let i = 0; i < sensebox.sensors.length; i++) {
@@ -169,23 +153,4 @@ export class SensifyMapPage implements OnChanges {
         }
         return sensorTitle + "<br>" + sensorsDescription;
     }
-
-    public removeMarkers(){
-  
-    }
-
-    // Mark the nearest box on the map
-
-        // TODO: connect box and user on map = draw line
-    /*
-        console.log(this.map);
-        
-        this.map.removeLayer(this.closestBoxesMarkers[index]);
-
-        this.closestBoxesMarkers[index] = L.marker([lat, lng], { icon: this.redIcon }).on('click', () => {
-            alert('senseBox: lat:' + this.metadata.settings.location.latitude + ", lon:" + this.metadata.settings.location.longitude);
-        });
-        this.closestBoxesMarkers[index].addTo(this.map);
-    */
-    
 }

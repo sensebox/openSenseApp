@@ -11,6 +11,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { LocalNotifications } from '@ionic-native/local-notifications';
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
+import { FavoriteProvider } from '../providers/favorite/favorite';
+import { IonicStorageModule } from '@ionic/storage';
 
 @NgModule({
     declarations: [
@@ -21,7 +23,9 @@ import { LeafletModule } from "@asymmetrik/ngx-leaflet";
         HttpClientModule,
         BrowserModule,
         IonicModule.forRoot(openSenseApp),
-        LeafletModule
+        LeafletModule,
+        IonicStorageModule.forRoot()
+
     ],
     bootstrap: [IonicApp],
     entryComponents: [
@@ -33,8 +37,10 @@ import { LeafletModule } from "@asymmetrik/ngx-leaflet";
         SplashScreen,
         { provide: ErrorHandler, useClass: IonicErrorHandler },
         ApiProvider,
+        FavoriteProvider,
         LocalNotifications,
-        NativeGeocoder
+        NativeGeocoder,
+    FavoriteProvider
     ]
 })
 export class AppModule { }

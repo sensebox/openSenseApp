@@ -4,8 +4,7 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
-import { SenseBoxPage } from '../sense-box/sense-box';
-
+import { Storage } from '@ionic/storage';
 
 @IonicPage()
 @Component({
@@ -23,7 +22,7 @@ export class SensifyPage {
     about: boolean;
     currentPos: Geoposition;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage) {
         // TODO: check for localStorage
         this.metadata = {
             settings: {
@@ -70,8 +69,15 @@ export class SensifyPage {
     }
 
     public setMetadata(metadata: Metadata) {
-        console.log(metadata);
-        // TODO: adapt localStorage with new settings
+        this.metadata = metadata;
+        this.storage.set("metadata", this.metadata);
+    }
+
+    public getMetadata(){
+        this.storage.get('metadata').then((val) => {
+            console.log("Meta: ", val);
+            return val;
+        });
     }
 
     /**

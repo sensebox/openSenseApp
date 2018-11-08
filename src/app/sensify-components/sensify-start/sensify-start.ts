@@ -5,6 +5,7 @@ import { ApiProvider } from '../../../providers/api/api';
 import { Geolocation } from "@ionic-native/geolocation";
 import { NativeGeocoder } from '@ionic-native/native-geocoder';
 import { SenseBox, Metadata } from '../../../providers/model';
+import { SensifyPage } from '../../../pages/sensify/sensify-page';
 
 @Component({
     selector: 'sensify-page-start',
@@ -17,8 +18,9 @@ export class SensifyStartPage implements OnChanges {
 
     public currBox: SenseBox;
 
-    constructor(public platform: Platform, public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
+    constructor(public mySensifyPage:SensifyPage,public platform: Platform, public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation, private nativeGeocoder: NativeGeocoder) {
         // TODO: take mySenseBox from metadata.settings and not from API request again
+        this.mySensifyPage.getMetadata();
         // this.currBox = this.metadata.settings.mySenseBox ? this.metadata.settings.mySenseBox : this.api.getclosestSenseBoxTest(boxes, pos.coords);
     }
 

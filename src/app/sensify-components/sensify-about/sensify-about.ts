@@ -3,6 +3,8 @@ import { NavController, NavParams, AlertController, Platform } from 'ionic-angul
 import { LocalNotifications } from '@ionic-native/local-notifications'
 import { Metadata } from '../../../providers/model';
 
+import { SensifyPage } from '../../../pages/sensify/sensify-page';
+
 
 @Component({
     selector: 'sensify-page-about',
@@ -20,7 +22,7 @@ export class SensifyAboutPage {
     newValidationRange: any;
     newSenseboxID: any;
 
-    constructor(public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private plt: Platform, private localNotifications: LocalNotifications) {
+    constructor(public mySensifyPage:SensifyPage,  public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private plt: Platform, private localNotifications: LocalNotifications) {
         //if testing on device  (because notifications cant be tested on browser)
         if (this.plt.is('cordova')) {
             this.plt.ready().then(rdy => {
@@ -30,6 +32,7 @@ export class SensifyAboutPage {
             });
         }
     }
+    
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifyAboutPage');
@@ -64,7 +67,8 @@ export class SensifyAboutPage {
         if (this.newSenseboxID) {
             this.metadata.settings.mySenseBox = this.newSenseboxID;
         }
-
-        this.onMetadataChange.emit(this.metadata);
+        this.mySensifyPage.setMetadata(this.metadata);
+        //this.onMetadataChange.emit(this.metadata);
+       
     }
 }

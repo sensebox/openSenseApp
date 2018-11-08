@@ -1,11 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
-import { LeafletModule } from "@asymmetrik/ngx-leaflet";
+import { NavController} from 'ionic-angular';
 import { tileLayer } from "leaflet";
-import { GeolocationOptions, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Metadata, SenseBox } from "../../../providers/model";
-import { SensifyPage } from "../../../pages/sensify/sensify-page";
 import {OnChanges} from '@angular/core';
 
 @Component({

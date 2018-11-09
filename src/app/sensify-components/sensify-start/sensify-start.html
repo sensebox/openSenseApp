@@ -2,7 +2,7 @@
     <ion-grid>
         <ion-row>
             <div *ngIf="currBox">
-                <h1>{{currBox.name}}</h1>
+                <h1 id="senseBoxTitle">{{currBox.name}}</h1>
                 <ion-list>
                     <div *ngIf="currBox.sensors">
                         <div ion-item *ngFor="let sensor of currBox.sensors">

@@ -69,6 +69,7 @@ export class SensifyAboutPage {
         }
         this.mySensifyPage.setMetadata(this.metadata);
 
+        //Reset Input forms after setting change
         this.newRadius = null;
         this.newValidationRange = null;
         this.newSenseboxID = null;

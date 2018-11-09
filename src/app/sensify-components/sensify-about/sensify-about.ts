@@ -68,6 +68,10 @@ export class SensifyAboutPage {
             this.metadata.settings.mySenseBox = this.newSenseboxID;
         }
         this.mySensifyPage.setMetadata(this.metadata);
+
+        this.newRadius = null;
+        this.newValidationRange = null;
+        this.newSenseboxID = null;
         //this.onMetadataChange.emit(this.metadata);
        
     }

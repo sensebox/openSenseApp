@@ -27,7 +27,7 @@ export class SensifyPage {
         this.metadata = {
             settings: {
                 gps: true,
-                radius: 20,
+                radius: 5,
                 ranges: {
                     temperature: 5
                 }
@@ -46,7 +46,7 @@ export class SensifyPage {
         let closestBox : SenseBox;
         try {
             this.metadata.settings.location = await this.getUserPosition();
-            await this.api.getClosestSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius).then(res =>{
+            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res =>{
                 this.metadata.senseBoxes = res;
                 closestBox = this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location);
             });

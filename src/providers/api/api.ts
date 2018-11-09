@@ -9,7 +9,7 @@ import * as L from "leaflet";
 export class ApiProvider {
 
 	private API_URL = 'https://api.opensensemap.org';
-//	private API_URL = 'https://api.testing.opensensemap.org';
+	//private API_URL = 'https://api.testing.opensensemap.org';
 	private sumTemp: any = 0;
 	private nSensors: any = 0;
 
@@ -45,11 +45,12 @@ export class ApiProvider {
 		let lon1 = userLocation.lng + (dLonNorthWest * 180 / Math.PI);
 		let lat2 = userLocation.lat + (dLatSouthEast * 180 / Math.PI);
 		let lon2 = userLocation.lng + (dLonSouthEast * 180 / Math.PI);
-		//fill array
-		coordinates.push(lat1);
+		// Order specifically needs to be 
+		// longitude southwest, latitude southwest, longitude northeast, latitude northeast.
 		coordinates.push(lon1);
 		coordinates.push(lat2);
 		coordinates.push(lon2);
+		coordinates.push(lat1);
 
 		return coordinates;
 	}
@@ -60,12 +61,11 @@ export class ApiProvider {
 		let coordinatesString = coordinates.join(",");
 
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,unknown&bbox=`+coordinatesString).map(res => {
-			//incoming senseboxes
-			console.log(res)
 			let allBoxes: any = res;
 			allBoxes.forEach(element => {
 				let boxLocation: L.LatLng = new L.LatLng(element.currentLocation.coordinates[1], element.currentLocation.coordinates[0]);
-				let distance: number = boxLocation.distanceTo(userLocation) / 1000; // distanceTo returns meters, not kilometers
+				let distance: number = boxLocation.distanceTo(userLocation) / 1000; // distanceTo is in 'meters'
+				// filter necessary because filter is a circle, not a rectangle
 				if (distance <= radius) {
 					let box: SenseBox = {
 						name: element.name,
@@ -81,8 +81,6 @@ export class ApiProvider {
 				closestSenseBoxes.push(box);
 				}
 			});
-			//filtered senseboxes
-			console.log(closestSenseBoxes)
 			return closestSenseBoxes;
 		}).toPromise().then(closestSenseBoxes => {
 			return closestSenseBoxes;
@@ -90,9 +88,6 @@ export class ApiProvider {
 	}
 
 	getClosestSenseBoxes(userLocation: L.LatLng, radius: number): Promise<SenseBox[]> {
-		//testing BBOX api argument
-		this.getSenseBoxesInBB(userLocation, radius);
-
 		let closestSenseBoxes = [];
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor, unknown`).map(res => {
 			let allBoxes: any = res;

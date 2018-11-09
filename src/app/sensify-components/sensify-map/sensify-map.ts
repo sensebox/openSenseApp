@@ -143,7 +143,7 @@ export class SensifyMapPage implements OnChanges {
 
     static getSenseboxPopupDescription(sensebox: SenseBox): string{
         let sensorTitle = "<b>" + sensebox.name + "</b>";
-        let sensorsDescription : any;
+        let sensorsDescription : String = "";
         for (let i = 0; i < sensebox.sensors.length; i++) {
             if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
                 sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";

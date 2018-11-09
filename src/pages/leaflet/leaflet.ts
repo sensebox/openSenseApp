@@ -1,6 +1,8 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import leaflet from 'leaflet';
+import 'leaflet-routing-machine';
+import 'leaflet-search'
 
 /**
  * Generated class for the LeafletPage page.
@@ -26,19 +28,13 @@ export class LeafletPage {
     console.log('ionViewDidLoad LeafletPage');
   }
 
-  loadMap(){
-    this.map = leaflet.map('map').setView([51.505, -0.09], 13);
+  //Function used to load leaflet map --> called in weather-app.ts
+
+  loadMap() {
+    this.map = leaflet.map('map', { zoomControl: false }).setView([51.9606649, 7.6261347], 15);
 
     leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-
-    leaflet.marker([51.5, -0.09]).addTo(this.map)
-      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-      .openPopup();
   }
-
-    
-  
-
 }

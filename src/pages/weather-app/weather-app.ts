@@ -23,6 +23,7 @@ export class WeatherAppPage {
     console.log('ionViewDidLoad WeatherAppPage');
   }
 
+  // popover leaflet.html
   presentPopover(myEvent) {
     let popover = this.popoverCtrl.create( LeafletPage, {} , { cssClass: 'custom_popover' });
     popover.present({

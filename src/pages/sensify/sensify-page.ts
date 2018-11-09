@@ -1,10 +1,12 @@
 import { ApiProvider } from '../../providers/api/api';
 import { Metadata, SenseBox } from '../../providers/model';
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
+import { LocalNotifications } from '@ionic-native/local-notifications'
+
 
 @IonicPage()
 @Component({
@@ -22,7 +24,7 @@ export class SensifyPage {
     about: boolean;
     currentPos: Geoposition;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage, private localNotifications: LocalNotifications, private plt: Platform) {
         // TODO: check for localStorage
         this.metadata = {
             settings: {
@@ -34,11 +36,23 @@ export class SensifyPage {
             }
         }
         this.initSenseBoxes();
+
+        //On  Notification click display data property of notification
+        if (this.plt.is('cordova')) {
+            this.plt.ready().then(rdy => {
+                this.localNotifications.on('click').subscribe(res => {
+                    alert(res.data);
+                });
+            });
+        }
     }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifyPage');
         this.tabSelector = 'start';
+        
+        //example notification 
+        this.setNotificationWithTimer(0.2,"Test","Hey! Open up your Sensify-App for a quick update :)","Works like a charm.");
     }
 
     public async initSenseBoxes() {
@@ -115,6 +129,23 @@ export class SensifyPage {
                 closestSenseBox: this.metadata.closestSenseBox
             }
         });
+
+    //Set notification with time in minutes from now, Title, Text, data that will be visible on click
+    setNotificationWithTimer(time : number, title : String, text : String, data : String){
+        let timeInMS = time * 1000 * 60;    //time * 60 = time in seconds, time * 1000 = time in ms
+        if (this.plt.is('cordova')) {
+            this.localNotifications.schedule({
+                id: 1,
+                trigger: { at: new Date(new Date().getTime() + timeInMS) }, 
+                title: ""+title,
+                text: ""+text,
+                data: ""+data
+            });
+        } else {
+            console.log("Notifications are not set because you ain't on a real device or emulator.");
+        }
+    }
+
 
     // TODO: getClosestSenseBoxes (only in sensify-page.ts) & set metadata.closestSenseBoxes
     // this.metadata.senseBoxes = this.api. requests

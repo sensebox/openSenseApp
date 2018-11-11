@@ -63,25 +63,21 @@ export class SensifyMapPage implements OnChanges {
     }
 
     ngOnChanges(changes): void {
+        console.log(changes);
         if (changes.metadata && this.map) {
-            if (this.metadata.settings.location) {
-                this.addUserLocationToMap();
-                if (this.metadata.senseBoxes && this.metadata.closestSenseBox) {
-                    this.addSenseboxMarkerToMap();
-                }
-            }
+            this.updateMap();
         }
     }
 
     onMapReady(map: L.Map) {
         this.map = map;
+        this.updateMap();
+    }
 
+    public updateMap() {
         if (this.metadata.settings.location) {
-            console.log('map ready: add user');
-            console.log(this.metadata);
             this.addUserLocationToMap();
             if (this.metadata && this.metadata.senseBoxes && this.metadata.closestSenseBox) {
-                console.log('map ready: add boxes');
                 this.addSenseboxMarkerToMap();
             }
         }

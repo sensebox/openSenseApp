@@ -16,6 +16,7 @@ import { LocalNotifications } from '@ionic-native/local-notifications'
 export class SensifyPage {
 
     public metadata: Metadata;
+    public startLocation: L.LatLng;
 
     tab: String;
     tabSelector: String;
@@ -57,21 +58,41 @@ export class SensifyPage {
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
         try {
-            console.log('get userlocation');
-            await this.getUserPosition().then(userlocation => { this.metadata.settings.location = userlocation; });
-            this.metadata = this.metadata;
+            await this.getUserPosition().then(userlocation => {
+                this.metadata.settings.location = userlocation;
+                this.startLocation = userlocation;
+            });
+            console.log('initSenseBoxes() - get user position');
+            this.updateMetadata();
             await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
-            console.log('get senseboxes');
-            this.metadata = this.metadata;
+            console.log('initSenseBoxes() - get sense boxes');
+            this.updateMetadata();
             await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
-            console.log('get closest sensebox');
-            this.metadata = this.metadata;
+            console.log('initSenseBoxes() - get closest sense box');
+            this.updateMetadata();
 
             // Test for Validation!!! Can be called from anywhere via API
             this.api.validateSenseBoxTemperature(this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature);
         }
         catch (err) {
             console.log(err);
+        }
+    }
+
+    public async updateBoxes() {
+        console.log('updateBoxes - get all');
+        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+        this.updateMetadata();
+        console.log('updatBoxes - get closest');
+        await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+        this.updateMetadata();
+    }
+    
+    private updateMetadata() {
+        this.metadata = {
+            settings: this.metadata.settings,
+            senseBoxes: this.metadata.senseBoxes,
+            closestSenseBox: this.metadata.closestSenseBox
         }
     }
 
@@ -135,6 +156,10 @@ export class SensifyPage {
                 },
                 senseBoxes: this.metadata.senseBoxes,
                 closestSenseBox: this.metadata.closestSenseBox
+            }
+
+            if (location.distanceTo(this.startLocation) / 1000 >= this.metadata.settings.radius / 2) {
+                this.updateBoxes();
             }
 
             if (this.metadata.senseBoxes && this.metadata.settings.location) {

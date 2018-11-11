@@ -121,7 +121,7 @@ export class ApiProvider {
 		if(!userLocation) { console.error('no userlcoation provided!\ngetClosestSenseBox() has no property userLocation.'); }
 		return new Promise(resolve => {
 			let index = 0;
-			let minDistance: any = Number.MAX_VALUE;
+			let minDistance: number = Number.MAX_VALUE;
 			let i = 0;
 			boxes.forEach(box => {
 				let distance = box.location.distanceTo(userLocation);
@@ -136,7 +136,7 @@ export class ApiProvider {
 	};
 
 	getclosestSenseBoxTest(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {
-		let index: any = 0;
+		let index: number = 0;
 		let minDistance: any = Number.MAX_VALUE;
 		let i = 0;
 		boxes.forEach(box => {

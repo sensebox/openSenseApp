@@ -1,5 +1,5 @@
 import { ApiProvider } from '../../providers/api/api';
-import { Metadata, SenseBox } from '../../providers/model';
+import { Metadata } from '../../providers/model';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
@@ -7,6 +7,11 @@ import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
 import { LocalNotifications } from '@ionic-native/local-notifications'
 
+interface Loading {
+    show: boolean,
+    message: string,
+    messages: string[]
+}
 
 @IonicPage()
 @Component({
@@ -17,6 +22,13 @@ export class SensifyPage {
 
     public metadata: Metadata;
     public startLocation: L.LatLng;
+
+    public globalMessage;
+    public loadingSpinner: Loading = {
+        show: false,
+        message: null,
+        messages: [],
+    };
 
     tab: String;
     tabSelector: String;
@@ -34,6 +46,10 @@ export class SensifyPage {
                 ranges: { temperature: 5 }
             }
         }
+        this.globalMessage = {
+            show: false,
+            message: null
+        };
         this.getMetadata();
         this.initSenseBoxes();
 
@@ -58,17 +74,21 @@ export class SensifyPage {
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
         try {
+            this.showGlobalMessage('No SenseBoxes around.');
+            this.toggleSpinner(true, 'Loading user position.');
             await this.getUserPosition().then(userlocation => {
                 this.metadata.settings.location = userlocation;
                 this.startLocation = userlocation;
             });
-            console.log('initSenseBoxes() - get user position');
+            this.toggleSpinner(false, 'Loading user position.');
             this.updateMetadata();
+            this.toggleSpinner(true, 'Loading SenseBoxes.');
             await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
-            console.log('initSenseBoxes() - get sense boxes');
+            this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
+            this.toggleSpinner(true, 'Loading closest SenseBox.');
             await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
-            console.log('initSenseBoxes() - get closest sense box');
+            this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
 
             // Test for Validation!!! Can be called from anywhere via API
@@ -79,13 +99,47 @@ export class SensifyPage {
         }
     }
 
+    /**
+     * Function to display and verify message of loading spinner.
+     * @param show {boolean} Should be true, if spinner is visible.
+     * @param msg {string} Should be the displayed message.
+     */
+    public toggleSpinner(show: boolean, msg: string) {
+        this.globalMessage = {
+            show: false,
+            message: ''
+        }
+        let idx = this.loadingSpinner.messages.findIndex(el => el === msg);
+        this.loadingSpinner.show = show;
+        if (idx >= 0) {
+            this.loadingSpinner.messages.splice(idx, 1);
+            if (this.loadingSpinner.messages.length > 0) {
+                this.loadingSpinner.show = true;
+                this.loadingSpinner.message = this.loadingSpinner.messages[this.loadingSpinner.messages.length - 1];
+            } else {
+                this.loadingSpinner.show = false;
+            }
+        } else if (show) {
+            this.loadingSpinner.messages.push(msg);
+            this.loadingSpinner.message = msg;
+        }
+        return;
+    }
+
     public async updateBoxes() {
-        console.log('updateBoxes - get all');
+        this.globalMessage = {
+            show: false,
+            message: ""
+        }
+        await this.updateMetadata();
+        await this.toggleSpinner(true, 'Updating SenseBoxes.');
         await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
-        this.updateMetadata();
-        console.log('updatBoxes - get closest');
+        await this.toggleSpinner(false, 'Updating SenseBoxes.');
+        await this.updateMetadata();
+        await this.toggleSpinner(true, 'Updating closest SenseBox.');
         await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
-        this.updateMetadata();
+        await this.toggleSpinner(false, 'Updating closest SenseBox.');
+        await this.updateMetadata();
     }
     
     private updateMetadata() {
@@ -94,6 +148,7 @@ export class SensifyPage {
             senseBoxes: this.metadata.senseBoxes,
             closestSenseBox: this.metadata.closestSenseBox
         }
+        return;
     }
 
     public changeTab(tab) {
@@ -103,6 +158,13 @@ export class SensifyPage {
     public setMetadata(metadata: Metadata) {
         this.metadata = metadata;
         this.storage.set("metadata", this.metadata);
+    }
+
+    public showGlobalMessage(msg: string) {
+        this.globalMessage = {
+            show: true,
+            message: msg
+        }
     }
 
     public getMetadata() {
@@ -146,19 +208,9 @@ export class SensifyPage {
             console.log('watch position');
             let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
             // necessary to re-define this.settings to trigger ngOnChanges in sensify.map.ts
-
-            this.metadata = {
-                settings: {
-                    location: location,
-                    radius: this.metadata.settings.radius,
-                    ranges: this.metadata.settings.ranges,
-                    gps: this.metadata.settings.gps
-                },
-                senseBoxes: this.metadata.senseBoxes,
-                closestSenseBox: this.metadata.closestSenseBox
-            }
-
+            this.metadata.settings.location = location;
             if (location.distanceTo(this.startLocation) / 1000 >= this.metadata.settings.radius / 2) {
+                this.startLocation = this.metadata.settings.location;
                 this.updateBoxes();
             }
 

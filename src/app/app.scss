@@ -67,3 +67,7 @@
         background: map-get($colors, primary);
     }
 }
+
+.header-md::after {
+    height: 0%;
+}

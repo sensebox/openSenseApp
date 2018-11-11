@@ -57,11 +57,14 @@ export class SensifyPage {
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
         try {
+            console.log('get userlocation');
             await this.getUserPosition().then(userlocation => { this.metadata.settings.location = userlocation; });
             this.metadata = this.metadata;
             await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+            console.log('get senseboxes');
             this.metadata = this.metadata;
             await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+            console.log('get closest sensebox');
             this.metadata = this.metadata;
 
             // Test for Validation!!! Can be called from anywhere via API
@@ -122,6 +125,7 @@ export class SensifyPage {
             console.log('watch position');
             let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
             // necessary to re-define this.settings to trigger ngOnChanges in sensify.map.ts
+
             this.metadata = {
                 settings: {
                     location: location,
@@ -131,6 +135,13 @@ export class SensifyPage {
                 },
                 senseBoxes: this.metadata.senseBoxes,
                 closestSenseBox: this.metadata.closestSenseBox
+            }
+
+            if (this.metadata.senseBoxes && this.metadata.settings.location) {
+                this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => {
+                    this.metadata.closestSenseBox = closestBox;
+                    this.metadata = this.metadata;
+                });
             }
         });
 

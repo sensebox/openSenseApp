@@ -54,7 +54,7 @@ export class ApiProvider {
 		return coordinates;
 	}
 
-	getSenseBoxesInBB(userLocation : L.LatLng, radius: number): Promise<SenseBox[]>{
+	getSenseBoxesInBB(userLocation : L.LatLng, radius: number): Promise<SenseBox[]> {
 		let coordinates = this.getBboxCoordinates(userLocation, radius);
 		let closestSenseBoxes : SenseBox[] = [];
 		let coordinatesString = coordinates.join(",");
@@ -116,21 +116,24 @@ export class ApiProvider {
 		});
 	}
 
-	getclosestSenseBox(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {
+	getclosestSenseBox(boxes: SenseBox[], userLocation: L.LatLng): Promise<SenseBox> {
 		// TODO: Error Handling for SenseBox.length = 0
-		let index = 0;
-		let minDistance: any = Number.MAX_VALUE;
-		let i = 0;
-		boxes.forEach(box => {
-			let distance = box.location.distanceTo(userLocation);
-			if (distance < minDistance) {
-				index = i;
-				minDistance = distance;
-			}
-			i++;
+		if(!userLocation) { console.error('no userlcoation provided!\ngetClosestSenseBox() has no property userLocation.'); }
+		return new Promise(resolve => {
+			let index = 0;
+			let minDistance: any = Number.MAX_VALUE;
+			let i = 0;
+			boxes.forEach(box => {
+				let distance = box.location.distanceTo(userLocation);
+				if (distance < minDistance) {
+					index = i;
+					minDistance = distance;
+				}
+				i++;
+			});
+			resolve(boxes[index]);
 		});
-		return boxes[index];
-	}
+	};
 
 	getclosestSenseBoxTest(boxes: SenseBox[], userLocation: L.LatLng): SenseBox {
 		let index: any = 0;

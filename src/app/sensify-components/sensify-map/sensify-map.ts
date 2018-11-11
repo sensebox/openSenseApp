@@ -67,21 +67,27 @@ export class SensifyMapPage implements OnChanges {
     ngOnChanges(changes): void {
         if (changes.metadata && this.map) {
             if (this.metadata.settings.location) {
+                console.log('update user location');
                 this.addUserLocationToMap();
-            }
-            if (this.metadata.senseBoxes) {
-                this.addSenseboxMarkerToMap();
+                if (this.metadata.senseBoxes && this.metadata.closestSenseBox) {
+                    console.log('update sense and closest boxes');
+                    this.addSenseboxMarkerToMap();
+                }
             }
         }
     }
 
     onMapReady(map: L.Map) {
         this.map = map;
-        // this.map.removeControl();
-        // this.map.addControl(L.control.zoom({ position: 'topleft' }));
-        this.addUserLocationToMap();
-        if (this.metadata && this.metadata.senseBoxes) {
-            this.addSenseboxMarkerToMap();
+
+        if (this.metadata.settings.location) {
+            console.log('map ready: add user');
+            console.log(this.metadata);
+            this.addUserLocationToMap();
+            if (this.metadata && this.metadata.senseBoxes && this.metadata.closestSenseBox) {
+                console.log('map ready: add boxes');
+                this.addSenseboxMarkerToMap();
+            }
         }
     }
 
@@ -108,8 +114,9 @@ export class SensifyMapPage implements OnChanges {
  
     // Add senseBoxes to Map
     public addSenseboxMarkerToMap() {
+        console.log(this.metadata);
         // Check if markers were already set; delete them if yes -> update markers
-        if(this.senseboxMarkersLayer != undefined){
+        if (this.senseboxMarkersLayer != undefined){
             this.map.removeLayer(this.senseboxMarkersLayer);
             this.senseboxMarkersLayer = undefined;
         }
@@ -118,13 +125,13 @@ export class SensifyMapPage implements OnChanges {
             // Generate marker-description
             let popupDescription = SensifyMapPage.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
             // Generate marker
-            if(this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location){
+            if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location){
                 let marker = L.marker(this.metadata.senseBoxes[i].location, 
                     { icon: this.greenIcon })
                     .bindPopup(popupDescription);
                 // Add marker to map
                 this.closestBoxesMarkers.push(marker);
-            }else{//ClosestSenseBox Marker
+            } else {//ClosestSenseBox Marker
                 let marker = L.marker(this.metadata.senseBoxes[i].location, 
                     { icon: this.redIcon })
                     .bindPopup(popupDescription);

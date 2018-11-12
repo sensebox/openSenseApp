@@ -117,21 +117,22 @@ export class ApiProvider {
 	}
 
 	getclosestSenseBox(boxes: SenseBox[], userLocation: L.LatLng): Promise<SenseBox> {
-		// TODO: Error Handling for SenseBox.length = 0
 		if(!userLocation) { console.error('no userlcoation provided!\ngetClosestSenseBox() has no property userLocation.'); }
 		return new Promise(resolve => {
 			let index = 0;
 			let minDistance: number = Number.MAX_VALUE;
 			let i = 0;
-			boxes.forEach(box => {
-				let distance = box.location.distanceTo(userLocation);
-				if (distance < minDistance) {
-					index = i;
-					minDistance = distance;
-				}
-				i++;
-			});
-			resolve(boxes[index]);
+			if(boxes.length != 0){
+        boxes.forEach(box => {
+          let distance = userLocation.distanceTo(box.location);
+          if (distance < minDistance) {
+            index = i;
+            minDistance = distance;
+          }
+          i++;
+        });
+        resolve(boxes[index]);
+      }
 		});
 	};
 

@@ -134,8 +134,7 @@ export class SensifyPage {
         };
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating SenseBoxes.');
-        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; console.log(this.metadata.senseBoxes)});
-        console.log(this.metadata.senseBoxes);
+        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
         await this.toggleSpinner(false, 'Updating SenseBoxes.');
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating closest SenseBox.');

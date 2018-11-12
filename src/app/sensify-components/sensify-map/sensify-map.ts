@@ -15,7 +15,7 @@ export class SensifyMapPage implements OnChanges {
     public metadata: Metadata;
 
     @Output()
-    public onMessageChange: EventEmitter<string> = new EventEmitter();;
+    public onMessageChange: EventEmitter<string> = new EventEmitter();
 
     // Leaflet Config Values
     public map: L.Map;
@@ -68,6 +68,7 @@ export class SensifyMapPage implements OnChanges {
     ngOnChanges(changes): void {
         console.log(changes);
         if (changes.metadata && this.map) {
+            console.log("CHANGES MAP");
             this.updateMap();
         }
     }
@@ -107,6 +108,7 @@ export class SensifyMapPage implements OnChanges {
  
     // Add senseBoxes to Map
     public addSenseboxMarkerToMap() {
+        console.log(this.metadata.senseBoxes);
         if (this.metadata.senseBoxes && this.metadata.closestSenseBox && this.metadata.senseBoxes.length > 0) {
             let closestBoxesMarkers = [];
             for (let i = 0; i < this.metadata.senseBoxes.length; i++) {

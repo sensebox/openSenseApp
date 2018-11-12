@@ -45,12 +45,11 @@ export class SensifyPage {
                 radius: 5,
                 ranges: { temperature: 5 }
             }
-        }
+        };
         this.globalMessage = {
             show: false,
             message: null
         };
-        this.getMetadata();
         this.initSenseBoxes();
 
         //On Notification click display data property of notification
@@ -81,7 +80,9 @@ export class SensifyPage {
                 this.startLocation = userlocation;
             });
             this.toggleSpinner(false, 'Loading user position.');
-            this.updateMetadata();
+            await this.getMetadata().then(meta => {
+              this.metadata = meta
+            });
             this.toggleSpinner(true, 'Loading SenseBoxes.');
             await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
             this.toggleSpinner(false, 'Loading SenseBoxes.');
@@ -108,7 +109,7 @@ export class SensifyPage {
         this.globalMessage = {
             show: false,
             message: ''
-        }
+        };
         let idx = this.loadingSpinner.messages.findIndex(el => el === msg);
         this.loadingSpinner.show = show;
         if (idx >= 0) {
@@ -130,10 +131,11 @@ export class SensifyPage {
         this.globalMessage = {
             show: false,
             message: ""
-        }
+        };
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating SenseBoxes.');
-        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; console.log(this.metadata.senseBoxes)});
+        console.log(this.metadata.senseBoxes);
         await this.toggleSpinner(false, 'Updating SenseBoxes.');
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating closest SenseBox.');
@@ -147,7 +149,7 @@ export class SensifyPage {
             settings: this.metadata.settings,
             senseBoxes: this.metadata.senseBoxes,
             closestSenseBox: this.metadata.closestSenseBox
-        }
+        };
         return;
     }
 
@@ -157,6 +159,7 @@ export class SensifyPage {
 
     public setMetadata(metadata: Metadata) {
         this.metadata = metadata;
+        this.updateBoxes();
         this.storage.set("metadata", this.metadata);
     }
 
@@ -167,21 +170,24 @@ export class SensifyPage {
         }
     }
 
-    public getMetadata() {
-        this.storage.get('metadata')
-            .then((val) => {
-                console.log("Meta: ", val);
-                this.metadata = {
-                    settings: {
-                        gps: val ? val.settings.gps : true,
-                        radius: val ? val.settings.radius : 5,
-                        ranges: val ? val.settings.ranges : { temperature: 5 },
-                        location: this.metadata.settings.location ? this.metadata.settings.location : ( val && val.settings.location ? val.settings.location : null )
-                    },
-                    senseBoxes: this.metadata.senseBoxes ? this.metadata.senseBoxes : ( val && val.senseBoxes ? val.senseBoxes : null ),
-                    closestSenseBox: this.metadata.closestSenseBox ? this.metadata.closestSenseBox : ( val && val.closestSenseBox ? val.closestSenseBox : null )
-                }
-            });
+    // Get the Metadata from storage
+    getMetadata(): Promise<Metadata> {
+      return this.storage.get('metadata')
+        .then((val) => {
+          console.log("Meta: ", val);
+          return {
+            settings: {
+              gps: val ? val.settings.gps : true,
+              radius: val ? val.settings.radius : 5,
+              ranges: val ? val.settings.ranges : { temperature: 5 },
+              location: this.metadata.settings.location ? this.metadata.settings.location : ( val && val.settings.location ? val.settings.location : null )
+            },
+            senseBoxes: this.metadata.senseBoxes ? this.metadata.senseBoxes : ( val && val.senseBoxes ? val.senseBoxes : null ),
+            closestSenseBox: this.metadata.closestSenseBox ? this.metadata.closestSenseBox : ( val && val.closestSenseBox ? val.closestSenseBox : null )
+          };
+        }, (error) => {
+          return error;
+        });
     }
 
     /**

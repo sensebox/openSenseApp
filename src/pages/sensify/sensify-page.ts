@@ -6,7 +6,6 @@ import { Geolocation, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
 import { LocalNotifications } from '@ionic-native/local-notifications';
-import { AlertController } from 'ionic-angular';
 
 interface Loading {
     show: boolean,
@@ -39,7 +38,7 @@ export class SensifyPage {
     about: boolean;
     currentPos: Geoposition;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage, private localNotifications: LocalNotifications, private plt: Platform, private alertCtrl: AlertController) {
+    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage, private localNotifications: LocalNotifications, private plt: Platform) {
         // check for localStorage
         this.metadata = {
             settings: {
@@ -98,13 +97,6 @@ export class SensifyPage {
 
             // Test for Validation!!! Can be called from anywhere via API
             this.api.validateSenseBoxTemperature(this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature);
-            let alert = this.alertCtrl.create({
-              title: 'Loaded successfully',
-              subTitle: 'SenseBoxes are loaded successfully',
-              buttons: ['OK']
-            });
-            alert.present();
-
         }
         catch (err) {
             console.log(err);
@@ -163,12 +155,6 @@ export class SensifyPage {
         }
         await this.toggleSpinner(false, 'Updating closest SenseBox.');
         await this.updateMetadata();
-        let alert = this.alertCtrl.create({
-          title: 'Update successfully',
-          subTitle: 'SenseBoxes are updated successfully',
-          buttons: ['OK']
-        });
-        alert.present();
     }
     
     private updateMetadata() {
@@ -240,7 +226,7 @@ export class SensifyPage {
         return new Promise(resolve => {
             let tempBoxes: SenseBox[] = [];
             for(let i = 0; i < this.metadata.senseBoxes.length; i++) {
-                let distance: number = this.metadata.senseBoxes[i].location.distanceTo(this.metadata.settings.location) / 1000;
+                let distance: number = this.metadata.settings.location.distanceTo(this.metadata.senseBoxes[i].location) / 1000;
                 if (distance <= this.radius) {
                   tempBoxes.push(this.metadata.senseBoxes[i]);
                 }

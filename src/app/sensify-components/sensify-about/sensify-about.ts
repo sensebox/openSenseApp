@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { NavController, NavParams, AlertController } from 'ionic-angular';
+import {NavController, NavParams, Platform} from 'ionic-angular';
 import { Metadata } from '../../../providers/model';
+import { AlertController } from 'ionic-angular';
 
 import { SensifyPage } from '../../../pages/sensify/sensify-page';
 
@@ -21,7 +22,7 @@ export class SensifyAboutPage {
     newValidationRange: any;
     newSenseboxID: any;
 
-    constructor(public mySensifyPage:SensifyPage,  public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams) {
+    constructor(public mySensifyPage:SensifyPage,  public navCtrl: NavController, public alertCrtl: AlertController, public navParams: NavParams, private alertCtrl: AlertController) {
     }
     
     ionViewDidLoad() {
@@ -44,6 +45,22 @@ export class SensifyAboutPage {
             this.metadata.settings.mySenseBox = this.newSenseboxID;
         }
         this.mySensifyPage.setMetadata(this.metadata);
+
+        if(this.newRadius || this.newValidationRange || this.newSenseboxID){
+            let alert = this.alertCtrl.create({
+              title: 'Saved successfully',
+              subTitle: 'Settings are saved successfully',
+              buttons: ['OK']
+            });
+            alert.present();
+        } else {
+            let alert = this.alertCtrl.create({
+              title: 'Nothing changed',
+              subTitle: 'There were no settings changed',
+              buttons: ['OK']
+            });
+            alert.present();
+        }
 
         //Reset Input forms after setting change
         this.newRadius = null;

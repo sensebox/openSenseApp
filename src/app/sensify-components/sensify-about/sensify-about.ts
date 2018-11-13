@@ -30,9 +30,6 @@ export class SensifyAboutPage {
     }
 
     //SETTINGS
-    //TODO
-    //-save inputs in other variables on button press so that they dont vanish when switching between tabs
-    //-show current settings in the fields
     //-Think about other setting options that we need
     public changeSettings() {
         if (this.newRadius) {
@@ -66,7 +63,6 @@ export class SensifyAboutPage {
         this.newRadius = null;
         this.newValidationRange = null;
         this.newSenseboxID = null;
-        //this.onMetadataChange.emit(this.metadata);
-       
+        //this.onMetadataChange.emit(this.metadata);    
     }
 }

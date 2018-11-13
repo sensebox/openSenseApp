@@ -30,20 +30,19 @@
                 <strong>Settings</strong>
             </ion-item>
             <ion-item>
-                <ion-label color="primary" floating>Radius (in km)</ion-label>
+                <ion-label color="primary" stacked>Radius (in km)</ion-label>
                 <!-- TODO: add placeholders ( e.g. in the ion-input: placeholder="{{settings.radius}}" ) -->
-                <ion-input type="number" min="0" [(ngModel)]="newRadius"></ion-input>
+                <ion-input type="number" min="0" [(ngModel)]="newRadius" placeholder="{{metadata.settings.radius}}"></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label color="primary" floating>Temp Validation Range (in °C)</ion-label>
-                <ion-input type="number" min="0" [(ngModel)]="newValidationRange"></ion-input>
+                <ion-label color="primary" stacked>Temp Validation Range (in °C)</ion-label>
+                <ion-input type="number" min="0" [(ngModel)]="newValidationRange" placeholder={{metadata.settings.ranges.temperature}}></ion-input>
             </ion-item>
             <ion-item>
-                <ion-label color="primary" floating>SenseBox ID</ion-label>
-                <ion-input [(ngModel)]="newSenseboxID"></ion-input>
+                <ion-label color="primary" stacked>SenseBox ID</ion-label>
+                <ion-input [(ngModel)]="newSenseboxID" placeholder="{{metadata.settings.mySenseBox}}"></ion-input>
             </ion-item>
         </ion-col>
     </ion-row>
     <button ion-button round outline (click)="changeSettings()">Confirm Changes</button>
-
 </ion-grid>

@@ -11,10 +11,11 @@
 
             <ion-row  id="tempRow" justify-content-center>
                 <ion-col id="temperature" col-8>
-                    Temperature Information
+                    Temperature
                 </ion-col>
                 <ion-col id="sunIndicator">
                     Sunrise/Sunset
+                    <h5 *ngIf="date" id="sunrise">{{sunrise}} / {{sunset}}</h5>
                 </ion-col>
             </ion-row>
 

@@ -92,18 +92,16 @@ $colors: (
 @import "noto-sans";
 
 
+// Styling the popver used for leaflet
 ion-popover{
   ion-backdrop{
   opacity: 0.5 !important;
   }
   .popover-wrapper{
-  .popover-content{
-  width: 97vw;
-  height: 100vw;
-  }
-  }
-  }
-
-  .scroll-content {
-    overflow-y: auto;
+      .popover-content{
+        width: 98.5%;
+        height: 90%;
+      }
+    }
 }
+

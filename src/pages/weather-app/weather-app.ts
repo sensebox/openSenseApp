@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { LeafletPage } from '../leaflet/leaflet';
 
 /**
  * Generated class for the WeatherAppPage page.
@@ -15,24 +16,32 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class WeatherAppPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad WeatherAppPage');
   }
 
-  refresh_click(){
+  // popover leaflet.html
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create( LeafletPage, {} , { cssClass: 'custom_popover' });
+    popover.present({
+      ev: myEvent
+    });
+  }
+
+  refresh_click() {
     console.log('Refresh was clicked');
   }
-  
-  locate_click(){
+
+  locate_click() {
     console.log('Locate was clicked');
   }
-  
-  search_click(){
+
+  search_click() {
     console.log('Search was clicked');
   }
-  
-  
+
+
 }

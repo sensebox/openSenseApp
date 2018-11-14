@@ -35,3 +35,4 @@ export interface Metadata {
     senseBoxes?: SenseBox[]; // Contains Closest SenseBoxes defined by radius and user location
     closestSenseBox?: SenseBox;
 }
+

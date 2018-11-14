@@ -1,52 +1,68 @@
 sensify-page-start {
+    
+}
+
+.start{
+    background: no-repeat 0 0 fixed;
+    background-size: cover;
+    color: rgb(255, 255, 255);
 }
 
 #senseBoxTitle{
-    color: #4EAF47;
+    font-size:40px;
+    color: rgb(255, 255, 255);
 }
 
 #titleRow{
-    background: yellow;
+    background: transparent;
     height: 10vh;
+    
 }
 
 #dateRow{
-    background: purple;
     height: 8vh;
 }
 
 #tempRow{
-    background: green;
     height: 25vh;
 }
 
 #temperature{
-    background: darkcyan;
+    position: relative;
+    left:40px;
+    font-size: 15px;
 }
 
-#sunIndicator{
-    background:darkolivegreen;
+.temp{
+    position: relative;
+    left:40px;
+    font-size: 50px;
 }
 
 #dataRow{
-    background: red;
     height: 40vh;
 }
 
 #sensors{
-    background:darkkhaki;
-    text-align: center;
+    background:rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    line-height: 2;
+    text-align: left;
     align-content: center;
 }
 
 #values{
-    background:darkorange;
+    background:rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    line-height: 2;
     text-align: center;
     align-content: center;
 }
 
 #unit{
-    background:plum;
+    background:rgba(0, 0, 0, 0.5);
+    font-size: 20px;
+    line-height: 2;
     text-align: center;
     align-content: center;
 }

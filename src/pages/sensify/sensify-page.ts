@@ -1,11 +1,11 @@
 import { ApiProvider } from '../../providers/api/api';
-import { Metadata } from '../../providers/model';
+import { Metadata, SenseBox } from '../../providers/model';
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
-import { LocalNotifications } from '@ionic-native/local-notifications'
+import { LocalNotifications } from '@ionic-native/local-notifications';
 
 interface Loading {
     show: boolean,
@@ -22,6 +22,7 @@ export class SensifyPage {
 
     public metadata: Metadata;
     public startLocation: L.LatLng;
+    public radius: number;
 
     public globalMessage;
     public loadingSpinner: Loading = {
@@ -46,6 +47,7 @@ export class SensifyPage {
                 ranges: { temperature: 5 }
             }
         };
+        this.radius = 5;
         this.globalMessage = {
             show: false,
             message: null
@@ -81,7 +83,8 @@ export class SensifyPage {
             });
             this.toggleSpinner(false, 'Loading user position.');
             await this.getMetadata().then(meta => {
-              this.metadata = meta
+                this.metadata = meta;
+                this.radius = meta.settings.radius;
             });
             this.toggleSpinner(true, 'Loading SenseBoxes.');
             await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
@@ -92,8 +95,8 @@ export class SensifyPage {
             this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
 
-            // Test for Validation!!! Can be called from anywhere via API
-            this.api.validateSenseBoxTemperature(this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature);
+            // Test for Validation!!! Can be called from anywhere via API            
+            console.log("SenseBox Sensor Value for Temperature Valid? : "+this.api.sensorIsValid("Temperatur", this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature));
         }
         catch (err) {
             console.log(err);
@@ -134,11 +137,22 @@ export class SensifyPage {
         };
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating SenseBoxes.');
-        await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+        // Check whether radius gets bigger or smaller
+        if(this.radius <= this.metadata.settings.radius){
+            await this.getBoxesSmallerRadius()
+                .then(res => {
+                    this.metadata.senseBoxes = res;
+                })
+        } else {
+            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+        }
+        this.radius = this.metadata.settings.radius;
         await this.toggleSpinner(false, 'Updating SenseBoxes.');
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating closest SenseBox.');
-        await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+        if(this.radius > this.metadata.settings.radius){
+          await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+        }
         await this.toggleSpinner(false, 'Updating closest SenseBox.');
         await this.updateMetadata();
     }
@@ -205,6 +219,20 @@ export class SensifyPage {
             }, (error) => {
                 return error;
             });
+    }
+
+    // If radius gets smaller, compute the new SenseBoxes
+    getBoxesSmallerRadius():Promise<SenseBox[]>{
+        return new Promise(resolve => {
+            let tempBoxes: SenseBox[] = [];
+            for(let i = 0; i < this.metadata.senseBoxes.length; i++) {
+                let distance: number = this.metadata.settings.location.distanceTo(this.metadata.senseBoxes[i].location) / 1000;
+                if (distance <= this.radius) {
+                  tempBoxes.push(this.metadata.senseBoxes[i]);
+                }
+            }
+            resolve(tempBoxes);
+        });
     }
 
     // Watch the user position

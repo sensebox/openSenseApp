@@ -66,7 +66,6 @@ export class SensifyMapPage implements OnChanges {
     }
 
     ngOnChanges(changes): void {
-        console.log(changes);
         if (changes.metadata && this.map) {
             this.updateMap();
         }

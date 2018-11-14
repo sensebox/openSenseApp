@@ -3,7 +3,7 @@ export interface Sensor {
     unit: String;
     lastMeasurement: {
         value: String;
-        createdAt;
+        createdAt: String;
     };
     sensorType: String;
     id: String;

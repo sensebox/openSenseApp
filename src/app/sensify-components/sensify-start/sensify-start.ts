@@ -38,7 +38,7 @@ export class SensifyStartPage implements OnChanges {
         var sunset = this.sunset.replace( ":" , ".")
       
 
-        if(sunrise > currTime || currTime > sunset){    //Nacht
+        if(Number(sunrise) > Number(currTime) || Number(currTime) > Number(sunset)){    //Nacht
             this.bgImage = "../../../assets/imgs/nightBackground.jpg";
         }else{                                          //Tag
             if(Number(this.temperature.slice(0 , -3)) < 0){

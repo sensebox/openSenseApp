@@ -1,68 +1,87 @@
 sensify-page-start {
     
-}
+    .start{
+        background: no-repeat 0 0 fixed;
+        background-size: cover;
+        color: rgb(255, 255, 255);
+    }
 
-.start{
-    background: no-repeat 0 0 fixed;
-    background-size: cover;
-    color: rgb(255, 255, 255);
-}
+    #senseBoxTitle{
+        font-size:40px;
+        color: rgb(255, 255, 255);
+    }
 
-#senseBoxTitle{
-    font-size:40px;
-    color: rgb(255, 255, 255);
-}
+    #titleRow{
+        background: transparent;
+        height: 10vh;
+        
+    }
 
-#titleRow{
-    background: transparent;
-    height: 10vh;
-    
-}
+    #dateRow{
+        height: 8vh;
+    }
 
-#dateRow{
-    height: 8vh;
-}
+    #tempRow{
+        height: 25vh;
+    }
 
-#tempRow{
-    height: 25vh;
-}
+    #temperature{
+        position: relative;
+        left:30px;
+        font-size: 15px;
+    }
 
-#temperature{
-    position: relative;
-    left:40px;
-    font-size: 15px;
-}
+    .temp{
+        position: relative;
+        font-size: 60px;
+    }
 
-.temp{
-    position: relative;
-    left:40px;
-    font-size: 50px;
-}
+    #sunIndicator{
+        text-align: center;
+        align-content: center;
+    }
 
-#dataRow{
-    height: 40vh;
-}
+    #sunriseIcon{
+        margin-bottom: -10px;
+        height: 30px;;
+        width: 30px;
+    }
 
-#sensors{
-    background:rgba(0, 0, 0, 0.5);
-    font-size: 20px;
-    line-height: 2;
-    text-align: left;
-    align-content: center;
-}
+    #sunsetIcon{
+        margin-bottom: -10px;
+        height: 30px;;
+        width: 30px;
+    }
 
-#values{
-    background:rgba(0, 0, 0, 0.5);
-    font-size: 20px;
-    line-height: 2;
-    text-align: center;
-    align-content: center;
-}
+    #dataRow{
+        height: 40vh;
+    }
 
-#unit{
-    background:rgba(0, 0, 0, 0.5);
-    font-size: 20px;
-    line-height: 2;
-    text-align: center;
-    align-content: center;
+    #sensors{
+        background:rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        line-height: 2;
+        text-align: left;
+        align-content: center;
+    }
+
+    #values{
+        background:rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        line-height: 2;
+        text-align: center;
+        align-content: center;
+    }
+
+    #unit{
+        background:rgba(0, 0, 0, 0.5);
+        font-size: 20px;
+        line-height: 2;
+        text-align: center;
+        align-content: center;
+    }
+
+    li{
+        border-right: 1px solid #aaa;
+    }
 }

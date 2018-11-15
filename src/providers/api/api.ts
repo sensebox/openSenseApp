@@ -120,17 +120,31 @@ export class ApiProvider {
 			let index = 0;
 			let minDistance: number = Number.MAX_VALUE;
 			let i = 0;
+			//Current day in YYYY-MM-DD Format for easy comparison
+			let date = new Date();
+			let currentDay = date.getUTCDate();
+			let currentMonth = date.getUTCMonth() +1;  //January is 0
+			let currentYear = date.getUTCFullYear();
+			let today  = currentYear+"-"+currentMonth+"-"+currentDay;
 			if(boxes.length != 0){
-        boxes.forEach(box => {
-          let distance = userLocation.distanceTo(box.location);
-          if (distance < minDistance) {
-            index = i;
-            minDistance = distance;
-          }
-          i++;
-        });
-        resolve(boxes[index]);
-      }
+				boxes.forEach(box => {
+					if(box.updatedAt){
+						let updatedAt = box.updatedAt.substring(0,10);
+						let distance = userLocation.distanceTo(box.location);
+						if (distance < minDistance && today == updatedAt) {
+							index = i;
+							minDistance = distance;
+						}
+						i++;
+					}
+				});
+				if(minDistance != Number.MAX_VALUE){
+					resolve(boxes[index]);
+				} else {
+					console.error("NO SENSEBOXES THAT HAVE BEEN UPDATED TODAY")
+					resolve(boxes[index]);
+				}
+      		}
 		});
 	};
 

@@ -95,7 +95,7 @@ export class SensifyPage {
             this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
 
-            // Test for Validation!!! Can be called from anywhere via API            
+            // TEST: VALIDATE TEMPERATURE VALUE OF CLOSEST SENSEBOX          
             console.log("SenseBox Sensor Value for Temperature Valid? : "+this.api.sensorIsValid("Temperatur", this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature));
         }
         catch (err) {

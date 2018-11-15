@@ -140,8 +140,16 @@ export class ApiProvider {
 				});
 				if(minDistance != Number.MAX_VALUE){
 					resolve(boxes[index]);
-				} else {
-					console.error("NO SENSEBOXES THAT HAVE BEEN UPDATED TODAY")
+				}else {   //When minDistance is still MAX_VALUE and boxes.length was not zero => No Box with values from today found, therefor closst Box is searched
+					boxes.forEach(box => {
+						let distance = userLocation.distanceTo(box.location);
+						if (distance < minDistance) {
+							index = i;
+							minDistance = distance;
+						}
+						i++;
+					});
+					console.error("NO SENSEBOX WITH VALUES FROM TODAY FOUND. USING CLOSEST BOX INSTEAD")
 					resolve(boxes[index]);
 				}
       		}

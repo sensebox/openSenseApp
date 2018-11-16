@@ -4,7 +4,7 @@
     - https://ionicframework.com/docs/cli/
 - please fork this repository to develop your apps
 
-### Prequesites 
+### Prequesites:-
 
 - Node + NPM (nvm) 
     - https://www.npmjs.com/get-npm

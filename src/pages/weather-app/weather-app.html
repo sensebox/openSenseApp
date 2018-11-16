@@ -3,12 +3,7 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>senseBox name</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="refresh_click()" icon-only>
-        <ion-icon name="refresh"></ion-icon>
-      </button>
-    </ion-buttons>
+    <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
     <ion-buttons start>
       <button ion-button (click)="locate_click()" icon-only>
         <ion-icon name="locate"></ion-icon>
@@ -22,43 +17,32 @@
   </ion-navbar>
 </ion-header>
 
+
 <ion-content padding class="buttons-components-page">
   <ion-card>
     <ion-card-content>
-      <ion-item>
-        <ion-icon name="rainy"></ion-icon>
-        <img src="assets/imgs/logo.png" />
-      </ion-item>
+      <!--  <ion-img src="https://api.sat24.com/animated/DE/rainTMC/3/Central%20European%20Standard%20Time/9553668"></ion-img>
+         <img src="https://api.sat24.com/animated/EU/rainTMC/3/Central%20European%20Standard%20Time/5384757 " /> -->
+       <img src="{{api.sat24Url}}">
     </ion-card-content>
 
-    <ion-item>
-      <button ion-button > <ion-icon name="share"></ion-icon> </button>
-    </ion-item>
-  </ion-card>
-
-  <ion-list>
-    <ion-item>
-      <ion-icon name="thermometer"></ion-icon>
-      Temperature
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="cloud"></ion-icon>
-      Real Air Humidity
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="speedometer"></ion-icon>
-      Air Pressure
-    </ion-item>
-
-    <ion-item>
-      <ion-icon name="sunny"></ion-icon>
-      Illumination
-    </ion-item>
-  </ion-list>
-  
+       <ion-refresher (ionRefresh)="doRefresh($event)">
+         <ion-refresher-content></ion-refresher-content>
+       </ion-refresher>
 
 
+       <ion-item>
+         <button ion-button > <ion-icon name="share"></ion-icon> </button>
+       </ion-item>
+     </ion-card>
 
-</ion-content>
+     <div *ngIf="boxData">
+       <ion-list>
+         <div ion-item *ngFor="let sensor of boxData.sensors">
+           <h2>{{sensor.title}}</h2>
+           <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+         </div>
+       </ion-list>
+     </div>
+
+    </ion-content>

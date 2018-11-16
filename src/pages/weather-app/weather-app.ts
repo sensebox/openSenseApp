@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+
 import {ApiProvider} from "../../providers/api/api";
+
+import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
+import { LeafletPage } from '../leaflet/leaflet';
 
 
 @IonicPage()
@@ -10,14 +13,15 @@ import {ApiProvider} from "../../providers/api/api";
   })
 
 export class WeatherAppPage {
-  boxData: any;
-  constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider) {
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad WeatherAppPage');
     this.refresh_data();
   }
+
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
@@ -49,10 +53,23 @@ task = setInterval(() => {
 */
 
   locate_click(){
+  // popover leaflet.html
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create( LeafletPage, {} , { cssClass: 'custom_popover' });
+    popover.present({
+      ev: myEvent
+    });
+  }
+
+  refresh_click() {
+    console.log('Refresh was clicked');
+  }
+
+  locate_click() {
     console.log('Locate was clicked');
   }
-  
-  search_click(){
+
+  search_click() {
     console.log('Search was clicked');
   }
 

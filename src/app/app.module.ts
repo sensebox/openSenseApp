@@ -8,6 +8,8 @@ import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
+import { LeafletPage } from '../pages/leaflet/leaflet';
+import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
 
 @NgModule({
   declarations: [
@@ -17,12 +19,14 @@ import { HttpClientModule } from '@angular/common/http';
   imports: [
     HttpClientModule,
     BrowserModule,
-    IonicModule.forRoot(openSenseApp)
+    IonicModule.forRoot(openSenseApp),
+    LeafletPageModule 
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     openSenseApp,
-    HomePage
+    HomePage,
+    LeafletPage
   ],
   providers: [
     StatusBar,

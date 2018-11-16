@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import {ApiProvider} from "../../providers/api/api";
+import {ApiProvider} from '../../providers/api/api';
 
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
@@ -13,8 +13,8 @@ import { LeafletPage } from '../leaflet/leaflet';
   })
 
 export class WeatherAppPage {
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController) {
+  boxData: any;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController, private api: ApiProvider) {
   }
 
   ionViewDidLoad() {
@@ -52,22 +52,20 @@ task = setInterval(() => {
 }, 1000000);
 */
 
-  locate_click(){
-  // popover leaflet.html
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create( LeafletPage, {} , { cssClass: 'custom_popover' });
-    popover.present({
-      ev: myEvent
-    });
+  locate_click() {
+    // popover leaflet.html
   }
+    presentPopover(myEvent){
+      let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
+      popover.present({
+        ev: myEvent
+      });
+    }
 
   refresh_click() {
     console.log('Refresh was clicked');
   }
 
-  locate_click() {
-    console.log('Locate was clicked');
-  }
 
   search_click() {
     console.log('Search was clicked');

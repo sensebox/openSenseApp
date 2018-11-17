@@ -63,6 +63,9 @@ export class LeafletPage {
       this.boxData.forEach(box => {
         featureArray.push(box);
       });
+      this.boxLayer.bindPopup(function (layer) {
+        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button data-id={id} id="boxButton" onclick="safeBoxId()">set preference</button><br></p>', layer.feature.properties);
+      });
     });
 
   }
@@ -81,8 +84,8 @@ let
     let geojsonFeature = {
       "type": "Feature",
       "properties": {
-        "name": entry.Name,
-        "amenity": entry.Name,
+        "name": entry.name,
+        "id": entry._id,
         "entry": entry,
         "popupContent": 'GoodBox!'
 

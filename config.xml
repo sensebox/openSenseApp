@@ -3,7 +3,7 @@
     <name>openSenseApp</name>
     <description>Apps utilizing the openSenseMap and senseBox.</description>
     <author email="kontakt@reedu.de" href="https://reedu.de/">re:edu</author>
-    <content original-src="index.html" src="http://192.168.178.44:8100" />
+    <content src="index.html" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />

@@ -19,6 +19,7 @@ export interface SenseBox {
     updatedAt: String;
     sensors: Sensor[];
     _id: String;
+    updatedCategory: String;
 }
 
 export interface Settings {

@@ -26,7 +26,7 @@ export class ApiProvider {
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,unknown`);
 	}
 
-	getBboxCoordinates(userLocation: L.LatLng, radius : number): number[]{
+	static getBboxCoordinates(userLocation: L.LatLng, radius : number): number[]{
 		let coordinates : number[] = [];
 		//earth radius in meters
 		let earthRadius = 6378137;
@@ -53,12 +53,18 @@ export class ApiProvider {
 	}
 
 	getSenseBoxesInBB(userLocation : L.LatLng, radius: number): Promise<SenseBox[]> {
-		let coordinates = this.getBboxCoordinates(userLocation, radius);
+		let coordinates = ApiProvider.getBboxCoordinates(userLocation, radius);
 		let closestSenseBoxes : SenseBox[] = [];
 		let coordinatesString = coordinates.join(",");
 
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,unknown&bbox=`+coordinatesString).map(res => {
 			let allBoxes: any = res;
+      //Current day in YYYY-MM-DD Format for easy comparison
+      let date = new Date();
+      let currentDay = date.getUTCDate();
+      let currentMonth = date.getUTCMonth() +1;  //January is 0
+      let currentYear = date.getUTCFullYear();
+      let today  = currentYear+"-"+currentMonth+"-"+currentDay;
 			allBoxes.forEach(element => {
 				let boxLocation: L.LatLng = new L.LatLng(element.currentLocation.coordinates[1], element.currentLocation.coordinates[0]);
 				let distance: number = boxLocation.distanceTo(userLocation) / 1000; // distanceTo is in 'meters'
@@ -73,8 +79,19 @@ export class ApiProvider {
 						createdAt: element.createdAt,
 						updatedAt: element.updatedAt,
 						sensors: element.sensors,
-						_id: element._id
-					}
+						_id: element._id,
+            updatedCategory: null
+					};
+          let updatedAt = box.updatedAt.substring(0,10);
+          let dateWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
+          let dateUpdate = new Date(box.updatedAt.toString());
+          if(today == updatedAt){
+            box.updatedCategory = "today";
+          } else if(dateWeek.getTime() < dateUpdate.getTime()){
+            box.updatedCategory = "thisWeek";
+          } else {
+            box.updatedCategory = "tooOld";
+          }
 				closestSenseBoxes.push(box);
 				}
 			});
@@ -102,8 +119,9 @@ export class ApiProvider {
 						createdAt: element.createdAt,
 						updatedAt: element.updatedAt,
 						sensors: element.sensors,
-						_id: element._id
-					}
+						_id: element._id,
+            updatedCategory: null
+					};
 
 					closestSenseBoxes.push(box);
 				}
@@ -124,7 +142,7 @@ export class ApiProvider {
 			let date = new Date();
 			let currentDay = date.getUTCDate();
 			let currentMonth = date.getUTCMonth() +1;  //January is 0
-			let currentYear = date.getUTCFullYear();
+      let currentYear = date.getUTCFullYear();
 			let today  = currentYear+"-"+currentMonth+"-"+currentDay;
 			if(boxes.length != 0){
 				boxes.forEach(box => {
@@ -149,7 +167,7 @@ export class ApiProvider {
 						}
 						i++;
 					});
-					console.error("NO SENSEBOX WITH VALUES FROM TODAY FOUND. USING CLOSEST BOX INSTEAD")
+					console.error("NO SENSEBOX WITH VALUES FROM TODAY FOUND. USING CLOSEST BOX INSTEAD");
 					resolve(boxes[index]);
 				}
       		}
@@ -239,7 +257,7 @@ export class ApiProvider {
 		});
 		//Division by zero handling
 		if(numberOfSensors === 0){
-			console.error("VALIDATION ERROR: Could not validate. No Sensors or no measurements from today found.")
+			console.error("VALIDATION ERROR: Could not validate. No Sensors or no measurements from today found.");
 			return 0;			
 		}else{
 			mean = sum/numberOfSensors;
@@ -261,7 +279,7 @@ export class ApiProvider {
 			return true;
 		}else {
 			return false;
-		}	
+		}
 	}
 
 }

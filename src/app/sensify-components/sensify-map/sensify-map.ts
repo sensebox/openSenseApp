@@ -123,6 +123,8 @@ export class SensifyMapPage implements OnChanges {
         if (this.metadata.senseBoxes && this.metadata.closestSenseBox && this.metadata.senseBoxes.length > 0) {
             let closestBoxesMarkers = [];
             for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
+                if (!this.metadata.senseBoxes[i].location) {
+                }
                 // Generate marker-description
                 let popupDescription = SensifyMapPage.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
                 // Generate marker
@@ -147,7 +149,7 @@ export class SensifyMapPage implements OnChanges {
                         closestBoxesMarkers.push(marker);
                     }
                 } else {//ClosestSenseBox Marker
-                    let marker = L.marker(this.metadata.senseBoxes[i].location, 
+                    let marker = L.marker(this.metadata.closestSenseBox.location, 
                         { icon: this.blueIcon })
                         .bindPopup(popupDescription);
                     // Add marker to map

@@ -130,11 +130,11 @@ export class SensifyStartPage implements OnChanges {
         var day = currentDate.getDate()
         var month = currentDate.getMonth() + 1 //January is 0!
         var year = currentDate.getFullYear()
-        console.log(day + "." + month + "." + year);
         this.date = day + "." + month + "." + year;
     }
 
     ngOnChanges(changes) {
+        console.log(changes)
         if (changes.metadata.currentValue.closestSenseBox) {
             this.currBox = this.metadata.closestSenseBox;
         }

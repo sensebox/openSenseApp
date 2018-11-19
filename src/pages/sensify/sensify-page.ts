@@ -91,7 +91,16 @@ export class SensifyPage {
             this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
             this.toggleSpinner(true, 'Loading closest SenseBox.');
-            await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+
+            //if personal sensebox is saved, us it instead of searching for closestSenseBox. If not, search closestSenseBox like usually
+            if(this.metadata.settings.mySenseBox){
+                await this.api.getSenseBoxByID(this.metadata.settings.mySenseBox).then(res => {
+                    let box : any = res;
+                    this.metadata.closestSenseBox = box;
+                })
+            }else{
+                await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+            }
             this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
 

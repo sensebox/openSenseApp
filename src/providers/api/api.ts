@@ -18,6 +18,29 @@ export class ApiProvider {
 		return this.http.get(`${this.API_URL}/boxes/5b0d436fd40a290019ef444d`);
 	}
 
+	getSenseBoxByID(boxID : String){
+		return this.http.get(`${this.API_URL}/boxes/`+boxID).map(res => {
+			let closestBox : any = res;
+					let boxLocation: L.LatLng = new L.LatLng(closestBox.currentLocation.coordinates[1], closestBox.currentLocation.coordinates[0]);
+						let box: SenseBox = {
+							name: closestBox.name,
+							location: boxLocation,
+							model: closestBox.model,
+							grouptag: closestBox.grouptag,
+							description: closestBox.description,
+							createdAt: closestBox.createdAt,
+							updatedAt: closestBox.updatedAt,
+							sensors: closestBox.sensors,
+							_id: closestBox._id,
+							updatedCategory: null
+						};
+						return box;
+		},error => console.log(error)).toPromise().then(closestSenseBox => {
+			console.log(closestSenseBox)
+			return closestSenseBox;
+		}, error => console.log("No SenseBox found..."));
+	}
+
 	getSenseBoxes() {
 		return this.http.get(`${this.API_URL}/boxes?exposure=outdoor,mobile,unknown`);
 	}
@@ -80,7 +103,7 @@ export class ApiProvider {
 						updatedAt: element.updatedAt,
 						sensors: element.sensors,
 						_id: element._id,
-            updatedCategory: null
+            			updatedCategory: null
 					};
           let updatedAt = box.updatedAt.substring(0,10);
           let dateWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);

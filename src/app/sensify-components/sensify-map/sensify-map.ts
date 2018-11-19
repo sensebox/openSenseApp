@@ -135,8 +135,11 @@ export class SensifyMapPage implements OnChanges {
             }
             //line from user to closest box
             let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
-            let polyline = L.polyline(lineCoords, {color:'red'});
-            closestBoxesMarkers.push(polyline);
+            let line = L.polyline(lineCoords,{className:"line", dashArray:"10,15"});
+            closestBoxesMarkers.push(line);
+            //Circle, visualizing radius
+            let radiusCircle = L.circle(this.metadata.settings.location, {className:"circle", radius: this.metadata.settings.radius*1000});
+            closestBoxesMarkers.push(radiusCircle)
             this.senseboxMarkersLayer = L.layerGroup(closestBoxesMarkers);
             this.layersControl.overlays['SenseBoxes'] = this.senseboxMarkersLayer;
             this.layersControl.overlays['SenseBoxes'].addTo(this.map);

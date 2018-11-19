@@ -105,17 +105,22 @@ export class ApiProvider {
 						_id: element._id,
             			updatedCategory: null
 					};
-          let updatedAt = box.updatedAt.substring(0,10);
-          let dateWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
-          let dateUpdate = new Date(box.updatedAt.toString());
-          if(today == updatedAt){
-            box.updatedCategory = "today";
-          } else if(dateWeek.getTime() < dateUpdate.getTime()){
-            box.updatedCategory = "thisWeek";
-          } else {
-            box.updatedCategory = "tooOld";
-          }
-				closestSenseBoxes.push(box);
+					if(box.updatedAt){
+						let updatedAt = box.updatedAt.substring(0,10);
+						let dateWeek = new Date(date.getFullYear(), date.getMonth(), date.getDate() - 7);
+						let dateUpdate = new Date(box.updatedAt.toString());
+						if(today == updatedAt){
+							box.updatedCategory = "today";
+						} else if(dateWeek.getTime() < dateUpdate.getTime()){
+							box.updatedCategory = "thisWeek";
+						} else {
+							box.updatedCategory = "tooOld";
+						}
+						closestSenseBoxes.push(box);
+					} else {
+						box.updatedCategory = "tooOld";
+						closestSenseBoxes.push(box);
+					}
 				}
 			});
 			return closestSenseBoxes;
@@ -165,7 +170,7 @@ export class ApiProvider {
 			let date = new Date();
 			let currentDay = date.getUTCDate();
 			let currentMonth = date.getUTCMonth() +1;  //January is 0
-      let currentYear = date.getUTCFullYear();
+      		let currentYear = date.getUTCFullYear();
 			let today  = currentYear+"-"+currentMonth+"-"+currentDay;
 			if(boxes.length != 0){
 				boxes.forEach(box => {
@@ -181,7 +186,8 @@ export class ApiProvider {
 				});
 				if(minDistance != Number.MAX_VALUE){
 					resolve(boxes[index]);
-				}else {   //When minDistance is still MAX_VALUE and boxes.length was not zero => No Box with values from today found, therefor closst Box is searched
+				}else {
+					//When minDistance is still MAX_VALUE and boxes.length was not zero => No Box with values from today found, therefor closst Box is searched
 					boxes.forEach(box => {
 						let distance = userLocation.distanceTo(box.location);
 						if (distance < minDistance) {

@@ -118,7 +118,7 @@ export class SensifyPage {
             console.log("SenseBox Sensor Value for Temperature Valid? : "+this.api.sensorIsValid("Temperatur", this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature));
         }
         catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }
 
@@ -233,7 +233,8 @@ export class SensifyPage {
                 // this.metadata.settings.location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
                 return new L.LatLng(pos.coords.latitude, pos.coords.longitude);
             }, (error) => {
-                return error;
+                return new L.LatLng(51.9695, 7.5961);
+                // return error;
             });
     }
 
@@ -251,11 +252,13 @@ export class SensifyPage {
         });
     }
 
+    /*
     // Watch the user position
     subscription = this.geolocation.watchPosition()
         .subscribe(pos => {
             console.log('watch position');
-            let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
+            // let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
+            let location = new L.LatLng(7.5961, 51.9695);
             // necessary to re-define this.settings to trigger ngOnChanges in sensify.map.ts
             this.metadata.settings.location = location;
             if (location.distanceTo(this.startLocation) / 1000 >= this.metadata.settings.radius / 2) {
@@ -270,6 +273,7 @@ export class SensifyPage {
                 });
             }
         });
+        */
 
     //Set notification with time in minutes from now, Title, Text, data that will be visible on click
     setNotificationWithTimer(time : number, title : String, text : String, data : String){

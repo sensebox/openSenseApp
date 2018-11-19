@@ -50,7 +50,7 @@ export class LeafletPage {
     }).addTo(this.map);
     
     //load sensboxes
-    this.loadSenseboxLayer();
+   // this.loadSenseboxLayer();
 
     //add search
     this.map.addControl( new leaflet.Control.Search({
@@ -63,6 +63,15 @@ export class LeafletPage {
       autoType: false,
       minLength: 2
     }) );
+
+    //define custom sensebox icon for marker
+    var senseIcon = leaflet.icon({
+      iconUrl: 'assets/imgs/logo.png',
+      iconSize: [50, 50], // size of the icon
+    });
+
+    // create marker object, pass custom icon as option, add to map         
+    var marker = leaflet.marker([51.9606649, 7.6261347], { icon: senseIcon }).addTo(this.map);
 
   }
 

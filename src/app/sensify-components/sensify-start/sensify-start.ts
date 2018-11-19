@@ -66,6 +66,10 @@ export class SensifyStartPage implements OnChanges {
     public async init() {
 
         try {
+            await this.mySensifyPage.getUserPosition().then(userlocation => {
+                this.metadata.settings.location = userlocation;
+                this.mySensifyPage.startLocation = userlocation;
+            });
             await this.mySensifyPage.getMetadata().then(meta => {
                 this.metadata = meta;
                 this.currBox= this.metadata.closestSenseBox;

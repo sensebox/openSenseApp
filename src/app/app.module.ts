@@ -11,6 +11,8 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
+import { StatsPage } from '../pages/stats/stats';
+import { StatsPageModule } from '../pages/stats/stats.module';
 
 @NgModule({
   declarations: [
@@ -22,13 +24,15 @@ import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
     BrowserModule,
     IonicModule.forRoot(openSenseApp),
     IonicStorageModule.forRoot(),
-    LeafletPageModule
+    LeafletPageModule,
+    StatsPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     openSenseApp,
     HomePage,
-    LeafletPage
+    LeafletPage,
+    StatsPage
   ],
   providers: [
     StatusBar,

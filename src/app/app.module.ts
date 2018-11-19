@@ -3,6 +3,7 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
+import { IonicStorageModule } from '@ionic/storage'
 
 import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -20,7 +21,8 @@ import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
     HttpClientModule,
     BrowserModule,
     IonicModule.forRoot(openSenseApp),
-    LeafletPageModule 
+    IonicStorageModule.forRoot(),
+    LeafletPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

@@ -67,14 +67,6 @@ export class SensifyPage {
         }
     }
 
-    openSelect() {
-        this.selectRef.open();
-    }
-
-    closeSelect() {
-        this.selectRef.close();
-    }
-
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifyPage');
         this.tabSelector = 'start';
@@ -82,6 +74,15 @@ export class SensifyPage {
         //example notification 
         this.setNotificationWithTimer(0.2,"Test","Hey! Open up your Sensify-App for a quick update :)","Works like a charm.");
     }
+
+    public openSelect() {
+        this.selectRef.open();
+    }
+
+    public closeSelect() {
+        this.selectRef.close();
+    }
+
 
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
@@ -102,7 +103,16 @@ export class SensifyPage {
             this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
             this.toggleSpinner(true, 'Loading closest SenseBox.');
-            await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+
+            //if personal sensebox is saved, us it instead of searching for closestSenseBox. If not, search closestSenseBox like usually
+            if(this.metadata.settings.mySenseBox){
+                await this.api.getSenseBoxByID(this.metadata.settings.mySenseBox).then(res => {
+                    let box : any = res;
+                    this.metadata.closestSenseBox = box;
+                })
+            }else{
+                await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+            }
             this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
 

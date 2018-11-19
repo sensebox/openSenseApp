@@ -1,14 +1,10 @@
-import { Component, Input } from '@angular/core';
-import { Metadata } from '../../../providers/model';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'sensify-page-notifications',
   templateUrl: 'sensify-notifications.html'
 })
 export class SensifyNotificationsPage {
-
-  @Input()
-  public metadata: Metadata;
 
   constructor() {}
 

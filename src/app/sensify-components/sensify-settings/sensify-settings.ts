@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { Metadata } from '../../../providers/model';
 import { AlertController } from 'ionic-angular';
+import { ApiProvider } from '../../../providers/api/api'
 
 import { SensifyPage } from '../../../pages/sensify/sensify-page';
 
@@ -22,7 +23,7 @@ export class SensifySettingsPage {
     newSenseboxID: any;
 
 
-    constructor(public mySensifyPage:SensifyPage, public alertCrtl: AlertController, private alertCtrl: AlertController) {}
+    constructor(public mySensifyPage:SensifyPage, public alertCrtl: AlertController, public api : ApiProvider, private alertCtrl: AlertController) {}
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifySettingsPage');
@@ -38,9 +39,18 @@ export class SensifySettingsPage {
             this.metadata.settings.ranges.temperature = this.newValidationRange;
         }
         if (this.newSenseboxID) {
-            this.metadata.settings.mySenseBox = this.newSenseboxID;
+            //Validate if senseBoxID is a sensebox
+            this.api.getSenseBoxByID(this.newSenseboxID).then(res => {
+                if(res){
+                    this.metadata.closestSenseBox = res;
+                    this.metadata.settings.mySenseBox = this.newSenseboxID;
+                }else{
+                    console.error("SENSEBOX ID IS NOT VALID: Please check it again!")
+                }
+            })
         }
-        this.mySensifyPage.setMetadata(this.metadata);
+        // this.mySensifyPage.setMetadata(this.metadata);
+        this.onMetadataChange.emit(this.metadata);
 
         if (this.newRadius || this.newValidationRange || this.newSenseboxID) {
             let alert = this.alertCtrl.create({

@@ -47,7 +47,7 @@
             <sensify-page-start [metadata]="metadata"></sensify-page-start>
         </div>
         <div class="selectedPage" *ngIf="(tabSelector === 'notifications')">
-            <sensify-page-notifications [metadata]="metadata" (onMetadataChange)="setMetadata($event)"></sensify-page-notifications>
+            <sensify-page-notifications></sensify-page-notifications>
         </div>
         <div class="selectedPage" *ngIf="(tabSelector === 'settings')">
             <sensify-page-settings [metadata]="metadata" (onMetadataChange)="setMetadata($event)"></sensify-page-settings>

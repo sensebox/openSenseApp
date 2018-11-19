@@ -1,5 +1,6 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import { Storage } from '@ionic/storage';
 import leaflet from 'leaflet';
 import $ from "jquery";
 
@@ -21,7 +22,7 @@ export class LeafletPage {
   boxData: any;
   boxLayer: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage) {
   }
 
   ionViewDidLoad() {
@@ -42,7 +43,10 @@ export class LeafletPage {
 
     this.loadSenseboxLayer();
   }
-
+  safeBoxId (){
+    debugger;
+    this.storage.set('boxID', 'Max');
+  };
   loadSenseboxLayer() {
     let featureArray = [];
     $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
@@ -64,21 +68,14 @@ export class LeafletPage {
         featureArray.push(box);
       });
       this.boxLayer.bindPopup(function (layer) {
-        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button data-id={id} id="boxButton" onclick="safeBoxId()">set preference</button><br></p>', layer.feature.properties);
+        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button data-id={id} id="boxButton" onclick="this.safeBoxId()">set preference</button><br></p>', layer.feature.properties);
       });
     });
 
   }
+
 }
 
-let
-  getJsonData = () => {
-    $.getJSON('https://api.opensensemap.org/boxes?', data => {
-      let jsonData = JSON.stringify(data);
-      jsonData = JSON.parse(jsonData);
-      return jsonData;
-    })
-  };
 let
   _createGeojsonFeaturen = (entry) => {
     let geojsonFeature = {

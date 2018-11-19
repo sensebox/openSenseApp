@@ -1,7 +1,7 @@
 import { ApiProvider } from '../../providers/api/api';
 import { Metadata, SenseBox } from '../../providers/model';
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { Component, ViewChild} from '@angular/core';
+import { IonicPage, NavController, NavParams, Platform, Select } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
 import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
@@ -20,6 +20,8 @@ interface Loading {
 })
 export class SensifyPage {
 
+    @ViewChild('mySelect') selectRef: Select;
+
     public metadata: Metadata;
     public startLocation: L.LatLng;
     public radius: number;
@@ -37,6 +39,7 @@ export class SensifyPage {
     map: boolean;
     about: boolean;
     currentPos: Geoposition;
+    settingsData: any;
 
     constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation,private storage: Storage, private localNotifications: LocalNotifications, private plt: Platform) {
         // check for localStorage
@@ -62,6 +65,14 @@ export class SensifyPage {
                 });
             });
         }
+    }
+
+    openSelect() {
+        this.selectRef.open();
+    }
+
+    closeSelect() {
+        this.selectRef.close();
     }
 
     ionViewDidLoad() {
@@ -270,7 +281,6 @@ export class SensifyPage {
             console.log("Notifications are not set because you ain't on a real device or emulator.");
         }
     }
-
 
     // TODO: getClosestSenseBoxes (only in sensify-page.ts) & set metadata.closestSenseBoxes
     // this.metadata.senseBoxes = this.api. requests

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ElementRef } from '@angular/core';
 import { NavController} from 'ionic-angular';
 import { tileLayer } from "leaflet";
 import * as L from "leaflet";
@@ -38,7 +38,9 @@ export class SensifyMapPage implements OnChanges {
     public senseboxMarkersLayer: L.LayerGroup;
 
     constructor(
-        public navCtrl: NavController) {}
+        public navCtrl: NavController,
+        private elementRef: ElementRef
+        ) {}
 
     public greenIcon = L.icon({
         iconUrl: '../../assets/imgs/greenMarker.png',
@@ -126,34 +128,45 @@ export class SensifyMapPage implements OnChanges {
                 if (!this.metadata.senseBoxes[i].location) {
                 }
                 // Generate marker-description
-                let popupDescription = SensifyMapPage.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
+                let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
                 // Generate marker
+                let marker;
                 if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location){
                     if(this.metadata.senseBoxes[i].updatedCategory == "today"){
-                        let marker = L.marker(this.metadata.senseBoxes[i].location,
+                        marker = L.marker(this.metadata.senseBoxes[i].location,
                           { icon: this.greenIcon })
                           .bindPopup(popupDescription);
                         // Add marker to map
                         closestBoxesMarkers.push(marker);
                     } else if(this.metadata.senseBoxes[i].updatedCategory == "thisWeek"){
-                        let marker = L.marker(this.metadata.senseBoxes[i].location,
+                        marker = L.marker(this.metadata.senseBoxes[i].location,
                           { icon: this.yellowIcon })
                           .bindPopup(popupDescription);
                         // Add marker to map
                         closestBoxesMarkers.push(marker);
                     } else if(this.metadata.senseBoxes[i].updatedCategory == "tooOld"){
-                        let marker = L.marker(this.metadata.senseBoxes[i].location,
+                        marker = L.marker(this.metadata.senseBoxes[i].location,
                           { icon: this.redIcon })
                           .bindPopup(popupDescription);
                         // Add marker to map
                         closestBoxesMarkers.push(marker);
                     }
                 } else {//ClosestSenseBox Marker
-                    let marker = L.marker(this.metadata.closestSenseBox.location, 
+                    marker = L.marker(this.metadata.closestSenseBox.location, 
                         { icon: this.blueIcon })
                         .bindPopup(popupDescription);
                     // Add marker to map
                     closestBoxesMarkers.push(marker);
+                }
+                if (marker) {
+                    marker.on('popupopen', () => {
+                        console.log(this);
+                        this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
+                            console.log(i);
+                            console.log(this.metadata.senseBoxes[i]);
+                            console.log(this.metadata.senseBoxes[i]._id);
+                        })
+                    })
                 }
             }
     
@@ -186,14 +199,20 @@ export class SensifyMapPage implements OnChanges {
         
     }
 
-    static getSenseboxPopupDescription(sensebox: SenseBox): string{
+    public getSenseboxPopupDescription(sensebox: SenseBox): string{
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription : String = "";
+        let id = 'a' + sensebox._id;
+        let button = "<button id='" + id + "' (click)='addMe(`hello`)'>choose me as SenseBox</button>"
         for (let i = 0; i < sensebox.sensors.length; i++) {
             if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
                 sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
             }
         }
-        return sensorTitle + "<br>" + sensorsDescription;
+        return sensorTitle + "<br>" + sensorsDescription + button;
+    }
+
+    public addMe(input) {
+        console.log(input);
     }
 }

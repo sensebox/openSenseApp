@@ -2,7 +2,7 @@ import {Component, ViewChild, ElementRef} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import leaflet from 'leaflet';
-//import 'leaflet-search';
+import 'leaflet-search';
 import 'leaflet.locatecontrol';
 import $ from "jquery";
 
@@ -33,20 +33,53 @@ export class LeafletPage {
   }
 
   loadMap() {
+    //initiate map
     this.map = leaflet.map('map', {zoomControl: false}).setView([51.9606649, 7.6261347], 13);
 
+    //add tile layer to map
     leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    leaflet.control.locate().addTo(this.map);
+    //add location finder
+    var lc = leaflet.control.locate({
+      position: 'topleft',
+      strings: {
+          setView: "once"
+      }
+    }).addTo(this.map);
+    
+    //load sensboxes
+   // this.loadSenseboxLayer();
 
-    this.loadSenseboxLayer();
+    //add search
+    this.map.addControl( new leaflet.Control.Search({
+      url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
+      jsonpParam: 'json_callback',
+      propertyName: 'display_name',
+      propertyLoc: ['lat','lon'],
+      marker: leaflet.marker([0,0]),
+      autoCollapse: true,
+      autoType: false,
+      minLength: 2
+    }) );
+
+    //define custom sensebox icon for marker
+    var senseIcon = leaflet.icon({
+      iconUrl: 'assets/imgs/logo.png',
+      iconSize: [50, 50], // size of the icon
+    });
+
+    // create marker object, pass custom icon as option, add to map         
+    var marker = leaflet.marker([51.9606649, 7.6261347], { icon: senseIcon }).addTo(this.map);
+
   }
+
   safeBoxId (){
     debugger;
     this.storage.set('boxID', 'Max');
   };
+
   loadSenseboxLayer() {
     let featureArray = [];
     $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
@@ -58,7 +91,6 @@ export class LeafletPage {
         id: 'jsonLayer',
 
       }).addTo(this.map);
-
 
       this.boxData.forEach((entry) => {
         let geojsonFeature = _createGeojsonFeaturen(entry);

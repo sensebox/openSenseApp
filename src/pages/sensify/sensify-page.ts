@@ -25,8 +25,10 @@ export class SensifyPage {
     public metadata: Metadata;
     public startLocation: L.LatLng;
     public radius: number;
-
-    public globalMessage;
+    public globalMessage = {
+        show: false,
+        message: null
+    };
     public loadingSpinner: Loading = {
         show: false,
         message: null,
@@ -51,10 +53,6 @@ export class SensifyPage {
             }
         };
         this.radius = 5;
-        this.globalMessage = {
-            show: false,
-            message: null
-        };
         this.initSenseBoxes();
 
         //On Notification click display data property of notification
@@ -130,10 +128,7 @@ export class SensifyPage {
      * @param msg {string} Should be the displayed message.
      */
     public toggleSpinner(show: boolean, msg: string) {
-        this.globalMessage = {
-            show: false,
-            message: ''
-        };
+        this.globalMessage.show = false;
         let idx = this.loadingSpinner.messages.findIndex(el => el === msg);
         this.loadingSpinner.show = show;
         if (idx >= 0) {
@@ -148,14 +143,14 @@ export class SensifyPage {
             this.loadingSpinner.messages.push(msg);
             this.loadingSpinner.message = msg;
         }
+
+        if (!this.loadingSpinner.show && (!this.metadata.senseBoxes || (this.metadata.senseBoxes && this.metadata.senseBoxes.length <= 0)) ) {
+            this.globalMessage.show = true;
+        }
         return;
     }
 
     public async updateBoxes() {
-        this.globalMessage = {
-            show: false,
-            message: ""
-        };
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating SenseBoxes.');
         // Check whether radius gets bigger or smaller

@@ -32,7 +32,7 @@
                 {{loadingSpinner.message}}
             </ion-col>
         </ion-grid>
-        <ion-grid [hidden]="!globalMessage.show">
+        <ion-grid [hidden]="loadingSpinner.show || !globalMessage.show">
             <ion-col id="colMessage">
                 {{globalMessage.message}}
             </ion-col>

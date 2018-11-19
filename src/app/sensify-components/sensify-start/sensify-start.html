@@ -22,10 +22,10 @@
             </ion-row>
 
 
-            <ion-row id="dataRow" justify-content-center>
+            <ion-row id="dataRow" class="titles" justify-content-center>
                 <ion-col id="sensors" col-6>
-                    <h3>Sensors</h3>
-                    <ul>
+                    <h3 >Sensors</h3>
+                    <ul class="values">
                         <li *ngFor="let sensor of sensors">
                           <div>{{sensor.title}}</div>
                         </li>
@@ -33,7 +33,7 @@
                 </ion-col>
                 <ion-col id="values" col-3>
                     <h3>Values</h3>
-                    <ul>
+                    <ul class="values">
                         <li *ngFor="let sensor of sensors">
                           <div *ngIf="sensor.lastMeasurement != null">{{sensor.lastMeasurement.value}}</div>
                         </li>
@@ -41,7 +41,7 @@
                 </ion-col>
                 <ion-col id="unit" col-3>
                     <h3>Unit</h3>
-                    <ul>
+                    <ul class="values">
                         <li *ngFor="let sensor of sensors">
                           <div>{{sensor.unit}}</div>
                         </li>

@@ -2,6 +2,8 @@ import {Component, ViewChild, ElementRef} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import { Storage } from '@ionic/storage';
 import leaflet from 'leaflet';
+//import 'leaflet-search';
+import 'leaflet.locatecontrol';
 import $ from "jquery";
 
 /**
@@ -31,15 +33,13 @@ export class LeafletPage {
   }
 
   loadMap() {
-    this.map = leaflet.map('map').setView([51.505, -0.09], 13);
+    this.map = leaflet.map('map', {zoomControl: false}).setView([51.9606649, 7.6261347], 13);
 
     leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    leaflet.marker([51.5, -0.09]).addTo(this.map)
-      .bindPopup('A pretty CSS3 popup.<br> Easily customizable.')
-      .openPopup();
+    leaflet.control.locate().addTo(this.map);
 
     this.loadSenseboxLayer();
   }

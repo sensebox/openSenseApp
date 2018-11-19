@@ -18,6 +18,9 @@ export class SensifySettingsPage {
     @Output()
     public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
 
+    @Output()
+    public onMessageChange: EventEmitter<string> = new EventEmitter();
+    
     newRadius: any;
     newValidationRange: any;
     newSenseboxID: any;
@@ -75,4 +78,20 @@ export class SensifySettingsPage {
         //this.onMetadataChange.emit(this.metadata);    
     }
 
+    deleteSenseBoxID(){
+        delete this.metadata.settings.mySenseBox;
+        this.mySensifyPage.toggleSpinner(true, "Waiting for Closest SenseBox...");
+        this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(res => {
+            this.metadata.closestSenseBox = res;
+            this.mySensifyPage.toggleSpinner(false, "Waiting for Closest SenseBox...");
+            if(!this.metadata.settings.mySenseBox){
+                let alert = this.alertCtrl.create({
+                    title: 'ID Removed',
+                    subTitle: 'The SenseBox ID has been removed.',
+                    buttons: ['OK']
+                });
+                alert.present();
+            }
+        })
+    }
 }

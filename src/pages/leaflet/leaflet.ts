@@ -71,8 +71,10 @@ export class LeafletPage {
     });
 
     // create marker object, pass custom icon as option, add to map
-    let marker = leaflet.marker([51.9606649, 7.6261347], {icon: senseIcon}).addTo(this.map);
+    let marker = leaflet.marker([51.969327, 7.595512], {icon: senseIcon}).addTo(this.map).bindPopup('SenseBox Headquarter<br> Institute for Geoinformatics');
     this.loadSenseboxLayer();
+
+
   }
 
   safeBoxId() {

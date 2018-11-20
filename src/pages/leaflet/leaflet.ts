@@ -64,9 +64,6 @@ export class LeafletPage {
       minLength: 2
     }));
 
-    //define custom sensebox icon for marker
-
-    // create marker object, pass custom icon as option, add to map
     this.loadSenseboxLayer();
   }
 

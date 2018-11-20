@@ -65,13 +65,8 @@ export class LeafletPage {
     }));
 
     //define custom sensebox icon for marker
-    let senseIcon = leaflet.icon({
-      iconUrl: 'assets/imgs/logo.png',
-      iconSize: [50, 50], // size of the icon
-    });
 
     // create marker object, pass custom icon as option, add to map
-    let marker = leaflet.marker([51.9606649, 7.6261347], {icon: senseIcon}).addTo(this.map);
     this.loadSenseboxLayer();
   }
 
@@ -85,7 +80,7 @@ export class LeafletPage {
       iconSize: [40, 40],
       iconAnchor: [13, 27],
       popupAnchor:  [1, -24],
-      iconUrl: '../assets/imgs/marker.png'
+      iconUrl: '../assets/imgs/markerGreen.png'
     });
     $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
       let jsonData = JSON.stringify(data);

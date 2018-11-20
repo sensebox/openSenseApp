@@ -64,17 +64,7 @@ export class LeafletPage {
       minLength: 2
     }));
 
-    //define custom sensebox icon for marker
-    let senseIcon = leaflet.icon({
-      iconUrl: 'assets/imgs/logo.png',
-      iconSize: [50, 50], // size of the icon
-    });
-
-    // create marker object, pass custom icon as option, add to map
-    let marker = leaflet.marker([51.969327, 7.595512], {icon: senseIcon}).addTo(this.map).bindPopup('SenseBox Headquarter<br> Institute for Geoinformatics');
     this.loadSenseboxLayer();
-
-
   }
 
   safeBoxId() {
@@ -87,7 +77,7 @@ export class LeafletPage {
       iconSize: [40, 40],
       iconAnchor: [13, 27],
       popupAnchor:  [1, -24],
-      iconUrl: '../assets/imgs/marker.png'
+      iconUrl: '../assets/imgs/markerGreen.png'
     });
     $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
       let jsonData = JSON.stringify(data);

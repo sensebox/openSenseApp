@@ -1,5 +1,5 @@
 import { Component, EventEmitter, Input, Output, ElementRef } from '@angular/core';
-import { NavController} from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { tileLayer } from "leaflet";
 import * as L from "leaflet";
 import { Metadata, SenseBox } from "../../../providers/model";
@@ -39,7 +39,8 @@ export class SensifyMapPage implements OnChanges {
 
     constructor(
         public navCtrl: NavController,
-        private elementRef: ElementRef
+        private elementRef: ElementRef,
+        private alertCtrl: AlertController
         ) {}
 
     public greenIcon = L.icon({
@@ -160,11 +161,14 @@ export class SensifyMapPage implements OnChanges {
                 }
                 if (marker) {
                     marker.on('popupopen', () => {
-                        console.log(this);
                         this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
-                            console.log(i);
-                            console.log(this.metadata.senseBoxes[i]);
-                            console.log(this.metadata.senseBoxes[i]._id);
+                            this.metadata.closestSenseBox = this.metadata.senseBoxes[i]; 
+                            let alert = this.alertCtrl.create({
+                                title: 'Success',
+                                subTitle: 'New home SenseBox was set',
+                                buttons: ['OK']
+                            });
+                            alert.present();                          
                         })
                     })
                 }
@@ -196,23 +200,18 @@ export class SensifyMapPage implements OnChanges {
             }
             delete this.layersControl.overlays['SenseBoxes'];
         }        
-        
     }
 
     public getSenseboxPopupDescription(sensebox: SenseBox): string{
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription : String = "";
         let id = 'a' + sensebox._id;
-        let button = "<button id='" + id + "' (click)='addMe(`hello`)'>choose me as SenseBox</button>"
+        let makeThisMySenseBox = "<button id='" + id + "'>Make this my home SenseBox</button>"
         for (let i = 0; i < sensebox.sensors.length; i++) {
             if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
                 sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
             }
         }
-        return sensorTitle + "<br>" + sensorsDescription + button;
-    }
-
-    public addMe(input) {
-        console.log(input);
+        return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
     }
 }

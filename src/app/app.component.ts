@@ -16,6 +16,9 @@ export class openSenseApp {
   pages: Array<{title: string, component: any}> = [
     { title: 'Home', component: HomePage },
     { title: 'About', component: 'AboutPage' },
+    { title: 'Games', component: 'GamesPage' },
+    { title: 'Experiments', component: 'ExperimentsPage' },
+    { title: 'Gyroscope', component: 'GyroscopePage' },
     { title: 'senseBox', component: 'SenseBoxPage' }
   ];
 

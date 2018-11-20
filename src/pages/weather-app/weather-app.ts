@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
-
 import {ApiProvider} from '../../providers/api/api';
-
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
+import { StatsPage } from '../stats/stats';
 
 
 @IonicPage()
@@ -61,6 +60,13 @@ task = setInterval(() => {
         ev: myEvent
       });
     }
+
+  presentPopoverChart(myEvent){
+    let popover = this.popoverCtrl.create(StatsPage, {}, {cssClass: 'custom_popover'});
+    popover.present({
+      ev: myEvent
+    });
+  }
 
   refresh_click() {
     console.log('Refresh was clicked');

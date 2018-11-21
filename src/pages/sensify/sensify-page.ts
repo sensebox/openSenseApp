@@ -102,11 +102,14 @@ export class SensifyPage {
             this.updateMetadata();
             this.toggleSpinner(true, 'Loading closest SenseBox.');
 
-            //if personal sensebox is saved, us it instead of searching for closestSenseBox. If not, search closestSenseBox like usually
+            //if personal sensebox is saved, use it instead of searching for closestSenseBox. If not, search closestSenseBox like usually
             if(this.metadata.settings.mySenseBox){
                 await this.api.getSenseBoxByID(this.metadata.settings.mySenseBox).then(res => {
                     let box : any = res;
                     this.metadata.closestSenseBox = box;
+                    if(this.metadata.senseBoxes.indexOf(box) < 0){
+                        this.metadata.senseBoxes.push(box);
+                    }
                 })
             }else{
                 await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
@@ -160,7 +163,13 @@ export class SensifyPage {
                     this.metadata.senseBoxes = res;
                 })
         } else {
-            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius)
+                .then(res => {
+                    this.metadata.senseBoxes = res;
+                    if(this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0){
+                        this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
+                    }
+                });
         }
         this.radius = this.metadata.settings.radius;
         await this.toggleSpinner(false, 'Updating SenseBoxes.');
@@ -245,7 +254,9 @@ export class SensifyPage {
             for(let i = 0; i < this.metadata.senseBoxes.length; i++) {
                 let distance: number = this.metadata.settings.location.distanceTo(this.metadata.senseBoxes[i].location) / 1000;
                 if (distance <= this.radius) {
-                  tempBoxes.push(this.metadata.senseBoxes[i]);
+                    tempBoxes.push(this.metadata.senseBoxes[i]);
+                } else if(distance > this.radius && this.metadata.closestSenseBox._id == this.metadata.senseBoxes[i]._id){
+                    tempBoxes.push(this.metadata.senseBoxes[i]);
                 }
             }
             resolve(tempBoxes);

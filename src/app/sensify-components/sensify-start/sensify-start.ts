@@ -34,18 +34,20 @@ export class SensifyStartPage implements OnChanges {
         var hour = currentDate.getHours();
         var minutes = currentDate.getMinutes();
         var currTime = hour + "." + minutes;
-        var sunrise = this.sunrise.replace( ":" , ".")
-        var sunset = this.sunset.replace( ":" , ".")
+        var sunrise = this.sunrise.replace( ":" , ".");
+        var sunset = this.sunset.replace( ":" , ".");
       
 
-        if(Number(sunrise) > Number(currTime) || Number(currTime) > Number(sunset)){    //Nacht
-            this.bgImage = "../../../assets/imgs/nightBackground.jpg";
-        }else{                                          //Tag
-            if(Number(this.temperature.slice(0 , -3)) < 0){
-                this.bgImage = "../../../assets/imgs/snowBackground.jpg";
-            }else{
-                this.bgImage = "../../../assets/imgs/sunnyBackground.jpg";
-            }   
+        if(this.temperature){
+            if(Number(sunrise) > Number(currTime) || Number(currTime) > Number(sunset)){    //Nacht
+                this.bgImage = "../../../assets/imgs/nightBackground.jpg";
+            }else{                                          //Tag
+                if(Number(this.temperature.slice(0 , -3)) < 0){
+                    this.bgImage = "../../../assets/imgs/snowBackground.jpg";
+                }else{
+                    this.bgImage = "../../../assets/imgs/sunnyBackground.jpg";
+                }
+            }
         }
     }
 
@@ -55,7 +57,7 @@ export class SensifyStartPage implements OnChanges {
                 if(this.currBox.sensors[i].lastMeasurement){
                     this.sensors.push(this.currBox.sensors[i]);
                 }                
-            }else{
+            } else if(this.currBox.sensors[i].lastMeasurement.value){
                 var temp = this.currBox.sensors[i].lastMeasurement.value;
                 this.temperature = temp.substr(0 , temp.indexOf("."));
                 this.temperature = this.temperature + " °C";
@@ -84,7 +86,7 @@ export class SensifyStartPage implements OnChanges {
             this.setBackground();     
         }
         catch (err) {
-            console.log(err);
+            console.error(err);
         }
     }
 

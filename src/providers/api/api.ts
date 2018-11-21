@@ -267,11 +267,11 @@ export class ApiProvider {
 		senseBoxes.forEach(box => {
 			//check all sensors
 			box.sensors.forEach(sensor => {
-				//if sensor title is equal to searched sensor 
-				if(sensor.title == sensorName && sensor.lastMeasurement){
+				//if sensor title is equal to searched sensor
+				if(sensor.title == sensorName && sensor.lastMeasurement && sensor.lastMeasurement.createdAt){
 					let measurements = sensor.lastMeasurement;
 
-					//Get Year, Month, Day of lastMeasurements for checking 
+					//Get Year, Month, Day of lastMeasurements for checking
 					let creationDay = Number(measurements.createdAt.substring(8,10));
 					let creationMonth = Number(measurements.createdAt.substring(5,7));
 					let creationYear = Number(measurements.createdAt.substring(0,4));

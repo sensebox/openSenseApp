@@ -35,6 +35,8 @@ export class SensifyPage {
         messages: [],
     };
 
+    public distanceToClosest;
+
     tab: String;
     tabSelector: String;
     start: boolean;
@@ -110,9 +112,18 @@ export class SensifyPage {
                     if(this.metadata.senseBoxes.indexOf(box) < 0){
                         this.metadata.senseBoxes.push(box);
                     }
+                  if(this.metadata.settings.location && this.metadata.closestSenseBox){
+                    this.distanceToClosest = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                  }
                 })
             }else{
-                await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+                await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location)
+                    .then(closestBox => {
+                        this.metadata.closestSenseBox = closestBox;
+                        if(this.metadata.settings.location && this.metadata.closestSenseBox){
+                            this.distanceToClosest = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                        }
+                    });
             }
             this.toggleSpinner(false, 'Loading closest SenseBox.');
             this.updateMetadata();
@@ -175,8 +186,13 @@ export class SensifyPage {
         await this.toggleSpinner(false, 'Updating SenseBoxes.');
         await this.updateMetadata();
         await this.toggleSpinner(true, 'Updating closest SenseBox.');
-        if(this.radius > this.metadata.settings.radius){
-          await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => { this.metadata.closestSenseBox = closestBox; });
+        if(this.radius > this.metadata.settings.radius && !this.metadata.settings.mySenseBox){
+            await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => {
+                this.metadata.closestSenseBox = closestBox;
+                if(this.metadata.settings.location && this.metadata.closestSenseBox){
+                    this.distanceToClosest = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                }
+            });
         }
         await this.toggleSpinner(false, 'Updating closest SenseBox.');
         await this.updateMetadata();

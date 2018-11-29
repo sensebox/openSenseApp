@@ -36,6 +36,8 @@ export class SensifyMapPage implements OnChanges {
     public userLocationMarker: L.Marker;
     public userLocationMarkerLayer: L.LayerGroup;    
     public senseboxMarkersLayer: L.LayerGroup;
+    public distanceToClosest: number;
+    public distanceToClosestString: String;
 
     constructor(
         public navCtrl: NavController,
@@ -158,6 +160,17 @@ export class SensifyMapPage implements OnChanges {
                         .bindPopup(popupDescription);
                     // Add marker to map
                     closestBoxesMarkers.push(marker);
+                    let tempDistance = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                    if(tempDistance > 999){
+                      tempDistance = tempDistance / 1000;
+                      this.distanceToClosest = this.round(tempDistance, 2);
+                      this.distanceToClosestString = this.distanceToClosest + " km";
+                    } else {
+                      this.distanceToClosest = this.round(tempDistance, 2);
+                      this.distanceToClosestString = this.distanceToClosest + " m";
+                    }
+
+
                 }
                 if (marker) {
                     marker.on('popupopen', () => {
@@ -202,11 +215,11 @@ export class SensifyMapPage implements OnChanges {
         }        
     }
 
-    public getSenseboxPopupDescription(sensebox: SenseBox): string{
+    getSenseboxPopupDescription(sensebox: SenseBox): string{
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription : String = "";
         let id = 'a' + sensebox._id;
-        let makeThisMySenseBox = "<button id='" + id + "'>Make this my home SenseBox</button>"
+        let makeThisMySenseBox = "<button id='" + id + "'>Make this my home SenseBox</button>";
         for (let i = 0; i < sensebox.sensors.length; i++) {
             if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
                 sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
@@ -214,4 +227,11 @@ export class SensifyMapPage implements OnChanges {
         }
         return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
     }
+
+    round(number, precision) {
+        let factor = Math.pow(10, precision);
+        let tempNumber = number * factor;
+        let roundedTempNumber = Math.round(tempNumber);
+        return roundedTempNumber / factor;
+    };
 }

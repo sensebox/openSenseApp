@@ -1,3 +1,11 @@
 page-mapview {
-
+  .distanceBox{
+    padding: 6px 10px 6px 6px;
+    color: #333;
+    background: #fff;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 10;
+  }
 }

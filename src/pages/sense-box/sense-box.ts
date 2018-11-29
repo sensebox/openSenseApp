@@ -29,11 +29,4 @@ export class SenseBoxPage {
         })
 
     }
-
-    getSenseBoxes() {
-        this.api.getSenseBoxes().subscribe(res => {
-            this.allBoxes = res;
-        })
-    }
-
 }

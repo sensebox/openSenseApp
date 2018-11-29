@@ -46,7 +46,7 @@ export class SensifySettingsPage {
             this.api.getSenseBoxByID(this.newSenseboxID).then(res => {
                 if(res){
                     this.metadata.closestSenseBox = res;
-                    this.metadata.settings.mySenseBox = this.newSenseboxID;
+                    this.metadata.settings.mySenseBox = res._id;
                 }else{
                     console.error("SENSEBOX ID IS NOT VALID: Please check it again!")
                 }

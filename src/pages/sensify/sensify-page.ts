@@ -102,15 +102,17 @@ export class SensifyPage {
                 this.radius = meta.settings.radius;
             });
             this.toggleSpinner(true, 'Loading SenseBoxes.');
-            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius).then(res => { this.metadata.senseBoxes = res; });
+            await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
+                .then(res => {
+                    this.metadata.senseBoxes = res;
+                });
             this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
             this.toggleSpinner(true, 'Loading closest SenseBox.');
 
             //if personal sensebox is saved, use it instead of searching for closestSenseBox. If not, search closestSenseBox like usually
             if(this.metadata.settings.mySenseBox){
-                await this.api.getSenseBoxByID(this.metadata.settings.mySenseBox).then(res => {
-                    let box : any = res;
+                await this.api.getSenseBoxByID(this.metadata.settings.mySenseBox).then((box : SenseBox) => {
                     this.metadata.closestSenseBox = box;
                     if(this.metadata.senseBoxes.indexOf(box) < 0){
                         this.metadata.senseBoxes.push(box);
@@ -121,7 +123,7 @@ export class SensifyPage {
                 })
             }else{
                 await this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location)
-                    .then(closestBox => {
+                    .then((closestBox : SenseBox) => {
                         this.metadata.closestSenseBox = closestBox;
                         if(this.metadata.settings.location && this.metadata.closestSenseBox){
                             this.distanceToClosest = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
@@ -177,7 +179,7 @@ export class SensifyPage {
                     this.metadata.senseBoxes = res;
                 })
         } else {
-            await this.api.getSenseBoxesInBB(this.metadata.settings.location, this.metadata.settings.radius)
+            await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
                 .then(res => {
                     this.metadata.senseBoxes = res;
                     if(this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0){
@@ -298,7 +300,6 @@ export class SensifyPage {
                 this.startLocation = this.metadata.settings.location;
                 this.updateBoxes();
             }
-
             if (this.metadata.senseBoxes && this.metadata.settings.location) {
                 this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(closestBox => {
                     this.metadata.closestSenseBox = closestBox;
@@ -323,7 +324,4 @@ export class SensifyPage {
             console.log("Notifications are not set because you ain't on a real device or emulator.");
         }
     }
-
-    // TODO: getClosestSenseBoxes (only in sensify-page.ts) & set metadata.closestSenseBoxes
-    // this.metadata.senseBoxes = this.api. requests
 }

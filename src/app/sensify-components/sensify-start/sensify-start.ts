@@ -18,10 +18,13 @@ export class SensifyStartPage implements OnChanges {
     public sunset: String;
     public sensors?: Sensor[]; 
     public temperature: String;
+    public uv:String;
     public bgImage:String;
 
     constructor(public mySensifyPage:SensifyPage,public platform: Platform, public navCtrl: NavController, public navParams: NavParams) {
         this.sensors = [];
+        this.temperature = "- °C"
+        this.uv = "";
         this.bgImage = "../../../assets/imgs/TestBckgrd.png";
         this.setCurrentDate();
 
@@ -53,7 +56,7 @@ export class SensifyStartPage implements OnChanges {
 
     public setSensors(){
         for(var i: number = 0; i < this.currBox.sensors.length; i++){
-            if(this.currBox.sensors[i].title != "Temperatur" ){
+            if(this.currBox.sensors[i].title != "Temperatur" && this.currBox.sensors[i].title != "UV"  ){
                 if(this.currBox.sensors[i].lastMeasurement){
                     this.sensors.push(this.currBox.sensors[i]);
                 }                
@@ -136,7 +139,7 @@ export class SensifyStartPage implements OnChanges {
         var day = currentDate.getDate()
         var month = currentDate.getMonth() + 1 //January is 0!
         var year = currentDate.getFullYear()
-        this.date = day + "." + month + "." + year;
+        this.date = day + "." + month;// + "." + year;
     }
 
     ngOnChanges(changes) {

@@ -27,6 +27,7 @@ export interface Settings {
     location?: L.LatLng;
     radius: number;
     mySenseBox?: String;
+    timestamp: Date;
     ranges: {
         temperature: number;
     };

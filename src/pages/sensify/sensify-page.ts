@@ -51,6 +51,7 @@ export class SensifyPage {
             settings: {
                 gps: true,
                 radius: 5,
+                timestamp: null,
                 ranges: { temperature: 5 }
             }
         };
@@ -87,6 +88,8 @@ export class SensifyPage {
     public async initSenseBoxes() {
         console.log('Initialising UserLocation and SenseBoxes');
         try {
+            var currentDate = new Date();
+            this.metadata.settings.timestamp = currentDate; 
             this.showGlobalMessage('No SenseBoxes around.');
             this.toggleSpinner(true, 'Loading user position.');
             await this.getUserPosition().then(userlocation => {
@@ -212,7 +215,9 @@ export class SensifyPage {
     }
 
     public setMetadata(metadata: Metadata) {
+        var currentDate = new Date();
         this.metadata = metadata;
+        this.metadata.settings.timestamp = currentDate;
         this.updateBoxes();
         this.storage.set("metadata", this.metadata);
     }
@@ -233,6 +238,7 @@ export class SensifyPage {
             settings: {
               gps: val ? val.settings.gps : true,
               radius: val ? val.settings.radius : 5,
+              timestamp: val? val.settings.timestamp: " : ",
               ranges: val ? val.settings.ranges : { temperature: 5 },
               location: this.metadata.settings.location ? this.metadata.settings.location : ( val && val.settings.location ? val.settings.location : null )
             },

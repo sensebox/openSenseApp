@@ -1,0 +1,15 @@
+page-radar-map {
+
+  html, body{
+    padding: 0;
+    margin: 0;
+  }
+  #rainviewerMap{
+    height: 82.3vh;
+    width:100%;
+  }
+
+  .scroll-content {
+    overflow-y: auto !important;
+  }
+}

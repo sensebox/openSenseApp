@@ -2,8 +2,7 @@ import { Component, ViewChild, ElementRef} from '@angular/core';
 import {ApiProvider} from '../../providers/api/api';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
-//import leaflet from "../leaflet/leaflet";
-import leaflet from 'leaflet';
+import { RadarMapPage } from '../radar-map/radar-map';
 
 
 @IonicPage()
@@ -13,8 +12,6 @@ import leaflet from 'leaflet';
   })
 
 export class WeatherAppPage {
-  @ViewChild('rainviewerMap')mapContainer: ElementRef;
-  rainviewerMap:any;
   boxData: any;
   constructor(public navCtrl: NavController, public navParams: NavParams, public popoverCtrl: PopoverController, private api: ApiProvider) {
   }
@@ -22,16 +19,9 @@ export class WeatherAppPage {
   ionViewDidLoad() {
     console.log('ionViewDidLoad WeatherAppPage');
     this.refresh_data();
-    this.loadRainViewerMap();
   }
 
-  loadRainViewerMap() {
-    this.rainviewerMap = leaflet.map('rainviewerMap').fitWorld();
-    leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: 'openSense WeatherApp',
-      maxZoom: 18
-    }).addTo(this.rainviewerMap)
-  }
+
 
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
@@ -62,15 +52,19 @@ task = setInterval(() => {
 }, 1000000);
 */
 
-  locate_click() {
-    // popover leaflet.html
-  }
     presentPopover(myEvent){
       let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
       popover.present({
         ev: myEvent
       });
     }
+
+  presentPopoverRadarMap(myEvent){
+    let popover = this.popoverCtrl.create(RadarMapPage, {}, {cssClass: 'custom_popover'});
+    popover.present({
+      ev: myEvent
+    });
+  }
 
   refresh_click() {
     console.log('Refresh was clicked');

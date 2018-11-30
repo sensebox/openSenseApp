@@ -17,6 +17,9 @@ export class SensifyMapPage implements OnChanges {
     @Output()
     public onMessageChange: EventEmitter<string> = new EventEmitter();
 
+    @Output()
+    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
+
     // Leaflet Config Values
     public map: L.Map;
     public LeafletOptions = {
@@ -96,6 +99,12 @@ export class SensifyMapPage implements OnChanges {
     onMapReady(map: L.Map) {
         this.map = map;
         this.updateMap();
+        this.map.on('moveend', e => {
+            this.metadata.settings.zoomLevel = e.target.getZoom();
+            let tempView = e.target.getCenter();
+            this.metadata.settings.mapView = new L.LatLng(tempView.lat, tempView.lng);
+            this.onMetadataChange.emit(this.metadata);
+      })
     }
 
     public updateMap() {
@@ -107,7 +116,12 @@ export class SensifyMapPage implements OnChanges {
 
     public addUserLocationToMap() {
         // Center map on user location
-        this.map.panTo(this.metadata.settings.location);
+        // this.map.panTo(this.metadata.settings.location);
+        if(this.metadata.settings.zoomLevel && this.metadata.settings.mapView){
+            this.map.setView(this.metadata.settings.mapView, this.metadata.settings.zoomLevel);
+        } else {
+            this.map.setView(this.metadata.settings.location, this.metadata.settings.zoomLevel);
+        }
 
         // Remove user location layer from map
         if (this.userLocationMarkerLayer != undefined) {

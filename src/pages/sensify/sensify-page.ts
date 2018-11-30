@@ -52,7 +52,9 @@ export class SensifyPage {
                 gps: true,
                 radius: 5,
                 timestamp: null,
-                ranges: { temperature: 5 }
+                ranges: { temperature: 5 },
+                zoomLevel: null,
+                mapView: null
             }
         };
         this.radius = 5;
@@ -242,7 +244,9 @@ export class SensifyPage {
               radius: val ? val.settings.radius : 5,
               timestamp: val? val.settings.timestamp: " : ",
               ranges: val ? val.settings.ranges : { temperature: 5 },
-              location: this.metadata.settings.location ? this.metadata.settings.location : ( val && val.settings.location ? val.settings.location : null )
+              location: this.metadata.settings.location ? this.metadata.settings.location : ( val && val.settings.location ? val.settings.location : null ),
+              zoomLevel: val.settings.zoomLevel ? val.settings.zoomLevel : 13,
+              mapView: this.metadata.settings.mapView ? this.metadata.settings.mapView : null
             },
             senseBoxes: this.metadata.senseBoxes ? this.metadata.senseBoxes : ( val && val.senseBoxes ? val.senseBoxes : null ),
             closestSenseBox: this.metadata.closestSenseBox ? this.metadata.closestSenseBox : ( val && val.closestSenseBox ? val.closestSenseBox : null )

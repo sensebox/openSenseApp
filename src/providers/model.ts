@@ -31,6 +31,8 @@ export interface Settings {
     ranges: {
         temperature: number;
     };
+    zoomLevel: number;
+    mapView: L.LatLng;
 }
 
 export interface Metadata {

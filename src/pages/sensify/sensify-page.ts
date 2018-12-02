@@ -58,6 +58,7 @@ export class SensifyPage {
             }
         };
         this.radius = 5;
+        this.storage.set("metadata", this.metadata);
         this.initSenseBoxes();
 
         //On Notification click display data property of notification

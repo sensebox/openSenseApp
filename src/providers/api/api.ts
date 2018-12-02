@@ -151,7 +151,7 @@ export class ApiProvider {
 			let minDistance: number = Number.MAX_VALUE;
 			let i = 0;
 			let currDate = this.getCurrentDate();
-
+			
 			if (boxes.length != 0) {
 				boxes.forEach(box => {
 					if (box.updatedAt) {
@@ -164,7 +164,7 @@ export class ApiProvider {
 						i++;
 					}
 				});
-				if (minDistance != Number.MAX_VALUE) {
+				if (minDistance != Number.MAX_SAFE_INTEGER) {
 					resolve(boxes[index]);
 				} else {
 					//When minDistance is still MAX_VALUE and boxes.length was not zero => No Box with values from today found, therefor closst Box is searched

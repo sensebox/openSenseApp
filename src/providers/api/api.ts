@@ -58,7 +58,11 @@ export class ApiProvider {
 		//Current day in YYYY-MM-DD Format for easy comparison
 		let currDate : CurrentDate;
 		let date = new Date();
-		let currentDay = date.getUTCDate();
+		let tmpDay = date.getUTCDate();
+		let currentDay;
+		if(tmpDay < 10){
+			currentDay = "0"+tmpDay;
+		}
 		let currentMonth = date.getUTCMonth() + 1;  //January is 0
 		let currentYear = date.getUTCFullYear();
 
@@ -151,7 +155,6 @@ export class ApiProvider {
 			let minDistance: number = Number.MAX_VALUE;
 			let i = 0;
 			let currDate = this.getCurrentDate();
-			
 			if (boxes.length != 0) {
 				boxes.forEach(box => {
 					if (box.updatedAt) {

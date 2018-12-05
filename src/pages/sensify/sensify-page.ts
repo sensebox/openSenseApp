@@ -89,7 +89,7 @@ export class SensifyPage {
 
 
     public async initSenseBoxes() {
-        console.log('Initialising UserLocation and SenseBoxes');
+        console.log('Start initSenseBoxes');
         try {
             var currentDate = new Date();
             this.metadata.settings.timestamp = currentDate; 
@@ -137,7 +137,7 @@ export class SensifyPage {
             this.updateMetadata();
 
             // TEST: VALIDATE TEMPERATURE VALUE OF CLOSEST SENSEBOX          
-            console.log("SenseBox Sensor Value for Temperature Valid? : "+this.api.sensorIsValid("Temperatur", this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature));
+            // console.log("SenseBox Sensor Value for Temperature Valid? : "+this.api.sensorIsValid("Temperatur", this.metadata.closestSenseBox, this.metadata.senseBoxes, this.metadata.settings.ranges.temperature));
         }
         catch (err) {
             console.error(err);
@@ -238,7 +238,6 @@ export class SensifyPage {
     getMetadata(): Promise<Metadata> {
       return this.storage.get('metadata')
         .then((val) => {
-          console.log("Meta: ", val);
           return {
             settings: {
               gps: val ? val.settings.gps : true,
@@ -326,7 +325,7 @@ export class SensifyPage {
                 data: ""+data
             });
         } else {
-            console.log("Notifications are not set because you ain't on a real device or emulator.");
+            console.log("Notifications are disabled: Not a real device or emulator");
         }
     }
 }

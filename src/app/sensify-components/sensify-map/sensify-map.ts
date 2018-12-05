@@ -227,7 +227,7 @@ export class SensifyMapPage implements OnChanges {
             if (this.senseboxMarkersLayerBlue != undefined) {
                 this.map.removeLayer(this.senseboxMarkersLayerBlue);
                 this.senseboxMarkersLayerBlue = undefined;
-                this.layersControl.overlays['Nearest/My SenseBox'] = {};
+                this.layersControl.overlays['Closest/My SenseBox'] = {};
             }
 
             //line from user to closest box
@@ -248,13 +248,12 @@ export class SensifyMapPage implements OnChanges {
             this.layersControl.overlays['Green SenseBoxes'] = this.senseboxMarkersLayerGreen;
             this.layersControl.overlays['Yellow SenseBoxes'] = this.senseboxMarkersLayerYellow;
             this.layersControl.overlays['Red SenseBoxes'] = this.senseboxMarkersLayerRed;
-            this.layersControl.overlays['Nearest/My SenseBox'] = this.senseboxMarkersLayerBlue;
+            this.layersControl.overlays['Closest/My SenseBox'] = this.senseboxMarkersLayerBlue;
             this.layersControl.overlays['Green SenseBoxes'].addTo(this.map);
             this.layersControl.overlays['Yellow SenseBoxes'].addTo(this.map);
             this.layersControl.overlays['Red SenseBoxes'].addTo(this.map);
-            this.layersControl.overlays['Nearest/My SenseBox'].addTo(this.map);
+            this.layersControl.overlays['Closest/My SenseBox'].addTo(this.map);
         } else {
-            this.metadata.senseBoxes !== null ? console.log(this.metadata.senseBoxes.length) : console.log('senseboxes ==== null');
             if (this.senseboxMarkersLayerGreen !== undefined) {
                 this.map.removeLayer(this.senseboxMarkersLayerGreen);
             }
@@ -273,7 +272,7 @@ export class SensifyMapPage implements OnChanges {
             delete this.layersControl.overlays['Green SenseBoxes'];
             delete this.layersControl.overlays['Yellow SenseBoxes'];
             delete this.layersControl.overlays['Red SenseBoxes'];
-            delete this.layersControl.overlays['Nearest/MY SenseBox'];
+            delete this.layersControl.overlays['Closest/MY SenseBox'];
         }
     }
 

@@ -17,9 +17,7 @@ export class ApiProvider {
 
 	public metadata: Metadata;
 
-	constructor(public http: HttpClient) {
-		console.log('Hello ApiProvider Provider');
-	}
+	constructor(public http: HttpClient) {}
 
 	getData() {
 		return this.http.get(`${this.API_URL}/boxes/5b0d436fd40a290019ef444d`);

@@ -6,13 +6,8 @@
   </ion-header>
 
   <ion-content>
-    <ion-list id="homeNavList">
+    <ion-list>
       <button menuClose ion-item *ngFor="let p of pages" (click)="openPage(p)">
-        {{p.title}}
-      </button>
-    </ion-list>
-    <ion-list id="navList" hidden>
-      <button menuClose ion-item *ngFor="let p of weatherPages" (click)="openPage(p)">
         {{p.title}}
       </button>
     </ion-list>

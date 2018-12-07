@@ -10,10 +10,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ApiProvider {
 
-  private API_URL = 'https://api.opensensemap.org/boxes/';
-  private boxId ='5bb610bf043f3f001b6a4c53';
-  private sat24Location = 'DE'; // https://en.sat24.com/en/freeimages
-  private sat24Url ='https://api.sat24.com/animated/'+this.sat24Location+'/rainTMC/2/Central%20European%20Standard%20Time/9553668';
+  private API_URL = 'https://api.testing.opensensemap.org'
 
   constructor(public http: HttpClient) {
     console.log('Hello ApiProvider Provider');
@@ -21,7 +18,7 @@ export class ApiProvider {
 
 
   getData(){
-    return this.http.get(`${this.API_URL} ${this.boxId}`);
+    return this.http.get(`${this.API_URL}/boxes/5b0d436fd40a290019ef444d`);
   }
 
 }

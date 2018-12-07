@@ -19,12 +19,13 @@ import $ from "jquery";
   templateUrl: 'leaflet.html',
 })
 export class LeafletPage {
-  @ViewChild('map') mapContainer: ElementRef;
+  @ViewChild('map')
+  mapContainer: ElementRef;
   map: any;
   boxData: any;
   boxLayer: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private elementRef: ElementRef) {
   }
 
   ionViewDidLoad() {
@@ -42,7 +43,7 @@ export class LeafletPage {
     }).addTo(this.map);
 
     //add location finder
-    var lc = leaflet.control.locate({
+    let lc = leaflet.control.locate({
       position: 'topleft',
       strings: {
         setView: "once"
@@ -67,22 +68,20 @@ export class LeafletPage {
     this.loadSenseboxLayer();
   }
 
-  safeBoxId() {
-    debugger;
-    this.storage.set('boxID', 'Max');
+  safeBoxId(e) {
+    this.storage.set('preferenceBoxID', e.target.id);
   };
 
   loadSenseboxLayer() {
     let senseBoxIcon = new leaflet.Icon({
       iconSize: [40, 40],
       iconAnchor: [13, 27],
-      popupAnchor:  [1, -24],
+      popupAnchor: [1, -24],
       iconUrl: '../assets/imgs/markerGreen.png'
     });
     $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
       let jsonData = JSON.stringify(data);
       jsonData = JSON.parse(jsonData);
-      console.log(jsonData);
       this.boxData = jsonData;
       this.boxLayer = leaflet.geoJSON('', {
         id: 'jsonLayer',
@@ -96,14 +95,18 @@ export class LeafletPage {
         this.boxLayer.addData(geojsonFeature)
       });
       this.boxLayer.bindPopup(function (layer) {
-        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button data-id={id} id="boxButton" onclick="this.safeBoxId()">set preference</button><br></p>', layer.feature.properties);
-      }, this);
+        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button><br><br></p>', layer.feature.properties);
+      });
+
+      this.boxLayer.on('popupopen', (e) => {
+        this.elementRef.nativeElement.querySelector('#id'+e.popup._source.feature.properties.id)
+          .addEventListener('click',this.safeBoxId.bind(this));
+
+      })
     });
 
   }
-
 }
-
 
 
 let

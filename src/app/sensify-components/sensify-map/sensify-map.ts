@@ -4,7 +4,6 @@ import { tileLayer } from "leaflet";
 import * as L from "leaflet";
 import { Metadata, SenseBox } from "../../../providers/model";
 import {OnChanges} from '@angular/core';
-import {locatecontrol} from 'leaflet.locatecontrol';
 
 @Component({
     selector: 'sensify-page-map',

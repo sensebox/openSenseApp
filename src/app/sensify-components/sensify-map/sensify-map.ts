@@ -164,60 +164,61 @@ export class SensifyMapPage implements OnChanges {
             let closestMarkersGreen = [];
             let closestMarkersBlue = [];
             for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
-                if (!this.metadata.senseBoxes[i].location) {
-                }
-                // Generate marker-description
-                let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
-                // Generate marker
-                let marker;
-                if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location) {
-                    if (this.metadata.senseBoxes[i].updatedCategory == "today") {
-                        marker = L.marker(this.metadata.senseBoxes[i].location,
-                            { icon: this.greenIcon })
+                if (!this.metadata.senseBoxes[i]) {
+                }else{
+                    // Generate marker-description
+                    let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
+                    // Generate marker
+                    let marker;
+                    if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location) {
+                        if (this.metadata.senseBoxes[i].updatedCategory == "today") {
+                            marker = L.marker(this.metadata.senseBoxes[i].location,
+                                { icon: this.greenIcon })
+                                .bindPopup(popupDescription);
+                            // Add marker to map
+                            closestMarkersGreen.push(marker);
+                        } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
+                            marker = L.marker(this.metadata.senseBoxes[i].location,
+                                { icon: this.yellowIcon })
+                                .bindPopup(popupDescription);
+                            // Add marker to map
+                            closestMarkersYellow.push(marker);
+                        } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
+                            marker = L.marker(this.metadata.senseBoxes[i].location,
+                                { icon: this.redIcon })
+                                .bindPopup(popupDescription);
+                            // Add marker to map
+                            closestMarkersRed.push(marker);
+                        }
+                    } else {//ClosestSenseBox Marker
+                        marker = L.marker(this.metadata.closestSenseBox.location,
+                            { icon: this.blueIcon })
                             .bindPopup(popupDescription);
                         // Add marker to map
-                        closestMarkersGreen.push(marker);
-                    } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
-                        marker = L.marker(this.metadata.senseBoxes[i].location,
-                            { icon: this.yellowIcon })
-                            .bindPopup(popupDescription);
-                        // Add marker to map
-                        closestMarkersYellow.push(marker);
-                    } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
-                        marker = L.marker(this.metadata.senseBoxes[i].location,
-                            { icon: this.redIcon })
-                            .bindPopup(popupDescription);
-                        // Add marker to map
-                        closestMarkersRed.push(marker);
+                        closestMarkersBlue.push(marker);
+                        let tempDistance = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                        if (tempDistance > 999) {
+                            tempDistance = tempDistance / 1000;
+                            this.distanceToClosest = this.round(tempDistance, 2);
+                            this.distanceToClosestString = this.distanceToClosest + " km";
+                        } else {
+                            this.distanceToClosest = this.round(tempDistance, 2);
+                            this.distanceToClosestString = this.distanceToClosest + " m";
+                        }
                     }
-                } else {//ClosestSenseBox Marker
-                    marker = L.marker(this.metadata.closestSenseBox.location,
-                        { icon: this.blueIcon })
-                        .bindPopup(popupDescription);
-                    // Add marker to map
-                    closestMarkersBlue.push(marker);
-                    let tempDistance = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
-                    if (tempDistance > 999) {
-                        tempDistance = tempDistance / 1000;
-                        this.distanceToClosest = this.round(tempDistance, 2);
-                        this.distanceToClosestString = this.distanceToClosest + " km";
-                    } else {
-                        this.distanceToClosest = this.round(tempDistance, 2);
-                        this.distanceToClosestString = this.distanceToClosest + " m";
-                    }
-                }
-                if (marker) {
-                    marker.on('popupopen', () => {
-                        this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
-                            this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
-                            let alert = this.alertCtrl.create({
-                                title: 'Success',
-                                subTitle: 'New home SenseBox was set',
-                                buttons: ['OK']
-                            });
-                            alert.present();
+                    if (marker) {
+                        marker.on('popupopen', () => {
+                            this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
+                                this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
+                                let alert = this.alertCtrl.create({
+                                    title: 'Success',
+                                    subTitle: 'New home SenseBox was set',
+                                    buttons: ['OK']
+                                });
+                                alert.present();
+                            })
                         })
-                    })
+                    }
                 }
             }
 
@@ -260,11 +261,11 @@ export class SensifyMapPage implements OnChanges {
                 this.layersControl.addOverlay(this.senseboxMarkersLayerGreen, 'Green SenseBoxes');
             }
             if (closestMarkersYellow.length > 0) {
-                this.senseboxMarkersLayerYellow = L.layerGroup(closestMarkersYellow).addTo(this.map);
+                this.senseboxMarkersLayerYellow = L.layerGroup(closestMarkersYellow);
                 this.layersControl.addOverlay(this.senseboxMarkersLayerYellow, 'Yellow SenseBoxes');
             }
             if (closestMarkersRed.length > 0) {
-                this.senseboxMarkersLayerRed = L.layerGroup(closestMarkersRed).addTo(this.map);
+                this.senseboxMarkersLayerRed = L.layerGroup(closestMarkersRed);
                 this.layersControl.addOverlay(this.senseboxMarkersLayerRed, 'Red SenseBoxes');
             }
             if (closestMarkersBlue.length > 0) {

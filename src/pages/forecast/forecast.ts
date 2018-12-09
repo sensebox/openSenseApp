@@ -22,4 +22,37 @@ export class ForecastPage {
     console.log('ionViewDidLoad ForecastPage');
   }
 
+  getData2(){
+    alert("hello bro");
+  }
+
+  displayAge(){ 
+    alert("hello bro111");
+    document.getElementById("feedback").innerHTML = "Age =";
+
+    var myPythonScriptPath = 'forecast.py';
+
+// Use python shell
+//let {PythonShell} = require('python-shell')
+//import { PythonShell } from 'python-shell';
+var pyshell = new PythonShell(myPythonScriptPath);
+
+pyshell.on('message', function (message) {
+    // received a message sent from the Python script (a simple "print" statement)
+    console.log(message);
+});
+
+// end the input stream and allow the process to exit
+pyshell.end(function (err) {
+    if (err){
+        throw err;
+    };
+
+    console.log('finished');
+});
+  }
+
+  
+
+
 }

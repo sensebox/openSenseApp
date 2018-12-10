@@ -112,10 +112,10 @@ export class SensifyPage {
             await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
                 .then(res => {
                     this.metadata.senseBoxes = res;
-                });
-            await this.validateBoxes(this.metadata.senseBoxes)
-                .then(res => {
-                    this.metadata.senseBoxes = res;
+                    this.validateBoxes(res)
+                        .then(response => {
+                            this.metadata.senseBoxes = response;
+                        })
                 });
             this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
@@ -235,7 +235,9 @@ export class SensifyPage {
     public validateBoxes(senseboxes: SenseBox[]): Promise<SenseBox[]> {
         return new Promise(resolve => {
             for(let i  = 0; i < senseboxes.length; i++){
-                senseboxes[i].isValid = this.api.sensorIsValid("Temperatur", senseboxes[i], senseboxes, this.metadata.settings.ranges.temperature);
+                if(senseboxes[i]){
+                    senseboxes[i].isValid = this.api.sensorIsValid("Temperatur", senseboxes[i], senseboxes, this.metadata.settings.ranges.temperature);
+                }
             }
             resolve(senseboxes);
         });
@@ -282,11 +284,11 @@ export class SensifyPage {
                         if ((this.metadata.closestSenseBox !== null || this.metadata.closestSenseBox !== undefined) && this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0) {
                             this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                         }
+                        this.validateBoxes(res)
+                            .then(response => {
+                                this.metadata.senseBoxes = response;
+                            })
                     });
-                await this.validateBoxes(this.metadata.senseBoxes)
-                    .then(res => {
-                        this.metadata.senseBoxes = res;
-                  });
             } else if ((this.metadata.settings.location.distanceTo(this.startLocation) / 1000) < (this.radius / 2)) {
                 // get boxes smaller radius inside origin circle & smaller
                 await this.getBoxesSmallerRadius()
@@ -301,11 +303,11 @@ export class SensifyPage {
                         if ((this.metadata.closestSenseBox !== null || this.metadata.closestSenseBox !== undefined) && this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0) {
                             this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                         }
+                        this.validateBoxes(res)
+                            .then(response => {
+                                this.metadata.senseBoxes = response;
+                            })
                     });
-                await this.validateBoxes(this.metadata.senseBoxes)
-                    .then(res => {
-                        this.metadata.senseBoxes = res;
-                  });
             }
         } else {
             await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
@@ -314,11 +316,11 @@ export class SensifyPage {
                     if ((this.metadata.closestSenseBox !== null || this.metadata.closestSenseBox !== undefined) && this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0) {
                         this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                     }
+                    this.validateBoxes(res)
+                        .then(response => {
+                            this.metadata.senseBoxes = response;
+                        })
                 });
-            await this.validateBoxes(this.metadata.senseBoxes)
-                .then(res => {
-                    this.metadata.senseBoxes = res;
-              });
         }
         this.startLocation = this.metadata.settings.location;
         this.radius = this.metadata.settings.radius;

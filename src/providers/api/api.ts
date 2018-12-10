@@ -234,10 +234,12 @@ export class ApiProvider {
 	//Checks if closestSenseBox has the sensor that you want to validate
 	senseBoxHasSensor(sensorName: String, closestBox: SenseBox) {
 		let res = false;
-		closestBox.sensors.forEach(sensor => {
-			let title: String = sensor.title;
-			if (sensorName === title) res = true;
-		});
+		if(closestBox){
+      closestBox.sensors.forEach(sensor => {
+        let title: String = sensor.title;
+        if (sensorName === title) res = true;
+      });
+    }
 		return res;
 	}
 
@@ -255,23 +257,25 @@ export class ApiProvider {
 		//check all closest boxes
 		senseBoxes.forEach(box => {
 			//check all sensors
-			box.sensors.forEach(sensor => {
-				//if sensor title is equal to searched sensor
-				if (sensor.title == sensorName && sensor.lastMeasurement && sensor.lastMeasurement.createdAt) {
-					let measurements = sensor.lastMeasurement;
+      if(box){
+        box.sensors.forEach(sensor => {
+          //if sensor title is equal to searched sensor
+          if (sensor.title == sensorName && sensor.lastMeasurement && sensor.lastMeasurement.createdAt) {
+            let measurements = sensor.lastMeasurement;
 
-					//Get Year, Month, Day of lastMeasurements for checking
-					let creationDay = Number(measurements.createdAt.substring(8, 10));
-					let creationMonth = Number(measurements.createdAt.substring(5, 7));
-					let creationYear = Number(measurements.createdAt.substring(0, 4));
+            //Get Year, Month, Day of lastMeasurements for checking
+            let creationDay = Number(measurements.createdAt.substring(8, 10));
+            let creationMonth = Number(measurements.createdAt.substring(5, 7));
+            let creationYear = Number(measurements.createdAt.substring(0, 4));
 
-					//check if last measurement is from same day, same month, same year
-					if (creationDay == currentDay && creationMonth == currentMonth && creationYear == currentYear) {
-						sum += Number(measurements.value);
-						numberOfSensors++;
-					}
-				}
-			});
+            //check if last measurement is from same day, same month, same year
+            if (creationDay == currentDay && creationMonth == currentMonth && creationYear == currentYear) {
+              sum += Number(measurements.value);
+              numberOfSensors++;
+            }
+          }
+        });
+      }
 		});
 		//Division by zero handling
 		if (numberOfSensors === 0) {

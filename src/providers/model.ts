@@ -1,3 +1,5 @@
+import { ILocalNotification } from '@ionic-native/local-notifications';
+
 export interface Sensor {
     title: String;
     unit: String;
@@ -39,5 +41,5 @@ export interface Metadata {
     settings: Settings;
     senseBoxes?: SenseBox[]; // Contains Closest SenseBoxes defined by radius and user location
     closestSenseBox?: SenseBox;
+    notifications: ILocalNotification[];
 }
-

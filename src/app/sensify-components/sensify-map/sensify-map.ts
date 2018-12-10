@@ -64,6 +64,7 @@ export class SensifyMapPage implements OnChanges {
     public senseboxMarkersLayerBlue: L.LayerGroup;
     public distanceToClosest: number;
     public distanceToClosestString: String;
+    public firstExecution: boolean = true;
 
     constructor(
         public navCtrl: NavController,
@@ -135,7 +136,10 @@ export class SensifyMapPage implements OnChanges {
 
     public addUserLocationToMap() {
         // Center map on user location
-        this.map.panTo(this.metadata.settings.location);
+        if (this.firstExecution) {
+            this.firstExecution = false;
+            this.map.panTo(this.metadata.settings.location);
+        }
 
         // Remove user location layer from map
         if (this.userLocationMarkerLayer) {

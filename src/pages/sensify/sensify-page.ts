@@ -179,7 +179,16 @@ export class SensifyPage {
         await this.toggleSpinner(true, 'Updating SenseBoxes.');
         // Check whether radius gets bigger or smaller
         if (this.metadata.senseBoxes != undefined && this.metadata.senseBoxes.length > 0) {
-            if ((this.metadata.settings.location.distanceTo(this.startLocation) / 1000) < (this.radius / 2)) {
+            if (this.metadata.settings.radius > this.radius) {
+                // if new radius is greater than 
+                await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
+                    .then(res => {
+                        this.metadata.senseBoxes = res;
+                        if ((this.metadata.closestSenseBox !== null || this.metadata.closestSenseBox !== undefined) && this.metadata.senseBoxes.indexOf(this.metadata.closestSenseBox) < 0) {
+                            this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
+                        }
+                    });
+            } else if ((this.metadata.settings.location.distanceTo(this.startLocation) / 1000) < (this.radius / 2)) {
                 // get boxes smaller radius inside origin circle & smaller
                 await this.getBoxesSmallerRadius()
                     .then(res => {
@@ -297,9 +306,9 @@ export class SensifyPage {
             let tempBoxes: SenseBox[] = [];
             for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
                 let distance: number = this.metadata.settings.location.distanceTo(this.metadata.senseBoxes[i].location) / 1000;
-                if (distance <= this.radius) {
+                if (distance <= this.metadata.settings.radius) { // radius) {
                     tempBoxes.push(this.metadata.senseBoxes[i]);
-                } else if (distance > this.radius && this.metadata.closestSenseBox._id == this.metadata.senseBoxes[i]._id) {
+                } else if (distance > this.metadata.settings.radius && this.metadata.closestSenseBox._id == this.metadata.senseBoxes[i]._id) {
                     tempBoxes.push(this.metadata.senseBoxes[i]);
                 }
             }

@@ -175,13 +175,13 @@ export class SensifyMapPage implements OnChanges {
                     // Generate marker
                     let marker;
                     if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location) {
-                        if (this.metadata.senseBoxes[i].updatedCategory == "today") {
+                        if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 { icon: this.greenIcon })
                                 .bindPopup(popupDescription);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
-                        } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
+                        } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 { icon: this.yellowIcon })
                                 .bindPopup(popupDescription);

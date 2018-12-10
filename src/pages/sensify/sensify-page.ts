@@ -113,6 +113,10 @@ export class SensifyPage {
                 .then(res => {
                     this.metadata.senseBoxes = res;
                 });
+            await this.validateBoxes(this.metadata.senseBoxes)
+                .then(res => {
+                    this.metadata.senseBoxes = res;
+                });
             this.toggleSpinner(false, 'Loading SenseBoxes.');
             this.updateMetadata();
             this.toggleSpinner(true, 'Loading closest SenseBox.');
@@ -228,6 +232,15 @@ export class SensifyPage {
         }
     }
 
+    public validateBoxes(senseboxes: SenseBox[]): Promise<SenseBox[]> {
+        return new Promise(resolve => {
+            for(let i  = 0; i < senseboxes.length; i++){
+                senseboxes[i].isValid = this.api.sensorIsValid("Temperatur", senseboxes[i], senseboxes, this.metadata.settings.ranges.temperature);
+            }
+            resolve(senseboxes);
+        });
+    }
+
     /**
      * Function to display and verify message of loading spinner.
      * @param show {boolean} Should be true, if spinner is visible.
@@ -270,6 +283,10 @@ export class SensifyPage {
                             this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                         }
                     });
+                await this.validateBoxes(this.metadata.senseBoxes)
+                    .then(res => {
+                        this.metadata.senseBoxes = res;
+                  });
             } else if ((this.metadata.settings.location.distanceTo(this.startLocation) / 1000) < (this.radius / 2)) {
                 // get boxes smaller radius inside origin circle & smaller
                 await this.getBoxesSmallerRadius()
@@ -285,6 +302,10 @@ export class SensifyPage {
                             this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                         }
                     });
+                await this.validateBoxes(this.metadata.senseBoxes)
+                    .then(res => {
+                        this.metadata.senseBoxes = res;
+                  });
             }
         } else {
             await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
@@ -294,6 +315,10 @@ export class SensifyPage {
                         this.metadata.senseBoxes.push(this.metadata.closestSenseBox);
                     }
                 });
+            await this.validateBoxes(this.metadata.senseBoxes)
+                .then(res => {
+                    this.metadata.senseBoxes = res;
+              });
         }
         this.startLocation = this.metadata.settings.location;
         this.radius = this.metadata.settings.radius;

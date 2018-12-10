@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { PendulumPage } from '../pendulum/pendulum';
 
 /**
- * Generated class for the ExperimentsPage page.
+ * Generated class for the PendulumPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -11,20 +10,16 @@ import { PendulumPage } from '../pendulum/pendulum';
 
 @IonicPage()
 @Component({
-  selector: 'page-experiments',
-  templateUrl: 'experiments.html',
+  selector: 'page-pendulum',
+  templateUrl: 'pendulum.html',
 })
-export class ExperimentsPage {
+export class PendulumPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad ExperimentsPage');
-  }
-
-  btnClick() {
-    this.navCtrl.push(PendulumPage);
+    console.log('ionViewDidLoad PendulumPage');
   }
 
 }

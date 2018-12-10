@@ -19,7 +19,7 @@ export class openSenseApp {
     { title: 'Games', component: 'GamesPage' },
     { title: 'Experiments', component: 'ExperimentsPage' },
     { title: 'Gyroscope', component: 'GyroscopePage' },
-    { title: 'senseBox', component: 'SenseBoxPage' }
+    { title: 'senseBox', component: 'SenseBoxPage' },
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

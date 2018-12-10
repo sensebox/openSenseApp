@@ -1,0 +1,19 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\resources",
+    "\\src",
+    "\\src\\app",
+    "\\src\\assets",
+    "\\src\\assets\\icon",
+    "\\src\\assets\\imgs",
+    "\\src\\pages",
+    "\\src\\pages\\experiments",
+    "\\src\\pages\\games",
+    "\\src\\providers",
+    "\\src\\theme",
+    "\\typings"
+  ],
+  "SelectedNode": "\\src\\app\\main.ts",
+  "PreviewInSolutionExplorer": false
+}

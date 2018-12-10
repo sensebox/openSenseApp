@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { PendulumPage } from '../pendulum/pendulum';
 
 /**
  * Generated class for the ExperimentsPage page.
@@ -20,6 +21,10 @@ export class ExperimentsPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ExperimentsPage');
+  }
+
+  btnClick() {
+    this.navCtrl.push(PendulumPage);
   }
 
 }

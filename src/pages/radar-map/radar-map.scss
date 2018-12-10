@@ -1,15 +1,27 @@
 page-radar-map {
 
-  html, body{
+  html, body {
     padding: 0;
     margin: 0;
   }
-  #rainviewerMap{
+
+  #rainviewerMap {
     height: 82.3vh;
-    width:100%;
+    width: 100%;
   }
 
   .scroll-content {
     overflow-y: auto !important;
+  }
+  .legend {
+    line-height: 18px;
+    color: #555;
+  }
+  .legend i {
+    width: 18px;
+    height: 18px;
+    float: left;
+    margin-right: 8px;
+    opacity: 0.7;
   }
 }

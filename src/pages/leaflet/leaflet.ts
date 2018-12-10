@@ -1,6 +1,7 @@
 import {Component, ViewChild, ElementRef} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import {Storage} from '@ionic/storage';
+import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
 import 'leaflet.locatecontrol';
@@ -25,7 +26,7 @@ export class LeafletPage {
   boxData: any;
   boxLayer: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private elementRef: ElementRef) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private elementRef: ElementRef, private api: ApiProvider) {
   }
 
   ionViewDidLoad() {
@@ -69,7 +70,9 @@ export class LeafletPage {
   }
 
   safeBoxId(e) {
-    this.storage.set('preferenceBoxID', e.target.id);
+    //this.storage.set('preferenceBoxID', e.target.id);
+    let id = e.target.id.substring(2);
+    this.api.setBoxId(id);
   };
 
   loadSenseboxLayer() {

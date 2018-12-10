@@ -59,6 +59,9 @@ task = setInterval(() => {
       popover.present({
         ev: myEvent
       });
+      popover.onDidDismiss(() =>{
+        this.refresh_data();
+      })
     }
 
   presentPopoverChart(myEvent){

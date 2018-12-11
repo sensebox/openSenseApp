@@ -3,6 +3,7 @@ import {ApiProvider} from '../../providers/api/api';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
 import { StatsPage } from '../stats/stats';
+import { RadarMapPage } from '../radar-map/radar-map';
 
 
 @IonicPage()
@@ -66,6 +67,13 @@ task = setInterval(() => {
 
   presentPopoverChart(myEvent){
     let popover = this.popoverCtrl.create(StatsPage, {}, {cssClass: 'custom_popover'});
+    popover.present({
+      ev: myEvent
+    });
+  }
+
+  presentPopoverRadarMap(myEvent){
+    let popover = this.popoverCtrl.create(RadarMapPage, {}, {cssClass: 'custom_popover'});
     popover.present({
       ev: myEvent
     });

@@ -171,6 +171,10 @@ export class SensifyPage {
             await this.api.getSenseBoxes(this.metadata.settings.location, this.metadata.settings.radius)
                 .then(res => {
                     this.metadata.senseBoxes = res;
+                    this.validateBoxes(res)
+                        .then(response => {
+                            this.metadata.senseBoxes = response;
+                        })
                 });
             this.toggleSpinner(false, 'Loading SenseBoxes. - automatic');
             this.updateMetadata();

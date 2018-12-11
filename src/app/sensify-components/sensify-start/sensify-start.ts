@@ -60,6 +60,7 @@ export class SensifyStartPage implements OnChanges {
     }
 
     public setSensors(){
+        this.sensors = [];
         for(var i: number = 0; i < this.currBox.sensors.length; i++){
             if(this.currBox.sensors[i].title != "Temperatur" && this.currBox.sensors[i].title != "UV"  ){
                 if(this.currBox.sensors[i].lastMeasurement){

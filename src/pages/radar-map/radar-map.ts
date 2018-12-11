@@ -1,3 +1,4 @@
+// created by albertios on 12/2018
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {IonicPage, NavController, NavParams} from 'ionic-angular';
 import leaflet from 'leaflet';

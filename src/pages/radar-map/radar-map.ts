@@ -84,7 +84,7 @@ export class RadarMapPage {
       // loop through our density intervals and generate a label with a colored square for each interval
       for (let i = 0; i < grades.length; i++) {
         div.innerHTML +=
-          '<i id="textColor" style="background:' + labels[i] + '"></i>' +
+          '<i style="background:' + labels[i] + '"></i>' +
           grades[i] + (grades[i] ? '<br>' : '');
       }
       return div;

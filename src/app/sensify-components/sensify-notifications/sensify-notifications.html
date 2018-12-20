@@ -5,14 +5,14 @@
         <ion-card-header >
             {{notification.title}}
         </ion-card-header>
-        <ion-card-content>
+        <ion-card-content style="white-space: normal;">
             {{notification.text}}
         </ion-card-content>
-        <ion-card-content>
+        <ion-card-content style="white-space: normal;">
             {{notification.data}}
         </ion-card-content>
         <ion-card-content >
-            {{notification.trigger.at}}
+            {{notification.trigger.at | date : format : timezone}}
         </ion-card-content>
     </ion-card>
 </ion-item>

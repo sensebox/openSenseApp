@@ -223,6 +223,8 @@ export class SensifyMapPage implements OnChanges {
                             this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
                                 this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
                                 this.metadata.settings.mySenseBox = this.metadata.senseBoxes[i]._id;
+                                this.addUserLocationToLayer();
+                                this.addSenseboxMarkerToMap();
                                 let alert = this.alertCtrl.create({
                                     title: 'Success',
                                     subTitle: 'New home SenseBox was set',

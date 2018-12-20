@@ -137,12 +137,12 @@ export class SensifyMapPage implements OnChanges {
 
     public updateMap() {
         if (this.metadata.settings.location) {
-            this.addUserLocationToMap();
+            this.addUserLocationToLayer();
             this.addSenseboxMarkerToMap();
         }
     }
 
-    public addUserLocationToMap() {
+    public addUserLocationToLayer() {
         // On first start, set view on user location; otherwise, set view on the saved position/zoom
         if (this.metadata.settings.zoomLevel && this.metadata.settings.mapView) {
             this.map.setView(this.metadata.settings.mapView, this.metadata.settings.zoomLevel);
@@ -162,11 +162,10 @@ export class SensifyMapPage implements OnChanges {
         let popupDescription = "<b>Your position is:</b><br>Latitude: " + this.metadata.settings.location.toString();
         this.userLocationMarker = L.marker(this.metadata.settings.location,
             { icon: this.posIcon })
-            .bindPopup(popupDescription);
+            .bindPopup(popupDescription);3
 
-        // Add userLocationMarker to Overlay Layer "Me"
+        // Add Layergroup to userLocationMarkerLayer
         this.userLocationMarkerLayer = L.layerGroup([this.userLocationMarker]).addTo(this.map);
-        this.layersControl.addOverlay(this.userLocationMarkerLayer, 'Me');
     }
 
     // Add senseBoxes to Map
@@ -261,7 +260,9 @@ export class SensifyMapPage implements OnChanges {
             //line from user to closest box
             let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
             let line = L.polyline(lineCoords, { className: "line", dashArray: "10,15" });
-            closestMarkersBlue.push(line);
+            this.userLocationMarkerLayer.addLayer(line);
+            this.layersControl.addOverlay(this.userLocationMarkerLayer, 'Me');
+
 
             //Circle, visualizing radius
             if (this.radiusCircle) {

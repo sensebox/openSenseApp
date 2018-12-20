@@ -98,7 +98,7 @@ export class SensifyStartPage implements OnChanges {
                     
 
                     }
-                }
+                };
 
                 this.sensors.push(sensor);
                 

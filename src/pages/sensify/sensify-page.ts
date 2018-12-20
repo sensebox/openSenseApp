@@ -282,7 +282,7 @@ export class SensifyPage {
     public validateBoxes(senseboxes: SenseBox[]): Promise<SenseBox[]> {
         return new Promise(resolve => {
             for(let i  = 0; i < senseboxes.length; i++){
-                if(senseboxes[i]){
+                if(senseboxes[i] && senseboxes[i].updatedCategory == "today"){
                     senseboxes[i].isValid = this.api.sensorIsValid("Temperatur", senseboxes[i], senseboxes, this.metadata.settings.ranges.temperature);
                 }
             }

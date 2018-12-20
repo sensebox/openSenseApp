@@ -46,7 +46,7 @@ export class SensifyMapPage implements OnChanges {
 
             container.onclick = () => {
                 this.map.panTo(this.metadata.settings.location);
-            }
+            };
             return container;
         }
     });
@@ -100,6 +100,10 @@ export class SensifyMapPage implements OnChanges {
         markerColor: "blue"
     });
 
+    public greenNotValidMarker = L.AwesomeMarkers.icon({
+        markerColor: "purple"
+    });
+
     ionViewDidLoad() {
         console.log('ionViewDidLoad MapPage');
     }
@@ -144,7 +148,7 @@ export class SensifyMapPage implements OnChanges {
         // Remove user location layer from map
         if (this.userLocationMarkerLayer) {
             this.map.removeLayer(this.userLocationMarkerLayer);
-            this.layersControl.removeLayer(this.userLocationMarker)
+            this.layersControl.removeLayer(this.userLocationMarker);
             this.addUserOverlay();
             this.userLocationMarkerLayer = undefined;
         }
@@ -180,7 +184,13 @@ export class SensifyMapPage implements OnChanges {
                                 .bindPopup(popupDescription);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
-                        } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek" && this.metadata.senseBoxes[i].isValid) {
+                        } else if (this.metadata.senseBoxes[i].updatedCategory == "today" && !this.metadata.senseBoxes[i].isValid) {
+                            marker = L.marker(this.metadata.senseBoxes[i].location,
+                                {icon: this.greenNotValidMarker})
+                                .bindPopup(popupDescription);
+                            // Add marker to map
+                            closestMarkersGreen.push(marker);
+                        }else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.yellowMarker})
                                 .bindPopup(popupDescription);

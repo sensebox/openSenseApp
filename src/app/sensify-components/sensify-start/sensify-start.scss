@@ -14,6 +14,9 @@ sensify-page-start {
     //First Row
     #titleRow{
         height:15%;
+        overflow:hidden;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
     }
 
     // Titel
@@ -37,7 +40,9 @@ sensify-page-start {
 
     //Second Row
     #currentSensorRow{
-
+        overflow:hidden;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
     }
 
     #currentSensorCol{
@@ -51,15 +56,25 @@ sensify-page-start {
         text-align: left;
         color:white;
         background:rgba(0, 0, 0, 0.2);
+        text-transform: capitalize;
+        overflow:hidden;
+        white-space: nowrap; 
+        text-overflow: ellipsis;
     }
 
+    #curName{
+        font-size: 10px;
+        margin: 10px 0;
+    }
 
     #curValue{
         font-size: 50px;
+        display:inline;
     }
 
     #curUnit{
         font-size: 50px;
+        display:inline;
     }
 
 
@@ -81,7 +96,7 @@ sensify-page-start {
         //white-space:nowrap;
         margin-top:80px;
         margin-bottom: 0px;
-
+       
         
         border-bottom: 3px solid #aaa;
         border-bottom-width: 80%;
@@ -90,7 +105,8 @@ sensify-page-start {
     }
 
     #headingCol{
-        left:30px;
+        top:-10px;
+        text-align: left;
         align-content: center;
         overflow:hidden;
         white-space: nowrap; 
@@ -112,6 +128,7 @@ sensify-page-start {
 
 
     #sensorCol{
+        top:-10px;
         font-size: 20px;
         line-height: 2;
         text-align: center;
@@ -120,6 +137,7 @@ sensify-page-start {
     }
 
     #valueCol{
+        top:-10px;
         font-size: 20px;
         line-height: 2;
         text-align: left;
@@ -127,6 +145,7 @@ sensify-page-start {
     }
 
     #unitCol{
+        top:-10px;
         font-size: 20px;
         line-height: 2;
         text-align: center;

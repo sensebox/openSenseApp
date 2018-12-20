@@ -22,6 +22,7 @@ export class SensifyStartPage implements OnChanges {
     public temperature:String;
     public curValue:String;
     public curUnit:String;
+    public curName:String;
     public btns:any;
 
     constructor(public mySensifyPage: SensifyPage, public platform: Platform, public navCtrl: NavController, public navParams: NavParams,public actionSheetCtrl: ActionSheetController) {
@@ -32,7 +33,7 @@ export class SensifyStartPage implements OnChanges {
 
         this.curValue = "...";
         this.curUnit = "";
-
+        this.curName = "";
 
         
 
@@ -93,6 +94,9 @@ export class SensifyStartPage implements OnChanges {
                     handler: () => {
                       this.curValue = sensor.lastMeasurement.value;
                       this.curUnit = sensor.unit;
+                      this.curName = sensor.title;
+                    
+
                     }
                 }
 
@@ -102,9 +106,11 @@ export class SensifyStartPage implements OnChanges {
                     this.temperature = sensor.lastMeasurement.value;
                     this.curValue = sensor.lastMeasurement.value;
                     this.curUnit = sensor.unit;
+                    this.curName = sensor.title;
                 }
             }
 
+            console.log(this.curName);
             this.btns.push(newBtn);
             
         }

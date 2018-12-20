@@ -77,26 +77,27 @@ sensify-page-start {
     //Headings Row
     #headingsRow{
         background:rgba(0, 0, 0, 0.5);
-        height:8%;
         //overflow: auto;
         //white-space:nowrap;
         margin-top:80px;
         margin-bottom: 0px;
-        //border-bottom: 3px solid #aaa;
-        //border-bottom-width: 80%;
-        //border-bottom-left-radius: 10%;
-        //border-bottom-right-radius: 10%;
+
+        
+        border-bottom: 3px solid #aaa;
+        border-bottom-width: 80%;
+        border-bottom-left-radius: 10%;
+        border-bottom-right-radius: 10%;
     }
 
-    #heading{
-        font-size: 20px;
-        line-height: 2;
-        text-align: left;
+    #headingCol{
         left:30px;
         align-content: center;
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
+    }
+
+    #heading{
     }
 
 

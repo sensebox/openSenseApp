@@ -104,8 +104,16 @@ export class SensifyMapPage implements OnChanges {
         markerColor: "purple"
     });
 
-    public customOptions = {
-        'className': 'custom'
+    public customOptionsRed = {
+        'className': 'customRed'
+    };
+
+    public customOptionsGreen = {
+        'className': 'customGreen'
+    };
+
+    public customOptionsYellow = {
+        'className': 'customYellow'
     };
 
     ionViewDidLoad() {
@@ -185,32 +193,32 @@ export class SensifyMapPage implements OnChanges {
                         if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.greenMarker})
-                                .bindPopup(popupDescription);
+                                .bindPopup(popupDescription, this.customOptionsGreen);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "today" && !this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.greenNotValidMarker})
-                                .bindPopup(popupDescription, this.customOptions);
+                                .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.yellowMarker})
-                                .bindPopup(popupDescription);
+                                .bindPopup(popupDescription, this.customOptionsYellow);
                             // Add marker to map
                             closestMarkersYellow.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.redMarker})
-                                .bindPopup(popupDescription);
+                                .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersRed.push(marker);
                         }
                     } else {//ClosestSenseBox Marker
                         marker = L.marker(this.metadata.closestSenseBox.location,
                             {icon: this.blueMarker})
-                            .bindPopup(popupDescription);
+                            .bindPopup(popupDescription, this.customOptionsGreen);
                         // Add marker to map
                         closestMarkersBlue.push(marker);
                         let tempDistance = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);

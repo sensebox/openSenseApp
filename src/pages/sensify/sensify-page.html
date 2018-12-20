@@ -5,7 +5,8 @@
         </button>
         <ion-buttons end>
             <button ion-button (click)="changeTimerNotificationBoolean()">
-                <ion-icon size="large" [name]="timerNotificationEnabled ? 'notifications' : 'notifications-off'" style="zoom:1.5;"></ion-icon>
+                <ion-icon size="large" [name]="timerNotificationEnabled ? 'notifications' : 'notifications-off'"
+                          style="zoom:1.5;"></ion-icon>
             </button>
             <button ion-button (click)="openSelect()">
                 <ion-icon size="large" name="settings" style="zoom:1.5;"></ion-icon>
@@ -53,7 +54,8 @@
             <sensify-page-notifications [metadata]="metadata"></sensify-page-notifications>
         </div>
         <div class="selectedPage" *ngIf="(tabSelector === 'settings')">
-            <sensify-page-settings [metadata]="metadata" (onMetadataChange)="setMetadata($event)"></sensify-page-settings>
+            <sensify-page-settings [metadata]="metadata"
+                                   (onMetadataChange)="setMetadata($event)"></sensify-page-settings>
         </div>
         <div class="selectedPage" *ngIf="(tabSelector === 'about')">
             <sensify-page-about></sensify-page-about>
@@ -62,7 +64,7 @@
 </ion-content>
 
 <ion-footer class="footer-sensify-page">
-<!-- <ion-toolbar> -->
+    <!-- <ion-toolbar> -->
     <ion-segment (click)="changeTab(tabSelector)" [(ngModel)]="tabSelector">
         <!--Map-->
         <ion-segment-button style="color:black" value="map">

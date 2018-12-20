@@ -173,7 +173,7 @@ export class SensifyMapPage implements OnChanges {
                     let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
                     // Generate marker
                     let marker;
-                    if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location) {
+                    if (this.metadata.senseBoxes[i]._id != this.metadata.closestSenseBox._id) {
                         if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.greenMarker})

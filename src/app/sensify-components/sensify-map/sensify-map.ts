@@ -104,6 +104,10 @@ export class SensifyMapPage implements OnChanges {
         markerColor: "purple"
     });
 
+    public customOptions = {
+        'className': 'custom'
+    };
+
     ionViewDidLoad() {
         console.log('ionViewDidLoad MapPage');
     }
@@ -187,10 +191,10 @@ export class SensifyMapPage implements OnChanges {
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "today" && !this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.greenNotValidMarker})
-                                .bindPopup(popupDescription);
+                                .bindPopup(popupDescription, this.customOptions);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
-                        }else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
+                        } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
                                 {icon: this.yellowMarker})
                                 .bindPopup(popupDescription);

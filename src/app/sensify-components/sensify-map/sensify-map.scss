@@ -21,3 +21,11 @@ page-map {
     fill-opacity: .1;
     fill: #c53debbb;
 }
+
+
+/* css to customize Leaflet default styles  */
+.custom .leaflet-popup-tip,
+.custom .leaflet-popup-content-wrapper {
+    background: color($colors, danger);
+    color: color($colors, light);
+}

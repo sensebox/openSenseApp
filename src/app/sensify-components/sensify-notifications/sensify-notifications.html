@@ -1,21 +1,27 @@
-<ion-title>Notifications</ion-title>
-
-<ion-item *ngFor='let notification of metadata.notifications'>
-    <ion-card>
-        <ion-card-header >
-            {{notification.title}}
-        </ion-card-header>
-        <ion-card-content style="white-space: normal;">
-            {{notification.text}}
-        </ion-card-content>
-        <ion-card-content style="white-space: normal;">
-            {{notification.data}}
-        </ion-card-content>
-        <ion-card-content >
-            {{notification.trigger.at | date : format : timezone}}
-        </ion-card-content>
-    </ion-card>
-</ion-item>
-
-
-
+<ion-content class="start" [style.backgroundImage]="'url(' + bgImage + ')'">
+    <ion-row>
+        <ion-col width-100>
+            <ion-item class="header">
+                <strong>Notifications</strong>
+            </ion-item>
+        </ion-col>
+    </ion-row>
+    <ion-grid>
+        <ion-item *ngFor='let notification of metadata.notifications' class="start">
+            <ion-card class="card">
+                <ion-card-header style="color:white">
+                    {{notification.title}}
+                </ion-card-header>
+                <ion-card-content style="white-space: normal;">
+                    {{notification.text}}
+                </ion-card-content>
+                <ion-card-content style="white-space: normal;">
+                    {{notification.data}}
+                </ion-card-content>
+                <ion-card-content>
+                    {{notification.trigger.at | date : format : timezone}}
+                </ion-card-content>
+            </ion-card>
+        </ion-item>
+    </ion-grid>
+</ion-content>

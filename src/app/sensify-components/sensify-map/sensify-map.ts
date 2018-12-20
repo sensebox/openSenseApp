@@ -1,9 +1,10 @@
-import { Component, EventEmitter, Input, Output, ElementRef } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
-import { tileLayer } from "leaflet";
+import {Component, EventEmitter, Input, Output, ElementRef} from '@angular/core';
+import {NavController, AlertController} from 'ionic-angular';
+import {tileLayer} from "leaflet";
 import * as L from "leaflet";
-import { Metadata, SenseBox } from "../../../providers/model";
-import { OnChanges } from '@angular/core';
+import {Metadata, SenseBox} from "../../../providers/model";
+import {OnChanges} from '@angular/core';
+import "leaflet.awesome-markers";
 
 @Component({
     selector: 'sensify-page-map',
@@ -56,7 +57,7 @@ export class SensifyMapPage implements OnChanges {
         zoom: 13,
         center: [0, 0]
     };
-    public layersControl: L.Control.Layers = L.control.layers(null, {}, { position: 'topleft' });
+    public layersControl: L.Control.Layers = L.control.layers(null, {}, {position: 'topleft'});
     public locatorButton: L.Control;
     public radiusCircle;
     public userLocationMarker: L.Marker;
@@ -72,41 +73,31 @@ export class SensifyMapPage implements OnChanges {
         public navCtrl: NavController,
         private elementRef: ElementRef,
         private alertCtrl: AlertController
-    ) { }
-
-    public greenIcon = L.icon({
-        iconUrl: '../../assets/imgs/greenMarker.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 37],
-        popupAnchor: [-3, -76]
-    });
-
-    public yellowIcon = L.icon({
-        iconUrl: '../../assets/imgs/yellowMarker.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 37],
-        popupAnchor: [-3, -76]
-    });
-
-    public redIcon = L.icon({
-        iconUrl: '../../assets/imgs/redMarker.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 37],
-        popupAnchor: [-3, -76]
-    });
-
-    public blueIcon = L.icon({
-        iconUrl: '../../assets/imgs/blueMarker.png',
-        iconSize: [40, 40],
-        iconAnchor: [20, 37],
-        popupAnchor: [-3, -76]
-    });
+    ) {
+    }
 
     public posIcon = L.icon({
         iconUrl: '../../assets/imgs/positionMarker.png',
         iconSize: [50, 50],
         iconAnchor: [25, 48],
         popupAnchor: [-3, -76]
+    });
+
+    public redMarker = L.AwesomeMarkers.icon({
+        markerColor: 'red'
+    });
+
+    public greenMarker = L.AwesomeMarkers.icon({
+        markerColor: "green"
+    });
+
+    public yellowMarker = L.AwesomeMarkers.icon({
+        icon: 'coffee',
+        markerColor: "orange"
+    });
+
+    public blueMarker = L.AwesomeMarkers.icon({
+        markerColor: "blue"
     });
 
     ionViewDidLoad() {
@@ -161,8 +152,8 @@ export class SensifyMapPage implements OnChanges {
         // Create marker with user location + description
         let popupDescription = "<b>Your position is:</b><br>Latitude: " + this.metadata.settings.location.toString();
         this.userLocationMarker = L.marker(this.metadata.settings.location,
-            { icon: this.posIcon })
-            .bindPopup(popupDescription);3
+            {icon: this.posIcon})
+            .bindPopup(popupDescription);
 
         // Add Layergroup to userLocationMarkerLayer
         this.userLocationMarkerLayer = L.layerGroup([this.userLocationMarker]).addTo(this.map);
@@ -177,7 +168,7 @@ export class SensifyMapPage implements OnChanges {
             let closestMarkersBlue = [];
             for (let i = 0; i < this.metadata.senseBoxes.length; i++) {
                 if (!this.metadata.senseBoxes[i]) {
-                }else{
+                } else {
                     // Generate marker-description
                     let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
                     // Generate marker
@@ -185,26 +176,26 @@ export class SensifyMapPage implements OnChanges {
                     if (this.metadata.senseBoxes[i].location != this.metadata.closestSenseBox.location) {
                         if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                { icon: this.greenIcon })
+                                {icon: this.greenMarker})
                                 .bindPopup(popupDescription);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                { icon: this.yellowIcon })
+                                {icon: this.yellowMarker})
                                 .bindPopup(popupDescription);
                             // Add marker to map
                             closestMarkersYellow.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                { icon: this.redIcon })
+                                {icon: this.redMarker})
                                 .bindPopup(popupDescription);
                             // Add marker to map
                             closestMarkersRed.push(marker);
                         }
                     } else {//ClosestSenseBox Marker
                         marker = L.marker(this.metadata.closestSenseBox.location,
-                            { icon: this.blueIcon })
+                            {icon: this.blueMarker})
                             .bindPopup(popupDescription);
                         // Add marker to map
                         closestMarkersBlue.push(marker);
@@ -223,8 +214,7 @@ export class SensifyMapPage implements OnChanges {
                             this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
                                 this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
                                 this.metadata.settings.mySenseBox = this.metadata.senseBoxes[i]._id;
-                                this.addUserLocationToLayer();
-                                this.addSenseboxMarkerToMap();
+                                this.updateMap();
                                 let alert = this.alertCtrl.create({
                                     title: 'Success',
                                     subTitle: 'New home SenseBox was set',
@@ -261,16 +251,18 @@ export class SensifyMapPage implements OnChanges {
 
             //line from user to closest box
             let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
-            let line = L.polyline(lineCoords, { className: "line", dashArray: "10,15" });
+            let line = L.polyline(lineCoords, {className: "line", dashArray: "10,15"});
             this.userLocationMarkerLayer.addLayer(line);
             this.layersControl.addOverlay(this.userLocationMarkerLayer, 'Me');
-
 
             //Circle, visualizing radius
             if (this.radiusCircle) {
                 this.map.removeLayer(this.radiusCircle);
             }
-            this.radiusCircle = L.circle(this.metadata.settings.location, { className: "circle", radius: this.metadata.settings.radius * 1000 }).addTo(this.map);
+            this.radiusCircle = L.circle(this.metadata.settings.location, {
+                className: "circle",
+                radius: this.metadata.settings.radius * 1000
+            }).addTo(this.map);
 
             // Create layerGroups and add layerGroups to map
             if (closestMarkersGreen.length > 0) {
@@ -315,7 +307,7 @@ export class SensifyMapPage implements OnChanges {
 
     addUserOverlay() {
         this.map.removeControl(this.layersControl);
-        this.layersControl = L.control.layers(null, {}, { position: 'topleft' });
+        this.layersControl = L.control.layers(null, {}, {position: 'topleft'});
         this.layersControl.addTo(this.map);
 
         this.map.zoomControl.setPosition('topleft');

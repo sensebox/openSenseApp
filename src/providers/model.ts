@@ -44,3 +44,26 @@ export interface Metadata {
     closestSenseBox?: SenseBox;
     notifications: ILocalNotification[];
 }
+
+export enum NotificationSensorTitles {
+    temperature ='Temperatur',
+    uvIntensity = 'UV-Intensität',
+    // brightness = 'Beleuchtungsstärke',
+    // airpressure = 'Luftdruck',
+    // humidity = 'rel. Luftfeuchte'
+    // , 'PM2.5', 'PM10', 'Niederschlagsmenge', 'Wolkenbedeckung', 'Windrichtung', 'Windgeschwindigkeit'
+}
+
+export enum NotificationThresholdValues {
+    temperatureLow = 1,
+    temperatureHigh = 25,
+    uvIntensityHigh = 300, // test value
+    // airpressureHigh
+}
+
+export enum NotificationMessages {
+    temperatureLow = 'It is very cold today',
+    temperatureHigh = 'It is very hot today',
+    uvIntensityHigh = 'It is very sunny today',
+    // airpressureHigh = 'It is very windy today.'
+}

@@ -1,5 +1,5 @@
 import { ApiProvider } from '../../providers/api/api';
-import { Metadata, SenseBox } from '../../providers/model';
+import { Metadata, NotificationMessages, NotificationSensorTitles, NotificationThresholdValues, SenseBox } from '../../providers/model';
 import { Component, ViewChild } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform, Select } from 'ionic-angular';
 import { Geolocation, Geoposition } from "@ionic-native/geolocation";
@@ -39,6 +39,36 @@ export class SensifyPage {
     public timerNotificationCounter: number = 0;
     public timerNotificationEnabled: boolean = false;
     public notificationCounter: number = 0;
+
+    // to validate senseBox data for notifications
+    public notificationSensors =  {
+        temperature: {
+            title: NotificationSensorTitles.temperature,
+            threshold: {
+                low: {
+                    value: NotificationThresholdValues.temperatureLow,
+                    msg: NotificationMessages.temperatureLow,
+                },
+                high: {
+                    value: NotificationThresholdValues.temperatureHigh,
+                    msg: NotificationMessages.temperatureHigh,
+                }
+            },
+        },
+        uvIntensity: {
+            title: NotificationSensorTitles.uvIntensity,
+            threshold: {
+                high: {
+                    value: NotificationThresholdValues.uvIntensityHigh,
+                    msg: NotificationMessages.uvIntensityHigh,
+                }
+            }
+        }
+        // brightness = 'Beleuchtungsstärke',
+        // airpressure = 'Luftdruck',
+        // humidity = 'rel. Luftfeuchte'
+        // , 'PM2.5', 'PM10', 'Niederschlagsmenge', 'Wolkenbedeckung', 'Windrichtung', 'Windgeschwindigkeit'
+    }
 
     tab: String;
     tabSelector: String;
@@ -206,11 +236,24 @@ export class SensifyPage {
             }
             // validate for threshold
             this.metadata.senseBoxes.forEach(sb => {
-                let tempSensor = sb.sensors.find(el => el.title === 'Temperatur');
-                if (tempSensor && tempSensor.lastMeasurement && tempSensor.lastMeasurement.value != undefined && Number(tempSensor.lastMeasurement.value) <= 1) {
-                    console.log(tempSensor);
-                    this.timerNotificationCounter += 1;
-                    this.setNotificationWithTimer(0.0, 'No.' + this.timerNotificationCounter, 'It will rain today at station ' + sb.name, 'Temperature is ' + tempSensor.lastMeasurement.value + '°C');
+                // validate for each sensor with a threshold
+                for (let sensor in this.notificationSensors) {
+                    let sn = this.notificationSensors[sensor];
+                    let sensorId = sb.sensors.find(el => el.title === sn.title);
+                    // validate threshold for low values
+                    if (sn.threshold.low) {
+                        if (sensorId && sensorId.lastMeasurement && sensorId.lastMeasurement.value != undefined && Number(sensorId.lastMeasurement.value) <= sn.threshold.low.value) {
+                            this.timerNotificationCounter += 1;
+                            this.setNotificationWithTimer(0.0, 'No.' + this.timerNotificationCounter + ' @' + sb.name, sn.threshold.low.msg, sn.title + ' is ' + sensorId.lastMeasurement.value);
+                        }
+                    } else
+                    // validate threshold for low values
+                    if (sn.threshold.high) {
+                        if (sensorId && sensorId.lastMeasurement && sensorId.lastMeasurement.value != undefined && Number(sensorId.lastMeasurement.value) >= sn.threshold.high.value) {
+                            this.timerNotificationCounter += 1;
+                            this.setNotificationWithTimer(0.0, 'No.' + this.timerNotificationCounter + ' @' + sb.name, sn.threshold.high.msg, sn.title + ' is ' + sensorId.lastMeasurement.value);
+                        }
+                    }
                 }
             })
             console.log('finished --> timerNotification()');

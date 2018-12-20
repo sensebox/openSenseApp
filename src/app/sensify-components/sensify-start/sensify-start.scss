@@ -78,15 +78,14 @@ sensify-page-start {
     #headingsRow{
         background:rgba(0, 0, 0, 0.5);
         height:8%;
-        overflow: auto;
-        white-space:nowrap;
+        //overflow: auto;
+        //white-space:nowrap;
         margin-top:80px;
         margin-bottom: 0px;
-
-        border-bottom: 3px solid #aaa;
-        border-bottom-width: 80%;
-        border-bottom-left-radius: 10%;
-        border-bottom-right-radius: 10%;
+        //border-bottom: 3px solid #aaa;
+        //border-bottom-width: 80%;
+        //border-bottom-left-radius: 10%;
+        //border-bottom-right-radius: 10%;
     }
 
     #heading{
@@ -98,8 +97,6 @@ sensify-page-start {
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
-        
-        
     }
 
 

@@ -1,7 +1,7 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
-import {SenseBox, Metadata} from '../model';
+import { SenseBox, Metadata } from '../model';
 import * as L from "leaflet";
 
 interface CurrentDate {
@@ -13,15 +13,10 @@ interface CurrentDate {
 export class ApiProvider {
 
     private API_URL = 'https://api.opensensemap.org';
-    //private API_URL = 'https://api.testing.opensensemap.org';
 
     public metadata: Metadata;
 
     constructor(public http: HttpClient) {
-    }
-
-    getData() {
-        return this.http.get(`${this.API_URL}/boxes/5b0d436fd40a290019ef444d`);
     }
 
     public async getSenseBoxes(userLocation: L.LatLng, radius: number) {
@@ -307,5 +302,4 @@ export class ApiProvider {
             return false;
         }
     }
-
 }

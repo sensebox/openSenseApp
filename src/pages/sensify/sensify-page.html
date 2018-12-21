@@ -26,22 +26,6 @@
 
 
 <ion-content>
-    <!-- toolbar for loading -->
-    <ion-row id="loadingBar">
-        <ion-grid [hidden]="!loadingSpinner.show">
-            <ion-col id="colSpinner" col-1>
-                <ion-spinner id="spinner" name="dots" class="spinner-dark"></ion-spinner>
-            </ion-col>
-            <ion-col id="colMessage">
-                {{loadingSpinner.message}}
-            </ion-col>
-        </ion-grid>
-        <ion-grid [hidden]="loadingSpinner.show || !globalMessage.show">
-            <ion-col id="colMessage">
-                {{globalMessage.message}}
-            </ion-col>
-        </ion-grid>
-    </ion-row>
     <!-- components -->
     <ion-row id="pageContent">
         <div class="selectedPage" *ngIf="(tabSelector === 'map')">

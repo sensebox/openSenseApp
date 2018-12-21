@@ -20,13 +20,13 @@ export class SensifySettingsPage {
 
     @Output()
     public onMessageChange: EventEmitter<string> = new EventEmitter();
-    
+
     newRadius: any;
     newValidationRange: any;
     newSenseboxID: any;
 
 
-    constructor(public mySensifyPage:SensifyPage, public alertCrtl: AlertController, public api : ApiProvider, private alertCtrl: AlertController) {}
+    constructor(public mySensifyPage: SensifyPage, public alertCrtl: AlertController, public api: ApiProvider, private alertCtrl: AlertController) { }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifySettingsPage');
@@ -44,10 +44,10 @@ export class SensifySettingsPage {
         if (this.newSenseboxID) {
             //Validate if senseBoxID is a sensebox
             this.api.getSenseBoxByID(this.newSenseboxID).then(res => {
-                if(res){
+                if (res) {
                     this.metadata.closestSenseBox = res;
                     this.metadata.settings.mySenseBox = res._id;
-                }else{
+                } else {
                     console.error("SENSEBOX ID IS NOT VALID: Please check it again!")
                 }
             })
@@ -78,13 +78,12 @@ export class SensifySettingsPage {
         //this.onMetadataChange.emit(this.metadata);    
     }
 
-    deleteSenseBoxID(){
+    deleteSenseBoxID() {
         delete this.metadata.settings.mySenseBox;
-        this.mySensifyPage.toggleSpinner(true, "Waiting for Closest SenseBox...");
+        this.mySensifyPage.presentToast('Waiting for Closest SenseBox');
         this.api.getclosestSenseBox(this.metadata.senseBoxes, this.metadata.settings.location).then(res => {
             this.metadata.closestSenseBox = res;
-            this.mySensifyPage.toggleSpinner(false, "Waiting for Closest SenseBox...");
-            if(!this.metadata.settings.mySenseBox){
+            if (!this.metadata.settings.mySenseBox) {
                 let alert = this.alertCtrl.create({
                     title: 'ID Removed',
                     subTitle: 'The SenseBox ID has been removed.',
@@ -93,5 +92,7 @@ export class SensifySettingsPage {
                 alert.present();
             }
         })
+        this.mySensifyPage.toastMSG.dismissAll();
+        this.mySensifyPage.toastMSG = null;
     }
 }

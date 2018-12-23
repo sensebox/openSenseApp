@@ -1,10 +1,11 @@
-import {Component, EventEmitter, Input, Output, ElementRef} from '@angular/core';
+import {Component, Input, Output, ElementRef} from '@angular/core';
 import {NavController, AlertController} from 'ionic-angular';
 import {tileLayer} from "leaflet";
 import * as L from "leaflet";
 import {Metadata, SenseBox} from "../../../providers/model";
 import {OnChanges} from '@angular/core';
 import "leaflet.awesome-markers";
+import { SensifyPage } from '../../../pages/sensify/sensify-page';
 
 @Component({
     selector: 'sensify-page-map',
@@ -14,12 +15,6 @@ export class SensifyMapPage implements OnChanges {
 
     @Input()
     public metadata: Metadata;
-
-    @Output()
-    public onMessageChange: EventEmitter<string> = new EventEmitter();
-
-    @Output()
-    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
 
     // Leaflet Config Values
     public map: L.Map;
@@ -74,7 +69,8 @@ export class SensifyMapPage implements OnChanges {
     constructor(
         public navCtrl: NavController,
         private elementRef: ElementRef,
-        private alertCtrl: AlertController
+        private alertCtrl: AlertController,
+        public mySensifyPage: SensifyPage
     ) {
     }
 
@@ -138,7 +134,6 @@ export class SensifyMapPage implements OnChanges {
             this.metadata.settings.zoomLevel = e.target.getZoom();
             let tempView = e.target.getCenter();
             this.metadata.settings.mapView = new L.LatLng(tempView.lat, tempView.lng);
-            this.onMetadataChange.emit(this.metadata);
         });
         this.updateMap();
         this.map.addControl(this.locatorButton);
@@ -323,7 +318,7 @@ export class SensifyMapPage implements OnChanges {
                 this.layersControl.removeLayer(this.senseboxMarkersLayerBlue);
             }
             if (this.senseboxMarkersLayerGreen === undefined && this.senseboxMarkersLayerYellow === undefined && this.senseboxMarkersLayerRed === undefined && this.senseboxMarkersLayerBlue === undefined || this.metadata.closestSenseBox === null || this.metadata.closestSenseBox === undefined) {
-                this.onMessageChange.emit('No SenseBoxes around.');
+                this.mySensifyPage.presentClosableToast('No SenseBoxes around.');
             }
         }
     }

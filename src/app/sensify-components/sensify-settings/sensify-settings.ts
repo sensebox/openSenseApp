@@ -15,12 +15,6 @@ export class SensifySettingsPage {
     @Input()
     public metadata: Metadata;
 
-    @Output()
-    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
-
-    @Output()
-    public onMessageChange: EventEmitter<string> = new EventEmitter();
-
     newRadius: any;
     newValidationRange: any;
     newSenseboxID: any;
@@ -52,8 +46,6 @@ export class SensifySettingsPage {
                 }
             })
         }
-        // this.mySensifyPage.setMetadata(this.metadata);
-        this.onMetadataChange.emit(this.metadata);
 
         if (this.newRadius || this.newValidationRange || this.newSenseboxID) {
             let alert = this.alertCtrl.create({

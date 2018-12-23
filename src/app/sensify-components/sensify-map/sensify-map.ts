@@ -45,7 +45,9 @@ export class SensifyMapPage implements OnChanges {
             container.style.backgroundPosition = 'center';
 
             container.onclick = () => {
-                this.map.panTo(this.metadata.settings.location);
+                if(this.metadata.settings.location){
+                    this.map.panTo(this.metadata.settings.location);
+                }
             };
             return container;
         }
@@ -138,8 +140,9 @@ export class SensifyMapPage implements OnChanges {
             this.metadata.settings.mapView = new L.LatLng(tempView.lat, tempView.lng);
             this.onMetadataChange.emit(this.metadata);
         });
-        this.map.addControl(this.locatorButton);
         this.updateMap();
+        this.map.addControl(this.locatorButton);
+
     }
 
     public updateMap() {

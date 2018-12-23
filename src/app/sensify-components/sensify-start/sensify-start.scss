@@ -13,7 +13,7 @@ sensify-page-start {
 
     //First Row
     #titleRow{
-        height:15%;
+        height:100px;
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
@@ -22,6 +22,7 @@ sensify-page-start {
     // Titel
     #senseBoxTitle{
         width: 70%;
+        height:100%;
         font-size:40px;
         color: rgb(255, 255, 255);
         overflow:hidden;
@@ -37,12 +38,12 @@ sensify-page-start {
         margin-top:30px;
     }
 
-
     //Second Row
     #currentSensorRow{
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
+        height: 70%;
     }
 
     #currentSensorCol{
@@ -50,7 +51,7 @@ sensify-page-start {
     }
 
     #btn{
-        height:80%;
+        height:70%;
         width:100%;
         background-color:transparent;
         text-align: left;
@@ -77,8 +78,6 @@ sensify-page-start {
         display:inline;
     }
 
-
-
     #sunIndicator{
         text-align: center;
         align-content: center;
@@ -94,7 +93,7 @@ sensify-page-start {
         background:rgba(0, 0, 0, 0.5);
         //overflow: auto;
         //white-space:nowrap;
-        margin-top:80px;
+        margin-top:-20px;
         margin-bottom: 0px;
        
         
@@ -113,9 +112,18 @@ sensify-page-start {
         text-overflow: ellipsis;
     }
 
-    #heading{
+    #headingSensor{
+        margin-left: 15px;;
     }
 
+
+    #headingValue{
+        margin-left: 12px;;
+    }
+
+    #headingUnit{
+        margin-left: 9px;;
+    }
 
     //Third Row
     #dataRow{
@@ -125,7 +133,6 @@ sensify-page-start {
         white-space:nowrap;
         margin-top: 0px;
     }
-
 
     #sensorCol{
         top:-10px;

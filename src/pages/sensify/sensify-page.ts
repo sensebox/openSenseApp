@@ -103,10 +103,6 @@ export class SensifyPage {
         this.selectRef.open();
     }
 
-    public closeSelect() {
-        this.selectRef.close();
-    }
-
     presentToast(text: string): void {
         let toastData = {
             message: text,

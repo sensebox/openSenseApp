@@ -1,5 +1,7 @@
 <ion-header>
     <ion-navbar>
+        <ion-title>Sensify</ion-title>
+
         <button ion-button menuToggle>
             <ion-icon name="menu"></ion-icon>
         </button>
@@ -12,7 +14,6 @@
                 <ion-icon size="large" name="settings" style="zoom:1.5;"></ion-icon>
             </button>
         </ion-buttons>
-        <ion-title>Sensify</ion-title>
     </ion-navbar>
 </ion-header>
 
@@ -21,7 +22,6 @@
 <ion-select [(ngModel)]="tabSelector" interface="action-sheet" #mySelect>
     <ion-option value="settings">Settings</ion-option>
     <ion-option value="about">About</ion-option>
-    <!--<ion-option value="mute_inf">Exit App</ion-option>-->
 </ion-select>
 
 

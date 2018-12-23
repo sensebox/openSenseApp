@@ -227,11 +227,9 @@ export class SensifyMapPage implements OnChanges {
                         let tempDistance = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
                         if (tempDistance > 999) {
                             tempDistance = tempDistance / 1000;
-                            this.distanceToClosest = this.round(tempDistance, 2);
-                            this.distanceToClosestString = this.distanceToClosest + " km";
+                            this.distanceToClosestString = this.round(tempDistance, 2) + " km";
                         } else {
-                            this.distanceToClosest = this.round(tempDistance, 2);
-                            this.distanceToClosestString = this.distanceToClosest + " m";
+                            this.distanceToClosestString = this.round(tempDistance, 2) + " m";
                         }
                     }
                     if (marker) {
@@ -353,11 +351,8 @@ export class SensifyMapPage implements OnChanges {
         return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
     }
 
-    // Round a number
-    round(number, precision) {
-        let factor = Math.pow(10, precision);
-        let tempNumber = number * factor;
-        let roundedTempNumber = Math.round(tempNumber);
-        return roundedTempNumber / factor;
-    };
+    round(value, precision) {
+        var multiplier = Math.pow(10, precision || 0);
+        return Math.round(value * multiplier) / multiplier;
+    }
 }

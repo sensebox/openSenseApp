@@ -19,9 +19,9 @@ export class SensifyPage {
     public metadata: Metadata;
     public startLocation: L.LatLng;
     public radius: number;
-    toastMSG: Toast = null;
+    public toastMSG: Toast;
 
-    public distanceToClosest;
+    public distanceToClosest: number;
     public timerNotificationCounter: number = 0;
     public timerNotificationEnabled: boolean = false;
     public notificationCounter: number = 0;

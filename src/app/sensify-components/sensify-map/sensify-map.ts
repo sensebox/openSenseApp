@@ -61,7 +61,7 @@ export class SensifyMapPage implements OnChanges {
     };
     public layersControl: L.Control.Layers = L.control.layers(null, {}, {position: 'topleft'});
     public locatorButton: L.Control;
-    public radiusCircle;
+    public radiusCircle: L.CircleMarker;
     public userLocationMarker: L.Marker;
     public userLocationMarkerLayer: L.LayerGroup;
     public senseboxMarkersLayerGreen: L.LayerGroup;
@@ -328,7 +328,7 @@ export class SensifyMapPage implements OnChanges {
         }
     }
 
-    addUserOverlay() {
+    private addUserOverlay() {
         this.map.removeControl(this.layersControl);
         this.layersControl = L.control.layers(null, {}, {position: 'topleft'});
         this.layersControl.addTo(this.map);
@@ -338,7 +338,7 @@ export class SensifyMapPage implements OnChanges {
     }
 
     // Create Popop-Description for senseBoxes
-    getSenseboxPopupDescription(sensebox: SenseBox): string {
+    private getSenseboxPopupDescription(sensebox: SenseBox): string {
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription: String = "";
         let id = 'a' + sensebox._id;
@@ -351,7 +351,7 @@ export class SensifyMapPage implements OnChanges {
         return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
     }
 
-    round(value, precision) {
+    private round(value, precision) {
         var multiplier = Math.pow(10, precision || 0);
         return Math.round(value * multiplier) / multiplier;
     }

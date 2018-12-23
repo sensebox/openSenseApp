@@ -7,12 +7,6 @@ import * as L from "leaflet";
 import { Storage } from '@ionic/storage';
 import { ILocalNotification, LocalNotifications } from '@ionic-native/local-notifications';
 
-interface Loading {
-    show: boolean,
-    message: string,
-    messages: string[]
-}
-
 @IonicPage()
 @Component({
     selector: 'sensify-page',
@@ -193,7 +187,7 @@ export class SensifyPage {
                 }
                 this.updateMetadata();
             }
-            this.toastMSG.dismissAll();
+            this.toastMSG.dismiss();
             this.toastMSG = null;
 
             // TEST: VALIDATE TEMPERATURE VALUE OF CLOSEST SENSEBOX          
@@ -277,7 +271,7 @@ export class SensifyPage {
             })
             console.log('finished --> timerNotification()');
             this.timerNotification();
-            this.toastMSG.dismissAll();
+            this.toastMSG.dismiss();
             this.toastMSG = null;
         }
     }
@@ -376,7 +370,7 @@ export class SensifyPage {
                 }
             });
         }
-        this.toastMSG.dismissAll();
+        this.toastMSG.dismiss();
         this.toastMSG = null;
         await this.updateMetadata();
     }

@@ -172,7 +172,6 @@ export class SensifyStartPage implements OnChanges {
 		var currentDate = new Date()
 		var day = currentDate.getDate()
 		var month = currentDate.getMonth() + 1 //January is 0!
-		var year = currentDate.getFullYear()
 		this.date = day + "." + month;// + "." + year;
 	}
 }

@@ -92,7 +92,7 @@ export class SensifySettingsPage {
                 alert.present();
             }
         })
-        this.mySensifyPage.toastMSG.dismissAll();
+        this.mySensifyPage.toastMSG.dismiss();
         this.mySensifyPage.toastMSG = null;
     }
 }

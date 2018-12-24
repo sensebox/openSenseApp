@@ -35,9 +35,7 @@ export class SensifyStartPage implements OnChanges {
 		this.curUnit = "";
 		this.curName = "";
 
-
-
-		this.bgImage = "../../../assets/imgs/TestBckgrd.png";
+		this.bgImage = "../../../assets/imgs/background.png";
 		this.setCurrentDate();
 	}
 

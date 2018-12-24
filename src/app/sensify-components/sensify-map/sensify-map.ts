@@ -1,9 +1,9 @@
-import {Component, Input, Output, ElementRef} from '@angular/core';
-import {NavController, AlertController} from 'ionic-angular';
-import {tileLayer} from "leaflet";
+import { Component, Input, Output, ElementRef } from '@angular/core';
+import { NavController, AlertController } from 'ionic-angular';
+import { tileLayer } from "leaflet";
 import * as L from "leaflet";
-import {Metadata, SenseBox} from "../../../providers/model";
-import {OnChanges} from '@angular/core';
+import { Metadata, SenseBox } from "../../../providers/model";
+import { OnChanges } from '@angular/core';
 import "leaflet.awesome-markers";
 import { SensifyPage } from '../../../pages/sensify/sensify-page';
 
@@ -16,37 +16,54 @@ export class SensifyMapPage implements OnChanges {
     @Input()
     public metadata: Metadata;
 
-    // Leaflet Config Values
     public map: L.Map;
-    public locateButton = L.Control.extend({
+    public layersControl: L.Control.Layers = L.control.layers(null, {}, { position: 'topleft' });
+    public radiusCircle: L.CircleMarker;
+    public locatorButton: L.Control;
+    public LegendButton: L.Control;
+    public userLocationMarker: L.Marker;
+    public userLocationMarkerLayer: L.LayerGroup;
+    public senseboxMarkersLayerGreen: L.LayerGroup;
+    public senseboxMarkersLayerYellow: L.LayerGroup;
+    public senseboxMarkersLayerRed: L.LayerGroup;
+    public senseboxMarkersLayerBlue: L.LayerGroup;
+    public distanceToClosestString: String;
 
+    public locateButton = L.Control.extend({
         options: {
             position: 'topleft'
-            //control position - allowed: 'topleft', 'topright', 'bottomleft', 'bottomright'
         },
-
         onAdd: (map) => {
             var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-
-            container.style.backgroundColor = 'white';
-            container.style.width = '30px';
-            container.style.height = '30px';
+            container.className = 'button';
             container.style.backgroundImage = 'url(../../assets/imgs/positionMarker.png)';
-            container.style.backgroundSize = '30px';
-            container.style.borderTopLeftRadius = '2px';
-            container.style.borderTopRightRadius = '2px';
-            container.style.borderBottomLeftRadius = '2px';
-            container.style.borderBottomRightRadius = '2px';
-            container.style.backgroundPosition = 'center';
 
             container.onclick = () => {
-                if(this.metadata.settings.location){
+                if (this.metadata.settings.location) {
                     this.map.panTo(this.metadata.settings.location);
                 }
             };
             return container;
         }
     });
+
+    public legendButton = L.Control.extend({
+        options: {
+            position: 'topleft'
+        },
+        onAdd: (map) => {
+            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+            container.className = 'button';
+            container.style.backgroundImage = 'url(../../assets/imgs/question-mark.png)';
+
+            container.onclick = () => {
+                let containerContent = "<ion-grid><ion-row><ion-col col-20><p><img src='../../assets/imgs/greenmarkericon.png'></ion-col><ion-col col-80>Data is valid & up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/imgs/notvalidmarkericon.png'></ion-col><ion-col col-80>Data is NOT valid, but up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/imgs/orangemarkericon.png'></ion-col><ion-col col-80>Data is one week old</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/imgs/redmarkericon.png'></ion-col><ion-col col-80>Data is older than one week</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/imgs/bluemarkericon.png'></ion-col><ion-col col-80>Closest Sensebox</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/imgs/positionmarkericon.png'></ion-col><ion-col col-80>User-Location</p></ion-col></ion-row></ion-grid>";
+                this.showAlert('Legend', containerContent);
+            };
+            return container;
+        }
+    });
+
     public LeafletOptions = {
         layers: [
             tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png')
@@ -54,25 +71,13 @@ export class SensifyMapPage implements OnChanges {
         zoom: 13,
         center: [0, 0]
     };
-    public layersControl: L.Control.Layers = L.control.layers(null, {}, {position: 'topleft'});
-    public locatorButton: L.Control;
-    public radiusCircle: L.CircleMarker;
-    public userLocationMarker: L.Marker;
-    public userLocationMarkerLayer: L.LayerGroup;
-    public senseboxMarkersLayerGreen: L.LayerGroup;
-    public senseboxMarkersLayerYellow: L.LayerGroup;
-    public senseboxMarkersLayerRed: L.LayerGroup;
-    public senseboxMarkersLayerBlue: L.LayerGroup;
-    public distanceToClosest: number;
-    public distanceToClosestString: String;
 
     constructor(
         public navCtrl: NavController,
         private elementRef: ElementRef,
         private alertCtrl: AlertController,
         public mySensifyPage: SensifyPage
-    ) {
-    }
+    ) { }
 
     public posIcon = L.icon({
         iconUrl: '../../assets/imgs/positionMarker.png',
@@ -89,8 +94,7 @@ export class SensifyMapPage implements OnChanges {
         markerColor: "green"
     });
 
-    public yellowMarker = L.AwesomeMarkers.icon({
-        icon: 'coffee',
+    public orangeMarker = L.AwesomeMarkers.icon({
         markerColor: "orange"
     });
 
@@ -124,20 +128,32 @@ export class SensifyMapPage implements OnChanges {
         }
     }
 
+    showAlert(legend: string, content: string) {
+        let alert = this.alertCtrl.create({
+            title: legend,
+            subTitle: content,
+            cssClass: 'alert',
+            buttons: ['Ok']
+        });
+        alert.present();
+    }
+
     onMapReady(map: L.Map) {
         this.map = map;
         // add custom controls to map
         this.layersControl.addTo(this.map);
         this.map.zoomControl.setPosition('topleft');
-        this.locatorButton = new this.locateButton();
         this.map.on('moveend', e => {
             this.metadata.settings.zoomLevel = e.target.getZoom();
             let tempView = e.target.getCenter();
             this.metadata.settings.mapView = new L.LatLng(tempView.lat, tempView.lng);
         });
-        this.updateMap();
-        this.map.addControl(this.locatorButton);
 
+        this.locatorButton = new this.locateButton();
+        this.map.addControl(this.locatorButton);
+        this.LegendButton = new this.legendButton();
+        this.map.addControl(this.LegendButton);
+        this.updateMap();
     }
 
     public updateMap() {
@@ -166,7 +182,7 @@ export class SensifyMapPage implements OnChanges {
         // Create marker with user location + description
         let popupDescription = "<b>Your position is:</b><br>Latitude: " + this.metadata.settings.location.toString();
         this.userLocationMarker = L.marker(this.metadata.settings.location,
-            {icon: this.posIcon})
+            { icon: this.posIcon })
             .bindPopup(popupDescription);
 
         // Add Layergroup to userLocationMarkerLayer
@@ -190,32 +206,32 @@ export class SensifyMapPage implements OnChanges {
                     if (this.metadata.senseBoxes[i]._id != this.metadata.closestSenseBox._id) {
                         if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.greenMarker})
+                                { icon: this.greenMarker })
                                 .bindPopup(popupDescription, this.customOptionsGreen);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "today" && !this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.greenNotValidMarker})
+                                { icon: this.greenNotValidMarker })
                                 .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.yellowMarker})
+                                { icon: this.orangeMarker })
                                 .bindPopup(popupDescription, this.customOptionsYellow);
                             // Add marker to map
                             closestMarkersYellow.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.redMarker})
+                                { icon: this.redMarker })
                                 .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersRed.push(marker);
                         }
                     } else {//ClosestSenseBox Marker
                         marker = L.marker(this.metadata.closestSenseBox.location,
-                            {icon: this.blueMarker})
+                            { icon: this.blueMarker })
                             .bindPopup(popupDescription, this.customOptionsGreen);
                         // Add marker to map
                         closestMarkersBlue.push(marker);
@@ -233,12 +249,7 @@ export class SensifyMapPage implements OnChanges {
                                 this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
                                 this.metadata.settings.mySenseBox = this.metadata.senseBoxes[i]._id;
                                 this.updateMap();
-                                let alert = this.alertCtrl.create({
-                                    title: 'Success',
-                                    subTitle: 'New home SenseBox was set',
-                                    buttons: ['OK']
-                                });
-                                alert.present();
+                                this.showAlert('Success', 'New home SenseBox was set');
                             })
                         })
                     }
@@ -269,7 +280,7 @@ export class SensifyMapPage implements OnChanges {
 
             //line from user to closest box
             let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
-            let line = L.polyline(lineCoords, {className: "line", dashArray: "10,15"});
+            let line = L.polyline(lineCoords, { className: "line", dashArray: "10,15" });
             this.userLocationMarkerLayer.addLayer(line);
             this.layersControl.addOverlay(this.userLocationMarkerLayer, 'Me');
 
@@ -299,7 +310,6 @@ export class SensifyMapPage implements OnChanges {
                 this.senseboxMarkersLayerBlue = L.layerGroup(closestMarkersBlue).addTo(this.map);
                 this.layersControl.addOverlay(this.senseboxMarkersLayerBlue, 'Nearest/My SenseBoxes');
             }
-
         } else {
             if (this.senseboxMarkersLayerGreen !== undefined) {
                 this.map.removeLayer(this.senseboxMarkersLayerGreen);
@@ -323,13 +333,27 @@ export class SensifyMapPage implements OnChanges {
         }
     }
 
+    private addLegendToMap() {
+        var div = L.DomUtil.create('div', 'info legend'),
+            grades = ['blueMarker', 'greenMarker', 'redMarker', 'positionMarker'],
+            labels = ['a', 'b', 'c', 'd'];
+
+        // loop through our density intervals and generate a label with a colored square for each interval
+        for (var i = 0; i < grades.length; i++) {
+            let image = '<img src="url(../../assets/imgs/' + grades[i] + '.png" height="30px" width="30px">';
+            div.innerHTML += '<p' + image + labels[i] + "</p>";
+        }
+        return div;
+    }
+
     private addUserOverlay() {
         this.map.removeControl(this.layersControl);
-        this.layersControl = L.control.layers(null, {}, {position: 'topleft'});
+        this.layersControl = L.control.layers(null, {}, { position: 'topleft' });
         this.layersControl.addTo(this.map);
 
         this.map.zoomControl.setPosition('topleft');
-        this.locatorButton.setPosition('topleft')
+        this.locatorButton.setPosition('topleft');
+        this.LegendButton.setPosition('topleft');
     }
 
     // Create Popop-Description for senseBoxes

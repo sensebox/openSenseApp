@@ -454,7 +454,7 @@ export class SensifyPage {
     // Watch the user position
     subscription = this.geolocation.watchPosition()
         .subscribe(pos => {
-            console.log('watch position');
+            console.log('Watching GPS position');
             if (pos.coords) {
                 let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
                 // let location = new L.LatLng(7.5961, 51.9695);

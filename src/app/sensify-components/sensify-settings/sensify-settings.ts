@@ -15,19 +15,27 @@ export class SensifySettingsPage {
     @Input()
     public metadata: Metadata;
 
+    @Output()
+    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
+
+    @Output()
+    public onMessageChange: EventEmitter<string> = new EventEmitter();
+
     newRadius: any;
     newValidationRange: any;
     newSenseboxID: any;
 
-
-    constructor(public mySensifyPage: SensifyPage, public alertCrtl: AlertController, public api: ApiProvider, private alertCtrl: AlertController) { }
+    constructor(
+        public mySensifyPage: SensifyPage,
+        public alertCrtl: AlertController,
+        public api: ApiProvider,
+        private alertCtrl: AlertController
+    ) { }
 
     ionViewDidLoad() {
         console.log('ionViewDidLoad SensifySettingsPage');
     }
 
-    //SETTINGS
-    //-Think about other setting options that we need
     public changeSettings() {
         if (this.newRadius) {
             this.metadata.settings.radius = this.newRadius;
@@ -36,7 +44,6 @@ export class SensifySettingsPage {
             this.metadata.settings.ranges.temperature = this.newValidationRange;
         }
         if (this.newSenseboxID) {
-            //Validate if senseBoxID is a sensebox
             this.api.getSenseBoxByID(this.newSenseboxID).then(res => {
                 if (res) {
                     this.metadata.closestSenseBox = res;
@@ -46,7 +53,6 @@ export class SensifySettingsPage {
                 }
             })
         }
-
         if (this.newRadius || this.newValidationRange || this.newSenseboxID) {
             let alert = this.alertCtrl.create({
                 title: 'Saved successfully',
@@ -62,12 +68,11 @@ export class SensifySettingsPage {
             });
             alert.present();
         }
-
         //Reset Input forms after setting change
         this.newRadius = null;
         this.newValidationRange = null;
         this.newSenseboxID = null;
-        //this.onMetadataChange.emit(this.metadata);    
+        this.onMetadataChange.emit(this.metadata);    
     }
 
     deleteSenseBoxID() {

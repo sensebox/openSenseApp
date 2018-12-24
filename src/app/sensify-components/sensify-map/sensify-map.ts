@@ -1,4 +1,4 @@
-import { Component, Input, Output, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ElementRef } from '@angular/core';
 import { NavController, AlertController } from 'ionic-angular';
 import { tileLayer } from "leaflet";
 import * as L from "leaflet";
@@ -15,6 +15,12 @@ export class SensifyMapPage implements OnChanges {
 
     @Input()
     public metadata: Metadata;
+
+    @Output()
+    public onMessageChange: EventEmitter<string> = new EventEmitter();
+
+    @Output()
+    public onMetadataChange: EventEmitter<Metadata> = new EventEmitter();
 
     public map: L.Map;
     public layersControl: L.Control.Layers = L.control.layers(null, {}, { position: 'topleft' });
@@ -35,7 +41,7 @@ export class SensifyMapPage implements OnChanges {
         },
         onAdd: (map) => {
             var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-            container.className = 'button';
+            container.className = 'buttons';
             container.style.backgroundImage = 'url(../../assets/imgs/positionMarker.png)';
 
             container.onclick = () => {
@@ -53,7 +59,7 @@ export class SensifyMapPage implements OnChanges {
         },
         onAdd: (map) => {
             var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-            container.className = 'button';
+            container.className = 'buttons';
             container.style.backgroundImage = 'url(../../assets/imgs/question-mark.png)';
 
             container.onclick = () => {
@@ -147,6 +153,7 @@ export class SensifyMapPage implements OnChanges {
             this.metadata.settings.zoomLevel = e.target.getZoom();
             let tempView = e.target.getCenter();
             this.metadata.settings.mapView = new L.LatLng(tempView.lat, tempView.lng);
+            this.onMetadataChange.emit(this.metadata);
         });
 
         this.locatorButton = new this.locateButton();
@@ -333,19 +340,6 @@ export class SensifyMapPage implements OnChanges {
         }
     }
 
-    private addLegendToMap() {
-        var div = L.DomUtil.create('div', 'info legend'),
-            grades = ['blueMarker', 'greenMarker', 'redMarker', 'positionMarker'],
-            labels = ['a', 'b', 'c', 'd'];
-
-        // loop through our density intervals and generate a label with a colored square for each interval
-        for (var i = 0; i < grades.length; i++) {
-            let image = '<img src="url(../../assets/imgs/' + grades[i] + '.png" height="30px" width="30px">';
-            div.innerHTML += '<p' + image + labels[i] + "</p>";
-        }
-        return div;
-    }
-
     private addUserOverlay() {
         this.map.removeControl(this.layersControl);
         this.layersControl = L.control.layers(null, {}, { position: 'topleft' });
@@ -356,7 +350,6 @@ export class SensifyMapPage implements OnChanges {
         this.LegendButton.setPosition('topleft');
     }
 
-    // Create Popop-Description for senseBoxes
     private getSenseboxPopupDescription(sensebox: SenseBox): string {
         let sensorTitle = "<b>" + sensebox.name + "</b>";
         let sensorsDescription: String = "";

@@ -25,7 +25,13 @@ export class SensifyStartPage implements OnChanges {
 	public curName: String;
 	public btns: any;
 
-	constructor(public mySensifyPage: SensifyPage, public platform: Platform, public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController) {
+	constructor(
+		public mySensifyPage: SensifyPage,
+		public platform: Platform,
+		public navCtrl: NavController,
+		public navParams: NavParams,
+		public actionSheetCtrl: ActionSheetController) {
+
 		this.sensors = [];
 		this.btns = [];
 
@@ -62,7 +68,6 @@ export class SensifyStartPage implements OnChanges {
 		var currTime = hour + "." + minutes;
 		var sunrise = this.sunrise.replace(":", ".");
 		var sunset = this.sunset.replace(":", ".");
-
 
 		if (this.temperature) {
 			if (Number(sunrise) > Number(currTime) || Number(currTime) > Number(sunset)) {    //Nacht
@@ -137,9 +142,7 @@ export class SensifyStartPage implements OnChanges {
 			hour = hour + 13;
 		}
 
-		time = hour + ":" + minutes;
-
-		return time;
+		return hour + ":" + minutes;
 	}
 
 	getSunrise(url: string): Promise<any> {

@@ -20,6 +20,7 @@ export class SensifyStartPage implements OnChanges {
 	public sensors?: Sensor[];
 	public bgImage: String;
 	public temperature: String;
+	public uv: String;
 	public curValue: String;
 	public curUnit: String;
 	public curName: String;
@@ -30,6 +31,7 @@ export class SensifyStartPage implements OnChanges {
 		this.btns = [];
 
 		this.temperature = " - ";
+		this.uv = "1000";
 
 		this.curValue = "...";
 		this.curUnit = "";
@@ -73,7 +75,13 @@ export class SensifyStartPage implements OnChanges {
 				if (Number(this.temperature.slice(0, -3)) < 0) {
 					this.bgImage = "../../../assets/imgs/snowBackground.jpg";
 				} else {
-					this.bgImage = "../../../assets/imgs/sunnyBackground.jpg";
+
+					if(Number(this.uv) < 100){
+						this.bgImage = "../../../assets/imgs/cloudBackground.jpg";
+
+					}else{
+						this.bgImage = "../../../assets/imgs/sunnyBackground.jpg";
+					}
 				}
 			}
 		}
@@ -87,28 +95,48 @@ export class SensifyStartPage implements OnChanges {
 			let newBtn: any;
 			let sensor = this.currBox.sensors[i];
 
-			if (sensor.lastMeasurement) {
-
-				newBtn = {
-					text: sensor.title,
-					handler: () => {
-						this.curValue = sensor.lastMeasurement.value;
-						this.curUnit = sensor.unit;
-						this.curName = sensor.title;
 
 
+				if (sensor.lastMeasurement) {
+
+					newBtn = {
+						text: sensor.title,
+						handler: () => {
+							this.curValue = sensor.lastMeasurement.value;
+							this.curUnit = sensor.unit;
+							this.curName = sensor.title;
+
+							this.metadata.settings.curSensor = sensor;
+							
+						}
+					};
+				
+	
+					this.sensors.push(sensor);
+	
+
+					if(this.metadata.settings.curSensor){
+
+						this.curValue = this.metadata.settings.curSensor.lastMeasurement.value;
+						this.curUnit = this.metadata.settings.curSensor.unit;
+						this.curName = this.metadata.settings.curSensor.title;
+
+					}else{
+						if (sensor.title == "Temperatur") {
+							this.temperature = sensor.lastMeasurement.value;
+							this.curValue = sensor.lastMeasurement.value;
+							this.curUnit = sensor.unit;
+							this.curName = sensor.title;
+						}
+						if (sensor.title == "UV-Intensität") {
+							this.uv = sensor.lastMeasurement.value;
+						}
 					}
-				};
-
-				this.sensors.push(sensor);
-
-				if (sensor.title == "Temperatur") {
-					this.temperature = sensor.lastMeasurement.value;
-					this.curValue = sensor.lastMeasurement.value;
-					this.curUnit = sensor.unit;
-					this.curName = sensor.title;
 				}
-			}
+
+			
+
+			
 			this.btns.push(newBtn);
 		}
 	}

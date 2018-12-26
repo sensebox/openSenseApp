@@ -73,7 +73,8 @@ export class SensifyPage {
                 timestamp: null,
                 ranges: { temperature: 5 },
                 zoomLevel: null,
-                mapView: null
+                mapView: null,
+                curSensor: null
             },
             notifications: []
         };

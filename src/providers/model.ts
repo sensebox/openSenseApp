@@ -36,6 +36,7 @@ export interface Settings {
     };
     zoomLevel: number;
     mapView: L.LatLng;
+    curSensor: Sensor;
 }
 
 export interface Metadata {

@@ -17,6 +17,7 @@ sensify-page-start {
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
+        min-height: 70px;
     }
 
     // Titel
@@ -44,6 +45,7 @@ sensify-page-start {
         white-space: nowrap; 
         text-overflow: ellipsis;
         height: 70%;
+        min-height: 200px;
     }
 
     #currentSensorCol{
@@ -51,7 +53,7 @@ sensify-page-start {
     }
 
     #btn{
-        height:70%;
+        height:50%;
         width:100%;
         background-color:transparent;
         text-align: left;
@@ -61,20 +63,24 @@ sensify-page-start {
         overflow:hidden;
         white-space: nowrap; 
         text-overflow: ellipsis;
+        
+        min-height: 120px;
     }
 
     #curName{
-        font-size: 10px;
-        margin: 10px 0;
+        font-size: 20px;
+        margin: 10px;
     }
 
     #curValue{
-        font-size: 50px;
+        font-size: 40px;
         display:inline;
+        font-size: 5.5vw;
+        margin: 10px;
     }
 
     #curUnit{
-        font-size: 50px;
+        font-size: 25px;
         display:inline;
     }
 
@@ -95,7 +101,7 @@ sensify-page-start {
         //white-space:nowrap;
         margin-top:-20px;
         margin-bottom: 0px;
-       
+        min-height: 50px;
         
         border-bottom: 3px solid #aaa;
         border-bottom-width: 80%;
@@ -113,12 +119,12 @@ sensify-page-start {
     }
 
     #headingSensor{
-        margin-left: 15px;;
+        margin-left: 10px;
     }
 
 
     #headingValue{
-        margin-left: 12px;;
+        margin-left: 12px;
     }
 
     #headingUnit{
@@ -132,23 +138,20 @@ sensify-page-start {
         overflow: auto;
         white-space:nowrap;
         margin-top: 0px;
+       
     }
 
     #sensorCol{
         top:-10px;
         font-size: 20px;
         line-height: 2;
-        text-align: center;
-        align-content: center;
-        
+        margin-left: -30px;
     }
 
     #valueCol{
         top:-10px;
         font-size: 20px;
         line-height: 2;
-        text-align: left;
-        align-content: left;
     }
 
     #unitCol{
@@ -160,7 +163,6 @@ sensify-page-start {
     }
 
     #sensors{
-        padding-left: 10%;
         border-right: 1px solid #aaa;
     }
 

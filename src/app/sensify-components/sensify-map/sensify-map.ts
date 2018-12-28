@@ -1,9 +1,9 @@
-import {Component, EventEmitter, Input, Output, ElementRef} from '@angular/core';
-import {NavController, AlertController} from 'ionic-angular';
-import {tileLayer} from "leaflet";
+import { Component, ElementRef, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { NavController, AlertController } from 'ionic-angular';
+import { tileLayer } from "leaflet";
 import * as L from "leaflet";
-import {Metadata, SenseBox} from "../../../providers/model";
-import {OnChanges} from '@angular/core';
+import { Metadata, SenseBox } from "../../../providers/model";
+import { } from '@angular/core';
 import "leaflet.awesome-markers";
 
 @Component({
@@ -45,7 +45,7 @@ export class SensifyMapPage implements OnChanges {
             container.style.backgroundPosition = 'center';
 
             container.onclick = () => {
-                if(this.metadata.settings.location){
+                if (this.metadata.settings.location) {
                     this.map.panTo(this.metadata.settings.location);
                 }
             };
@@ -59,7 +59,7 @@ export class SensifyMapPage implements OnChanges {
         zoom: 13,
         center: [0, 0]
     };
-    public layersControl: L.Control.Layers = L.control.layers(null, {}, {position: 'topleft'});
+    public layersControl: L.Control.Layers = L.control.layers(null, {}, { position: 'topleft' });
     public locatorButton: L.Control;
     public radiusCircle;
     public userLocationMarker: L.Marker;
@@ -142,7 +142,6 @@ export class SensifyMapPage implements OnChanges {
         });
         this.updateMap();
         this.map.addControl(this.locatorButton);
-
     }
 
     public updateMap() {
@@ -171,7 +170,7 @@ export class SensifyMapPage implements OnChanges {
         // Create marker with user location + description
         let popupDescription = "<b>Your position is:</b><br>Latitude: " + this.metadata.settings.location.toString();
         this.userLocationMarker = L.marker(this.metadata.settings.location,
-            {icon: this.posIcon})
+            { icon: this.posIcon })
             .bindPopup(popupDescription);
 
         // Add Layergroup to userLocationMarkerLayer
@@ -195,32 +194,32 @@ export class SensifyMapPage implements OnChanges {
                     if (this.metadata.senseBoxes[i]._id != this.metadata.closestSenseBox._id) {
                         if (this.metadata.senseBoxes[i].updatedCategory == "today" && this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.greenMarker})
+                                { icon: this.greenMarker })
                                 .bindPopup(popupDescription, this.customOptionsGreen);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "today" && !this.metadata.senseBoxes[i].isValid) {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.greenNotValidMarker})
+                                { icon: this.greenNotValidMarker })
                                 .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersGreen.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "thisWeek") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.yellowMarker})
+                                { icon: this.yellowMarker })
                                 .bindPopup(popupDescription, this.customOptionsYellow);
                             // Add marker to map
                             closestMarkersYellow.push(marker);
                         } else if (this.metadata.senseBoxes[i].updatedCategory == "tooOld") {
                             marker = L.marker(this.metadata.senseBoxes[i].location,
-                                {icon: this.redMarker})
+                                { icon: this.redMarker })
                                 .bindPopup(popupDescription, this.customOptionsRed);
                             // Add marker to map
                             closestMarkersRed.push(marker);
                         }
                     } else {//ClosestSenseBox Marker
                         marker = L.marker(this.metadata.closestSenseBox.location,
-                            {icon: this.blueMarker})
+                            { icon: this.blueMarker })
                             .bindPopup(popupDescription, this.customOptionsGreen);
                         // Add marker to map
                         closestMarkersBlue.push(marker);
@@ -235,10 +234,21 @@ export class SensifyMapPage implements OnChanges {
                         }
                     }
                     if (marker) {
+                        // create button on popup
                         marker.on('popupopen', () => {
+                            // use '#a' to select id, but id is not allowed to start with a symbol different from a letter (character)
                             this.elementRef.nativeElement.querySelector("#a" + this.metadata.senseBoxes[i]._id).addEventListener('click', (e) => {
                                 this.metadata.closestSenseBox = this.metadata.senseBoxes[i];
                                 this.metadata.settings.mySenseBox = this.metadata.senseBoxes[i]._id;
+                                if (!this.metadata.settings.mySenseBoxIDs) {
+                                    this.metadata.settings.mySenseBoxIDs = [];
+                                }
+                                let idx = this.metadata.settings.mySenseBoxIDs.findIndex(el => el === this.metadata.settings.mySenseBox);
+                                // slice deleted id from sensebox array
+                                if (idx < 0) {
+                                    this.metadata.settings.mySenseBoxIDs.push(this.metadata.settings.mySenseBox);
+                                }
+
                                 this.updateMap();
                                 let alert = this.alertCtrl.create({
                                     title: 'Success',
@@ -276,7 +286,7 @@ export class SensifyMapPage implements OnChanges {
 
             //line from user to closest box
             let lineCoords = [[this.metadata.settings.location, this.metadata.closestSenseBox.location]];
-            let line = L.polyline(lineCoords, {className: "line", dashArray: "10,15"});
+            let line = L.polyline(lineCoords, { className: "line", dashArray: "10,15" });
             this.userLocationMarkerLayer.addLayer(line);
             this.layersControl.addOverlay(this.userLocationMarkerLayer, 'Me');
 
@@ -332,7 +342,7 @@ export class SensifyMapPage implements OnChanges {
 
     addUserOverlay() {
         this.map.removeControl(this.layersControl);
-        this.layersControl = L.control.layers(null, {}, {position: 'topleft'});
+        this.layersControl = L.control.layers(null, {}, { position: 'topleft' });
         this.layersControl.addTo(this.map);
 
         this.map.zoomControl.setPosition('topleft');

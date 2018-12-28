@@ -74,7 +74,8 @@ export class SensifyPage {
                 ranges: { temperature: 5 },
                 zoomLevel: null,
                 mapView: null,
-                curSensor: null
+                curSensor: null,
+                mySenseBoxIDs: []
             },
             notifications: []
         };

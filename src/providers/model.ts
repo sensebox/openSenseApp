@@ -30,6 +30,7 @@ export interface Settings {
     location?: L.LatLng;
     radius: number;
     mySenseBox?: String;
+    mySenseBoxIDs?: String[];
     timestamp: Date;
     ranges: {
         temperature: number;
@@ -47,7 +48,7 @@ export interface Metadata {
 }
 
 export enum NotificationSensorTitles {
-    temperature ='Temperatur',
+    temperature = 'Temperatur',
     uvIntensity = 'UV-Intensität',
     // brightness = 'Beleuchtungsstärke',
     // airpressure = 'Luftdruck',

@@ -187,50 +187,51 @@ export class SensifyMapPage implements OnChanges {
                 let marker: L.Marker;
                 // Generate marker Popup-Content
                 let popupDescription = this.getSenseboxPopupDescription(this.metadata.senseBoxes[i]);
-
-                if (this.metadata.senseBoxes[i]._id != this.metadata.closestSenseBox._id && this.metadata.senseBoxes[i]) {
-                    let loc = this.metadata.senseBoxes[i].location;
-                    switch (this.metadata.senseBoxes[i].updatedCategory) {
-                        case 'today': {
-                            if (this.metadata.senseBoxes[i].isValid) {
-                                marker = this.createMarker('green', loc)
-                                    .bindPopup(popupDescription, this.customOptionsGreen);
-                                closestMarkersGreen.push(marker);
-                            } else {
-                                marker = this.createMarker('purple', loc)
-                                    .bindPopup(popupDescription, this.customOptionsRed);
-                                closestMarkersGreen.push(marker);
+                if(this.metadata.senseBoxes[i] && this.metadata.closestSenseBox){
+                    if (this.metadata.senseBoxes[i]._id != this.metadata.closestSenseBox._id && this.metadata.senseBoxes[i]) {
+                        let loc = this.metadata.senseBoxes[i].location;
+                        switch (this.metadata.senseBoxes[i].updatedCategory) {
+                            case 'today': {
+                                if (this.metadata.senseBoxes[i].isValid) {
+                                    marker = this.createMarker('green', loc)
+                                        .bindPopup(popupDescription, this.customOptionsGreen);
+                                    closestMarkersGreen.push(marker);
+                                } else {
+                                    marker = this.createMarker('purple', loc)
+                                        .bindPopup(popupDescription, this.customOptionsRed);
+                                    closestMarkersGreen.push(marker);
+                                }
+                                break;
                             }
-                            break;
+                            case 'thisWeek': {
+                                let marker = this.createMarker('orange', loc)
+                                    .bindPopup(popupDescription, this.customOptionsYellow);
+                                closestMarkersYellow.push(marker);
+                                break;
+                            }
+                            case 'tooOld': {
+                                let marker = this.createMarker('red', loc)
+                                    .bindPopup(popupDescription, this.customOptionsRed);
+                                closestMarkersRed.push(marker);
+                                break;
+                            }
+                            default: {
+                                this.showAlert('Error', 'Ups, something went wrong here.')
+                                break;
+                            }
                         }
-                        case 'thisWeek': {
-                            let marker = this.createMarker('orange', loc)
-                                .bindPopup(popupDescription, this.customOptionsYellow);
-                            closestMarkersYellow.push(marker);
-                            break;
-                        }
-                        case 'tooOld': {
-                            let marker = this.createMarker('red', loc)
-                                .bindPopup(popupDescription, this.customOptionsRed);
-                            closestMarkersRed.push(marker);
-                            break;
-                        }
-                        default: {
-                            this.showAlert('Error', 'Ups, something went wrong here.')
-                            break;
-                        }
-                    }
-                } else {
-                    marker = this.createMarker('blue', this.metadata.closestSenseBox.location)
-                        .bindPopup(popupDescription);
-                    closestMarkersBlue.push(marker);
-                    // Calculate and style distance distance to ClosestSenseBox
-                    let distanceToBox = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
-                    if (distanceToBox > 999) {
-                        distanceToBox = distanceToBox / 1000;
-                        this.distanceToClosestString = this.round(distanceToBox, 2) + " km";
                     } else {
-                        this.distanceToClosestString = this.round(distanceToBox, 2) + " m";
+                        marker = this.createMarker('blue', this.metadata.closestSenseBox.location)
+                            .bindPopup(popupDescription);
+                        closestMarkersBlue.push(marker);
+                        // Calculate and style distance distance to ClosestSenseBox
+                        let distanceToBox = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);
+                        if (distanceToBox > 999) {
+                            distanceToBox = distanceToBox / 1000;
+                            this.distanceToClosestString = this.round(distanceToBox, 2) + " km";
+                        } else {
+                            this.distanceToClosestString = this.round(distanceToBox, 2) + " m";
+                        }
                     }
                 }
                 if (marker) {
@@ -343,16 +344,18 @@ export class SensifyMapPage implements OnChanges {
     }
 
     private getSenseboxPopupDescription(sensebox: SenseBox): string {
-        let sensorTitle = "<b>" + sensebox.name + "</b>";
-        let sensorsDescription: String = "";
-        let id = 'a' + sensebox._id;
-        let makeThisMySenseBox = "<button id='" + id + "'>Make this my home SenseBox</button>";
-        for (let i = 0; i < sensebox.sensors.length; i++) {
-            if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
-                sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
+        if(sensebox){
+            let sensorTitle = "<b>" + sensebox.name + "</b>";
+            let sensorsDescription: String = "";
+            let id = 'a' + sensebox._id;
+            let makeThisMySenseBox = "<button id='" + id + "'>Make this my home SenseBox</button>";
+            for (let i = 0; i < sensebox.sensors.length; i++) {
+                if (sensebox.sensors[i].lastMeasurement != null && sensebox.sensors[i].lastMeasurement) {
+                    sensorsDescription += sensebox.sensors[i].title + ": " + sensebox.sensors[i].lastMeasurement.value + "<br>";
+                }
             }
+            return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
         }
-        return sensorTitle + "<br>" + sensorsDescription + makeThisMySenseBox;
     }
 
     private round(value, precision) {

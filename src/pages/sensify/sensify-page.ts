@@ -155,6 +155,7 @@ export class SensifyPage {
                     this.validateBoxes(res)
                         .then(response => {
                             this.metadata.senseBoxes = response;
+                            console.log(response)
                         })
                 });
             this.updateMetadata();

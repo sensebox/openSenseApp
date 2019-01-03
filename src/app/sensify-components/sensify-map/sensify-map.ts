@@ -60,10 +60,10 @@ export class SensifyMapPage implements OnChanges {
         onAdd: (map) => {
             var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
             container.className = 'buttons';
-            container.style.backgroundImage = 'url(../../assets/icons/questionmarkicon.png)';
+            container.style.backgroundImage = 'url(../../assets/icons/questionMarkIcon.png)';
 
             container.onclick = () => {
-                let containerContent = "<ion-grid><ion-row><ion-col col-20><p><img src='../../assets/icons/greenmarkericon.png'></ion-col><ion-col col-80>Data is valid & up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/notvalidmarkericon.png'></ion-col><ion-col col-80>Data is NOT valid, but up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/orangemarkericon.png'></ion-col><ion-col col-80>Data is one week old</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/redmarkericon.png'></ion-col><ion-col col-80>Data is older than one week</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/bluemarkericon.png'></ion-col><ion-col col-80>Closest Sensebox</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/positionmarkericon.png'></ion-col><ion-col col-80>User-Location</p></ion-col></ion-row></ion-grid>";
+                let containerContent = "<ion-grid><ion-row><ion-col col-20><p><img src='../../assets/icons/greenMarkerIcon.png'></ion-col><ion-col col-80>Data is valid & up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/notValidMarkerIcon.png'></ion-col><ion-col col-80>Data is NOT valid, but up-to-date (<24h)</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/orangeMarkerIcon.png'></ion-col><ion-col col-80>Data is one week old</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/redMarkerIcon.png'></ion-col><ion-col col-80>Data is older than one week</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/blueMarkerIcon.png'></ion-col><ion-col col-80>Closest Sensebox</p></ion-col></ion-row><ion-row><ion-col col-20><p><img style='height:40px' src='../../assets/icons/positionMarkerIcon.png'></ion-col><ion-col col-80>User-Location</p></ion-col></ion-row></ion-grid>";
                 this.showAlert('Legend', containerContent);
             };
             return container;
@@ -216,13 +216,13 @@ export class SensifyMapPage implements OnChanges {
                                 break;
                             }
                             default: {
-                                this.showAlert('Error', 'Ups, something went wrong here.')
+                                this.showAlert('Error', 'Ups, something went wrong here.');
                                 break;
                             }
                         }
                     } else {
                         marker = this.createMarker('blue', this.metadata.closestSenseBox.location)
-                            .bindPopup(popupDescription);
+                            .bindPopup(popupDescription, this.customOptionsGreen);
                         closestMarkersBlue.push(marker);
                         // Calculate and style distance distance to ClosestSenseBox
                         let distanceToBox = this.metadata.settings.location.distanceTo(this.metadata.closestSenseBox.location);

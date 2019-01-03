@@ -23,12 +23,16 @@ export class ApiProvider {
         let senseboxes: SenseBox[] = [];
         let boxes: SenseBox[] = await this.getSenseBoxesInBB(userLocation, radius);
         let currDate = this.getCurrentDate();
+        let todayDate = currDate.today;
+        if(todayDate.substring(6, 7) == "-"){
+            todayDate = todayDate.substring(0, 5) + "0" + todayDate.substring(5);
+        }
         for (const element of boxes) {
             let box = await this.getSenseBoxByID(element._id);
             if (box.updatedAt) {
                 let updatedAt = box.updatedAt.substring(0, 10);
                 let dateUpdate = new Date(box.updatedAt.toString());
-                if (currDate.today == updatedAt) {
+                if (todayDate == updatedAt) {
                     box.updatedCategory = "today";
                 } else if (currDate.week.getTime() < dateUpdate.getTime()) {
                     box.updatedCategory = "thisWeek";
@@ -149,13 +153,17 @@ export class ApiProvider {
             let minDistance: number = Number.MAX_VALUE;
             let i = 0;
             let currDate = this.getCurrentDate();
+            let todayDate = currDate.today;
+            if(todayDate.substring(6, 7) == "-"){
+                todayDate = todayDate.substring(0, 5) + "0" + todayDate.substring(5);
+            }
             if (boxes.length > 0 || boxes[0] !== null) {
                 boxes.forEach((box, i) => {
                     if (box !== null) {
                         if (box.updatedAt) {
                             let updatedAt = box.updatedAt.substring(0, 10);
                             let distance = userLocation.distanceTo(box.location);
-                            if (distance < minDistance && currDate.today == updatedAt && box.isValid) {
+                            if (distance < minDistance && todayDate == updatedAt && box.isValid) {
                                 index = i;
                                 minDistance = distance;
                             }

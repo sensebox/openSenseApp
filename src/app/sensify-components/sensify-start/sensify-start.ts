@@ -11,6 +11,7 @@ export class SensifyStartPage implements OnChanges {
 
     @Input()
     public metadata: Metadata;
+
     public currBox: SenseBox;
     public date: String;
     public sunrise: String;
@@ -24,7 +25,13 @@ export class SensifyStartPage implements OnChanges {
     public curName: String;
     public btns: any;
 
-    constructor(public mySensifyPage: SensifyPage, public platform: Platform, public navCtrl: NavController, public navParams: NavParams, public actionSheetCtrl: ActionSheetController) {
+    constructor(
+        public mySensifyPage: SensifyPage,
+        public platform: Platform,
+        public navCtrl: NavController,
+        public navParams: NavParams,
+        public actionSheetCtrl: ActionSheetController) {
+
         this.sensors = [];
         this.btns = [];
 
@@ -35,7 +42,7 @@ export class SensifyStartPage implements OnChanges {
         this.curUnit = "";
         this.curName = "";
 
-        this.bgImage = "../../../assets/imgs/TestBckgrd.png";
+        this.bgImage = "../../../assets/imgs/background.png";
         this.setCurrentDate();
     }
 
@@ -155,9 +162,7 @@ export class SensifyStartPage implements OnChanges {
             hour = hour + 13;
         }
 
-        time = hour + ":" + minutes;
-
-        return time;
+        return hour + ":" + minutes;
     }
 
     getSunrise(url: string): Promise<any> {

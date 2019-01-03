@@ -52,7 +52,6 @@ export class SensifySettingsPage {
             this.metadata.settings.ranges.temperature = this.newValidationRange;
         }
         if (this.newSenseboxID) {
-            //Validate if senseBoxID is a sensebox
             this.api.getSenseBoxByID(this.newSenseboxID).then(res => {
                 if (res) {
                     this.metadata.closestSenseBox = res;
@@ -67,9 +66,6 @@ export class SensifySettingsPage {
                 }
             })
         }
-        // this.mySensifyPage.setMetadata(this.metadata);
-        this.onMetadataChange.emit(this.metadata);
-
         if (this.newRadius || this.newValidationRange || this.newSenseboxID) {
             let alert = this.alertCtrl.create({
                 title: 'Saved successfully',
@@ -85,12 +81,11 @@ export class SensifySettingsPage {
             });
             alert.present();
         }
-
-        // Reset Input forms after setting change
+        //Reset Input forms after setting change
         this.newRadius = null;
         this.newValidationRange = null;
         this.newSenseboxID = null;
-        // this.onMetadataChange.emit(this.metadata);    
+        this.onMetadataChange.emit(this.metadata);    
     }
 
     /**

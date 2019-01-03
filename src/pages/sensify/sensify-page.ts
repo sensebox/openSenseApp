@@ -19,9 +19,9 @@ export class SensifyPage {
     public metadata: Metadata;
     public startLocation: L.LatLng;
     public radius: number;
-    toastMSG: Toast = null;
+    public toastMSG: Toast;
 
-    public distanceToClosest;
+    public distanceToClosest: number;
     public timerNotificationCounter: number = 0;
     public timerNotificationEnabled: boolean = false;
     public notificationCounter: number = 0;
@@ -105,15 +105,12 @@ export class SensifyPage {
         this.selectRef.open();
     }
 
-    public closeSelect() {
-        this.selectRef.close();
-    }
-
     presentToast(text: string): void {
         let toastData = {
             message: text,
             duration: 500000,
-            position: 'top'
+            position: 'top',
+            dismissOnPageChange: true
         }
 
         this.showToast(toastData);
@@ -124,7 +121,8 @@ export class SensifyPage {
             message: text,
             showCloseButton: true,
             closeButtonText: 'X',
-            position: 'top'
+            position: 'top',
+            dismissOnPageChange: true
         };
 
         this.showToast(toastData);
@@ -460,7 +458,7 @@ export class SensifyPage {
     // Watch the user position
     subscription = this.geolocation.watchPosition()
         .subscribe(pos => {
-            console.log('watch position');
+            console.log('Watching GPS position');
             if (pos.coords) {
                 let location = new L.LatLng(pos.coords.latitude, pos.coords.longitude);
                 // let location = new L.LatLng(7.5961, 51.9695);

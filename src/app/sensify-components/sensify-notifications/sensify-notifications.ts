@@ -13,7 +13,7 @@ export class SensifyNotificationsPage {
 
 
   constructor() {
-    this.bgImage = "../../../assets/imgs/TestBckgrd.png";
+    this.bgImage = "../../../assets/imgs/background.png";
   }
 
   ionViewDidLoad() {

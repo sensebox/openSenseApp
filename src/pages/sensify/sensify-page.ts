@@ -64,7 +64,16 @@ export class SensifyPage {
     currentPos: Geoposition;
     settingsData: any;
 
-    constructor(public navCtrl: NavController, public navParams: NavParams, private api: ApiProvider, private geolocation: Geolocation, private storage: Storage, private localNotifications: LocalNotifications, private plt: Platform, private toastCtrl: ToastController) {
+    constructor(
+        public navCtrl: NavController,
+        public navParams: NavParams,
+        private api: ApiProvider,
+        private geolocation: Geolocation,
+        private storage: Storage,
+        private localNotifications: LocalNotifications,
+        private plt: Platform,
+        private toastCtrl: ToastController
+    ) {
         // check for localStorage
         this.metadata = {
             settings: {
@@ -139,8 +148,8 @@ export class SensifyPage {
         try {
             var currentDate = new Date();
             this.metadata.settings.timestamp = currentDate;
-            this.presentToast('Loading user position');
 
+            this.presentToast('Loading user position');
             await this.getUserPosition().then(userlocation => {
                 this.metadata.settings.location = userlocation;
                 this.startLocation = userlocation;

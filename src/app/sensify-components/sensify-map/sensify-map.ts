@@ -81,7 +81,9 @@ export class SensifyMapPage implements OnChanges {
         this.locatorButton.setPosition('topleft');
 
         // Add layers to map
-        this.addUserLocationToLayer();
+        if(this.metadata.settings.location){
+            this.addUserLocationToLayer();
+        }
         this.addSenseboxMarkerToMap();
     }
 

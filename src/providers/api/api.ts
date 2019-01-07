@@ -59,7 +59,12 @@ export class ApiProvider {
         } else {
             currentDay = tmpDay
         }
-        let currentMonth = date.getUTCMonth() + 1;  //January is 0
+        let currentMonth;
+        if ((date.getUTCMonth() + 1) < 10) {
+            currentMonth = "0" + (date.getUTCMonth() + 1);
+        } else {
+            currentMonth = date.getUTCMonth() + 1;
+        }
         let currentYear = date.getUTCFullYear();
 
         currDate = {

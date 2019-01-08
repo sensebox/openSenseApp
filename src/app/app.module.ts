@@ -11,25 +11,25 @@ import { IonicStorageModule } from '@ionic/storage';
 
 import { LeafletModule } from "@asymmetrik/ngx-leaflet";
 
-import { openSenseApp } from './app.component';
+import { Sensify } from './app.component';
 import { ApiProvider } from '../providers/api/api';
 import { helpers } from '../pages/sensify/js/helpers';
 import { validation } from '../pages/sensify/js/validation';
 
 @NgModule({
     declarations: [
-        openSenseApp
+        Sensify
     ],
     imports: [
         HttpClientModule,
         BrowserModule,
-        IonicModule.forRoot(openSenseApp),
+        IonicModule.forRoot(Sensify),
         LeafletModule,
         IonicStorageModule.forRoot()
     ],
     bootstrap: [IonicApp],
     entryComponents: [
-        openSenseApp
+        Sensify
     ],
     providers: [
         StatusBar,

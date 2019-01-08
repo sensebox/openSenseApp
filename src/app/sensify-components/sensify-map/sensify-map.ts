@@ -83,8 +83,8 @@ export class SensifyMapPage implements OnChanges {
         // Add layers to map
         if(this.metadata.settings.location){
             this.addUserLocationToLayer();
+            this.addSenseboxMarkerToMap();
         }
-        this.addSenseboxMarkerToMap();
     }
 
     public updateMap() {

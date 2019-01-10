@@ -40,12 +40,20 @@ export class SenseBoxPage {
         },
         xAxis: {
           title: {
-            text: 'Measurements'
+            text: 'Seconds'
+          },
+          tickInterval: 10, // one week
+          tickWidth: 0,
+          gridLineWidth: 1,
+          labels: {
+              align: 'left',
+              x: 3,
+              y: -3
           }
-        },
+      },
         yAxis: {
           title: {
-            text: 'Value of Acceleration'
+            text: 'G-Force'
           }
         },
         series: [{
@@ -58,7 +66,7 @@ export class SenseBoxPage {
           type: 'spline'
         },
         title: {
-          text: 'Acceleration on X-Axis'
+          text: 'Acceleration on Y-Axis'
         },
         xAxis: {
           title: {
@@ -67,7 +75,7 @@ export class SenseBoxPage {
         },
         yAxis: {
           title: {
-            text: 'Value of Acceleration'
+            text: 'G-Force'
           }
         },
         series: [{
@@ -80,7 +88,7 @@ export class SenseBoxPage {
           type: 'spline'
         },
         title: {
-          text: 'Acceleration on X-Axis'
+          text: 'Acceleration on Z-Axis'
         },
         xAxis: {
           title: {
@@ -89,7 +97,7 @@ export class SenseBoxPage {
         },
         yAxis: {
           title: {
-            text: 'Value of Acceleration'
+            text: 'G-Force'
           }
         },
         series: [{
@@ -112,13 +120,31 @@ export class SenseBoxPage {
     console.log('ionViewDidLoad SenseBoxPage');
   }
 
+
+  getData() {
+    this.client.subscribe("accelerometer/#");
+  }
+
+  stopData() {
+    this.client.unsubscribe("accelerometer/#");
+  }
+
+  deleteData() {
+    this.xdatArray = [];
+    this.xchart.series[0].setData(this.xdatArray);
+    this.ydatArray = [];
+    this.ychart.series[0].setData(this.ydatArray);
+    this.zdatArray = [];
+    this.zchart.series[0].setData(this.zdatArray);
+  }
+
    // called when the this.client connects
   onConnect() {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
     console.log(this.client);
     //this.client.subscribe("$SYS/#");
-    this.client.subscribe("accelerometer/#");
+    
     this.message = new Paho.MQTT.Message('1');
     this.message.destinationName = "/World";
     this.client.send(this.message); 

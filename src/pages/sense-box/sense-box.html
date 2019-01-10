@@ -14,7 +14,15 @@
 </ion-header>
 
 <ion-content padding>
-  <div id="container" style="height: 400px"></div>
+    <button (click)="getData()"  ion-button color="secondary">
+        start
+    </button>
+    <button (click)="stopData()" ion-button color="secondary">
+        stop
+    </button>
+    <button (click)="deleteData()" ion-button color="secondary">
+        delete all data
+    </button>
 
   <div id="xValues" style="display: block;"></div>
   <hr />

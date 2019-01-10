@@ -19,15 +19,19 @@ export class SenseBoxPage {
   boxData: any;
   client: any;
   message: any;
-  datArray: number[] = []; 
-  chart: any;
+  xdatArray: number[] = [];
+  ydatArray: number[] = []; 
+  zdatArray: number[] = []; 
+  xchart: any;
+  ychart: any;
+  zchart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
 
-      this.chart = HighCharts.chart('xValues', {
+      this.xchart = HighCharts.chart('xValues', {
         chart: {
           type: 'spline'
         },
@@ -45,7 +49,51 @@ export class SenseBoxPage {
           }
         },
         series: [{
-          data: this.datArray
+          data: this.xdatArray
+          }]
+      });
+
+      this.ychart = HighCharts.chart('yValues', {
+        chart: {
+          type: 'spline'
+        },
+        title: {
+          text: 'Acceleration on X-Axis'
+        },
+        xAxis: {
+          title: {
+            text: 'Measurements'
+          }
+        },
+        yAxis: {
+          title: {
+            text: 'Value of Acceleration'
+          }
+        },
+        series: [{
+          data: this.ydatArray
+          }]
+      });
+
+      this.zchart = HighCharts.chart('zValues', {
+        chart: {
+          type: 'spline'
+        },
+        title: {
+          text: 'Acceleration on X-Axis'
+        },
+        xAxis: {
+          title: {
+            text: 'Measurements'
+          }
+        },
+        yAxis: {
+          title: {
+            text: 'Value of Acceleration'
+          }
+        },
+        series: [{
+          data: this.zdatArray
           }]
       });
     
@@ -70,7 +118,7 @@ export class SenseBoxPage {
     console.log("onConnect");
     console.log(this.client);
     //this.client.subscribe("$SYS/#");
-    this.client.subscribe("accelerometer/y");
+    this.client.subscribe("accelerometer/#");
     this.message = new Paho.MQTT.Message('1');
     this.message.destinationName = "/World";
     this.client.send(this.message); 
@@ -87,9 +135,21 @@ export class SenseBoxPage {
   // called when a message arrives
   onMessageArrived = (message) => {
     console.log("onMessageArrived:", message.destinationName, message.payloadString);
-    this.datArray.push(+message.payloadString);
+    if(message.destinationName === "accelerometer/x") {
+      this.xdatArray.push(+message.payloadString);
+    }
+    this.xchart.series[0].setData(this.xdatArray);
+    if(message.destinationName === "accelerometer/y") {
+      this.ydatArray.push(+message.payloadString);
+    }
+    this.ychart.series[0].setData(this.ydatArray);
+    if(message.destinationName === "accelerometer/z") {
+      this.zdatArray.push(+message.payloadString);
+    }
+    this.zchart.series[0].setData(this.zdatArray);
+    //this.datArray.push(+message.payloadString);
     // console.log(this.datArray);
-    this.chart.series[0].setData(this.datArray);
+    // this.chart.series[0].setData(this.datArray);
     // this.reloadHighchart();
   }
 

@@ -17,19 +17,9 @@
 
 
 <ion-content padding>
-
-  <button (click)="getData()" ion-button color="secondary">
-    get data
-  </button>
-
-  <div *ngIf="boxData">
-    <h1>{{boxData.name}}</h1>
-    <ion-list>
-      <div ion-item *ngFor="let sensor of boxData.sensors">
-        <h3>{{sensor.title}}</h3>
-        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
-      </div>
-    </ion-list>
-  </div>
-
+  <div id="xValues" style="display: block;"></div>
+  <hr />
+  <div id="yValues" style="display: block;"></div>
+  <hr />
+  <div id="zValues" style="display: block;"></div>
 </ion-content>

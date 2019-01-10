@@ -51,7 +51,7 @@ export class SenseBoxPage {
     
 
     // Create a client instance
-    this.client = new Paho.MQTT.Client('localhost', 11883, "clienId");
+    this.client = new Paho.MQTT.Client('10.0.1.71', 11883, "clienId");
     
 
     // set callback handlers
@@ -70,7 +70,7 @@ export class SenseBoxPage {
     console.log("onConnect");
     console.log(this.client);
     //this.client.subscribe("$SYS/#");
-    this.client.subscribe("/World");
+    this.client.subscribe("accelerometer/y");
     this.message = new Paho.MQTT.Message('1');
     this.message.destinationName = "/World";
     this.client.send(this.message); 
@@ -88,7 +88,7 @@ export class SenseBoxPage {
   onMessageArrived = (message) => {
     console.log("onMessageArrived:", message.destinationName, message.payloadString);
     this.datArray.push(+message.payloadString);
-    console.log(this.datArray);
+    // console.log(this.datArray);
     this.chart.series[0].setData(this.datArray);
     // this.reloadHighchart();
   }

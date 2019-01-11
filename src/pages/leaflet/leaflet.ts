@@ -1,7 +1,7 @@
-import {Component, ViewChild, ElementRef} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {Storage} from '@ionic/storage';
-import {ApiProvider} from '../../providers/api/api';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { Storage } from '@ionic/storage';
+import { ApiProvider } from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
 import 'leaflet.locatecontrol';
@@ -36,7 +36,7 @@ export class LeafletPage {
 
   loadMap() {
     //initiate map
-    this.map = leaflet.map('map', {zoomControl: false}).setView([51.9606649, 7.6261347], 13);
+    this.map = leaflet.map('map', { zoomControl: false }).setView([51.9606649, 7.6261347], 13);
 
     //add tile layer to map
     leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -51,10 +51,38 @@ export class LeafletPage {
       }
     }).addTo(this.map);
 
-    //load sensboxes
-    // this.loadSenseboxLayer();
+    // add event for location found of location finder
+    function onLocationFound(e) {
+      console.log("You were located!")
+    }
+    function getClosestSensebox(e){
+      let minDist = 0;
+      let closestSenseboxID
+      this.boxData.forEach((box)=>{
+        let dist = distance(e.latlng, [parseFloat(box.currentLocation.coordinates[0]), parseFloat(box.currentLocation.coordinates[1])])
+        if (minDist> dist){
+          minDist = dist;
+          closestSenseboxID = box._id;
+        }
+      });
+      console.log(closestSenseboxID);
+      console.log('not the closest');
+    }
 
-    //add search
+    function distance(latlng1, latlng2) {
+      let distance;
+      if (latlng1[0] == latlng2[0] && latlng1[1] == latlng2[1]) {
+          distance = 0
+      } else {
+          distance = Math.sqrt((Math.pow((latlng1[0] - latlng2[0]), 2) + Math.pow((latlng1[1] - latlng2[1]), 2)));
+      }
+      return distance;
+  }
+
+    // add event listener to map
+    this.map.on('locationfound', getClosestSensebox, this);
+
+    //add search and event function
     this.map.addControl(new leaflet.Control.Search({
       url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
       jsonpParam: 'json_callback',
@@ -64,10 +92,16 @@ export class LeafletPage {
       autoCollapse: true,
       autoType: false,
       minLength: 2
-    }));
+    }).on('search:locationfound', function () {
+      debugger;
+      console.log("Location Found");
+      this.getClosestSensebox(this.boxData)
+    }, this));
 
     this.loadSenseboxLayer();
   }
+
+
 
   safeBoxId(e) {
     //this.storage.set('preferenceBoxID', e.target.id);
@@ -89,7 +123,7 @@ export class LeafletPage {
       this.boxLayer = leaflet.geoJSON('', {
         id: 'jsonLayer',
         pointToLayer: function (feature, latlng) {
-          return leaflet.marker(latlng, {icon: senseBoxIcon});
+          return leaflet.marker(latlng, { icon: senseBoxIcon });
         }
 
       }).addTo(this.map);

@@ -15,9 +15,8 @@ page-radar-map {
   }
   .legend {
     line-height: 18px;
-
-  .legend i {
-    color: #555;
+  }
+  .legend i{
     width: 18px;
     height: 18px;
     float: left;
@@ -35,12 +34,11 @@ page-radar-map {
     color: white;
   }
 
-//time-dependent selection (legend text color)
+  //time-dependent selection (legend text color)
   divDay{
     color: #000;
   }
   divNight{
     color: white;
   }
-}
 }

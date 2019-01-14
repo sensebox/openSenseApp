@@ -29,12 +29,12 @@ export class RadarMapPage {
   loadRainViewerMap() {
 
     //ToDo: setView to current marker
-    this.rainviewerMap = leaflet.map('rainviewerMap').setView([52, 7],5)
+    this.rainviewerMap = leaflet.map('rainviewerMap', {zoomControl: false}).setView([52, 7],5)
     let currentSenseBox = this.api.getData();
     console.log(currentSenseBox);
     currentSenseBox.toPromise().then( res => {
       console.log(res)
-      this.rainviewerMap.setView(res.currentLocation.coordinates, 5);
+      this.rainviewerMap.setView([res.currentLocation.coordinates[1], res.currentLocation.coordinates[0]], 5);
     })
 
     //get current date / time

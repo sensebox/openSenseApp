@@ -1,5 +1,8 @@
 page-weather-app {
-
+  #rainviewerMap{
+    width:auto;
+    height: 200px;
+  }
   ion-card {
     margin-bottom: 2em;
   }
@@ -14,4 +17,5 @@ page-weather-app {
     display: block;
     margin: auto;
   }
+
 }

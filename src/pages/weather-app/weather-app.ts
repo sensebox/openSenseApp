@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, ViewChild, ElementRef} from '@angular/core';
 import {ApiProvider} from '../../providers/api/api';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
-import { StatsPage } from '../stats/stats';
+import { RadarMapPage } from '../radar-map/radar-map';
 
 
 @IonicPage()
@@ -20,6 +20,7 @@ export class WeatherAppPage {
     console.log('ionViewDidLoad WeatherAppPage');
     this.refresh_data();
   }
+
 
 
   doRefresh(refresher) {
@@ -51,9 +52,6 @@ task = setInterval(() => {
 }, 1000000);
 */
 
-  locate_click() {
-    // popover leaflet.html
-  }
     presentPopover(myEvent){
       let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
       popover.present({
@@ -64,8 +62,8 @@ task = setInterval(() => {
       })
     }
 
-  presentPopoverChart(myEvent){
-    let popover = this.popoverCtrl.create(StatsPage, {}, {cssClass: 'custom_popover'});
+  presentPopoverRadarMap(myEvent){
+    let popover = this.popoverCtrl.create(RadarMapPage, {}, {cssClass: 'custom_popover'});
     popover.present({
       ev: myEvent
     });

@@ -21,27 +21,30 @@
 <ion-content padding class="buttons-components-page">
   <ion-card>
     <ion-card-content>
-      <!--  <ion-img src="https://api.sat24.com/animated/DE/rainTMC/3/Central%20European%20Standard%20Time/9553668"></ion-img>
+       <!-- <ion-img src="https://api.sat24.com/animated/DE/rainTMC/3/Central%20European%20Standard%20Time/9553668"></ion-img>
          <img src="https://api.sat24.com/animated/EU/rainTMC/3/Central%20European%20Standard%20Time/5384757 " /> -->
-       <img src="{{api.sat24Url}}">
-    </ion-card-content>
+      <!-- <img src="{{api.sat24Url}}">
+       <iframe src="https://www.rainviewer.com/map.html?loc=51.9606649, 7.6261347,4&oFa=0&oC=0&oU=0&oCS=1&oF=0&oAP=1&rmt=2&c=5&o=100&lm=1&th=1" width="100%" frameborder="0" style="border:0;height:50vh;" allowfullscreen></iframe>
+-->
+         </ion-card-content>
 
-       <ion-refresher (ionRefresh)="doRefresh($event)">
-         <ion-refresher-content></ion-refresher-content>
-       </ion-refresher>
+        <ion-refresher (ionRefresh)="doRefresh($event)">
+          <ion-refresher-content></ion-refresher-content>
+        </ion-refresher>
 
 
-       <ion-item>
-         <button ion-button > <ion-icon name="share"></ion-icon> </button>
-       </ion-item>
-     </ion-card>
+        <ion-item>
+          <button ion-button > <ion-icon name="share"></ion-icon> </button>
+        </ion-item>
+      </ion-card>
 
-     <div *ngIf="boxData">
-       <ion-list>
-         <div ion-item *ngFor="let sensor of boxData.sensors">
-           <h2>{{sensor.title}}</h2>
-           <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
-         </div>
-       </ion-list>
-     </div>
-    </ion-content>
+      <div *ngIf="boxData">
+        <ion-list>
+          <div ion-item *ngFor="let sensor of boxData.sensors">
+            <h2>{{sensor.title}}</h2>
+            <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+          </div>
+        </ion-list>
+      </div>
+
+     </ion-content>

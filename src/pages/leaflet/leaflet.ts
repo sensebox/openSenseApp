@@ -5,7 +5,6 @@ import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
 import 'leaflet.locatecontrol';
-import $ from "jquery";
 
 /**
  * Generated class for the LeafletPage page.
@@ -51,10 +50,50 @@ export class LeafletPage {
       }
     }).addTo(this.map);
 
-    //load sensboxes
-    // this.loadSenseboxLayer();
+    // add event for location found of location finder
+    function onLocationFound(e) {
+      console.log("You were located!")
+    }
 
-    //add search
+    function getClosestSensebox(e) {
+      let minDist = 100;
+      let closestSenseboxID;
+      this.boxData.forEach((box) => {
+        let dist = distance(e.latlng, [parseFloat(box.currentLocation.coordinates[0]), parseFloat(box.currentLocation.coordinates[1])])
+        if (minDist > dist) {
+          minDist = dist;
+          closestSenseboxID = box._id;
+        }
+      });
+      console.log(closestSenseboxID);
+      for (let box in this.boxLayer._layers) {
+        if (this.boxLayer._layers[box].feature.properties.id === closestSenseboxID) {
+          let selectedSenseBoxIcon = new leaflet.Icon({
+            iconSize: [40, 40],
+            iconAnchor: [13, 27],
+            popupAnchor: [1, -24],
+            iconUrl: '../assets/imgs/markerYellow.png'
+          });
+          this.boxLayer._layers[box].feature.properties.icon = selectedSenseBoxIcon;
+
+        }
+      }
+    }
+
+    function distance(latlng1, latlng2) {
+      let distance;
+      if (latlng1.lat == latlng2[0] && latlng1.lng == latlng2[1]) {
+        distance = 0
+      } else {
+        distance = Math.sqrt((Math.pow((latlng1.lat - latlng2[1]), 2) + Math.pow((latlng1.lng - latlng2[0]), 2)));
+      }
+      return distance;
+    }
+
+    // add event listener to map
+    this.map.on('locationfound', getClosestSensebox, this);
+
+    //add search and event function
     this.map.addControl(new leaflet.Control.Search({
       url: 'http://nominatim.openstreetmap.org/search?format=json&q={s}',
       jsonpParam: 'json_callback',
@@ -64,10 +103,15 @@ export class LeafletPage {
       autoCollapse: true,
       autoType: false,
       minLength: 2
-    }));
+    }).on('search:locationfound', function () {
+      debugger;
+      console.log("Location Found");
+      this.getClosestSensebox(this.boxData)
+    }, this));
 
     this.loadSenseboxLayer();
   }
+
 
   safeBoxId(e) {
     //this.storage.set('preferenceBoxID', e.target.id);
@@ -82,7 +126,7 @@ export class LeafletPage {
       popupAnchor: [1, -24],
       iconUrl: '../assets/imgs/markerGreen.png'
     });
-    $.getJSON('https://api.opensensemap.org/boxes?exposure=outdoor', data => {
+    this.api.getData().subscribe(data => {
       let jsonData = JSON.stringify(data);
       jsonData = JSON.parse(jsonData);
       this.boxData = jsonData;
@@ -102,8 +146,8 @@ export class LeafletPage {
       });
 
       this.boxLayer.on('popupopen', (e) => {
-        this.elementRef.nativeElement.querySelector('#id'+e.popup._source.feature.properties.id)
-          .addEventListener('click',this.safeBoxId.bind(this));
+        this.elementRef.nativeElement.querySelector('#id' + e.popup._source.feature.properties.id)
+          .addEventListener('click', this.safeBoxId.bind(this));
 
       })
     });

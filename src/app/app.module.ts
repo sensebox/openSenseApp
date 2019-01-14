@@ -11,8 +11,8 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
-import { StatsPage } from '../pages/stats/stats';
-import { StatsPageModule } from '../pages/stats/stats.module';
+import {RadarMapPage} from "../pages/radar-map/radar-map";
+import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
 
 @NgModule({
   declarations: [
@@ -25,14 +25,14 @@ import { StatsPageModule } from '../pages/stats/stats.module';
     IonicModule.forRoot(openSenseApp),
     IonicStorageModule.forRoot(),
     LeafletPageModule,
-    StatsPageModule
+    RadarMapPageModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [
     openSenseApp,
     HomePage,
     LeafletPage,
-    StatsPage
+    RadarMapPage
   ],
   providers: [
     StatusBar,

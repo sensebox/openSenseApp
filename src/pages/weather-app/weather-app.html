@@ -5,13 +5,8 @@
     </button>
     <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
     <ion-buttons start>
-      <button ion-button (click)="locate_click()" icon-only>
-        <ion-icon name="locate"></ion-icon>
-      </button>
-    </ion-buttons>
-    <ion-buttons end>
-      <button ion-button (click)="presentPopoverChart($event)" icon-only>
-        <ion-icon name="stats"></ion-icon>
+      <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
+        <ion-icon name="umbrella"></ion-icon>
       </button>
     </ion-buttons>
     <ion-buttons end>
@@ -49,5 +44,4 @@
          </div>
        </ion-list>
      </div>
-
     </ion-content>

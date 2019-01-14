@@ -1,5 +1,5 @@
-<!-- Import forecast.JS-->
-<script src="assets/forecast.js"></script>
+<!-- Import forecast.JS
+<script src="forecast.js"></script> -->
 
 
 <ion-header>
@@ -13,7 +13,37 @@
 
 
 <ion-content padding>
-  <button ion-button (click)="getData2()">
-    get data
-  </button>
+  <button ion-button color="secondary" (click)="checkName()">Get forecasting result</button>
+
+    <ion-grid>
+      <ion-row justify-content-start>
+        <ion-col col-3>
+          Temp9
+        </ion-col>
+        <ion-col col-3>
+          Temp12
+        </ion-col>
+        <ion-col col-3>
+          Temp15
+        </ion-col>
+      </ion-row>
+      
+      <ion-row justify-content-start>
+        <ion-col col-3>
+          {{item | slice:0:1}}
+        </ion-col>
+
+        <ion-col col-3>
+          {{item | slice:1:2}}
+        </ion-col>
+
+        <ion-col col-3>
+          {{item | slice:2:3}}
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+
+
+
+
 </ion-content>

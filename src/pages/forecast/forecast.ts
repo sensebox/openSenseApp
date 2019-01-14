@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { map } from 'rxjs/operators';
+// import { Http } from '@angular/http';
+import { HttpClient } from '@angular/common/http';
 
 /**
  * Generated class for the ForecastPage page.
@@ -15,44 +18,28 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class ForecastPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  name: string;
+  item: any;
+
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
+    console.log('Hello ApiProvider Provider');
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ForecastPage');
+
   }
 
-  getData2(){
-    alert("hello bro");
+  checkName() {
+ 
+      let data = {
+          name: this.name
+      };
+
+      this.http.get('http://localhost:8080/checkname/' + this.name).subscribe(response => {
+          console.log('GET Response:', response);
+          this.item = response;
+      });
+
   }
-
-  displayAge(){ 
-    alert("hello bro111");
-    document.getElementById("feedback").innerHTML = "Age =";
-
-    var myPythonScriptPath = 'forecast.py';
-
-// Use python shell
-//let {PythonShell} = require('python-shell')
-//import { PythonShell } from 'python-shell';
-var pyshell = new PythonShell(myPythonScriptPath);
-
-pyshell.on('message', function (message) {
-    // received a message sent from the Python script (a simple "print" statement)
-    console.log(message);
-});
-
-// end the input stream and allow the process to exit
-pyshell.end(function (err) {
-    if (err){
-        throw err;
-    };
-
-    console.log('finished');
-});
-  }
-
-  
-
-
 }

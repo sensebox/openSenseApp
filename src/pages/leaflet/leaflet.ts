@@ -36,7 +36,7 @@ export class LeafletPage {
 
   loadMap() {
     //initiate map
-    this.map = leaflet.map('map', { zoomControl: false }).setView([51.9606649, 7.6261347], 13);
+    this.map = leaflet.map('map', {zoomControl: false}).setView([51.9606649, 7.6261347], 13);
 
     //add tile layer to map
     leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -92,6 +92,15 @@ export class LeafletPage {
       autoCollapse: true,
       autoType: false,
       minLength: 2
+    }));
+
+    this.loadSenseboxLayer();
+  }
+
+  safeBoxId(e) {
+    //this.storage.set('preferenceBoxID', e.target.id);
+    let id = e.target.id.substring(2);
+    this.api.setBoxId(id);
     }).on('search:locationfound', function () {
       debugger;
       console.log("Location Found");
@@ -123,7 +132,7 @@ export class LeafletPage {
       this.boxLayer = leaflet.geoJSON('', {
         id: 'jsonLayer',
         pointToLayer: function (feature, latlng) {
-          return leaflet.marker(latlng, { icon: senseBoxIcon });
+          return leaflet.marker(latlng, {icon: senseBoxIcon});
         }
 
       }).addTo(this.map);
@@ -138,6 +147,14 @@ export class LeafletPage {
       this.boxLayer.on('popupopen', (e) => {
         this.elementRef.nativeElement.querySelector('#id' + e.popup._source.feature.properties.id)
           .addEventListener('click', this.safeBoxId.bind(this));
+
+      })
+        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button><br><br></p>', layer.feature.properties);
+      });
+
+      this.boxLayer.on('popupopen', (e) => {
+        this.elementRef.nativeElement.querySelector('#id'+e.popup._source.feature.properties.id)
+          .addEventListener('click',this.safeBoxId.bind(this));
 
       })
     });

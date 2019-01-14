@@ -1,11 +1,10 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { Storage } from '@ionic/storage';
-import { ApiProvider } from '../../providers/api/api';
+import {Component, ViewChild, ElementRef} from '@angular/core';
+import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {Storage} from '@ionic/storage';
+import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
 import 'leaflet.locatecontrol';
-import $ from "jquery";
 
 /**
  * Generated class for the LeafletPage page.
@@ -55,29 +54,41 @@ export class LeafletPage {
     function onLocationFound(e) {
       console.log("You were located!")
     }
-    function getClosestSensebox(e){
-      let minDist = 0;
-      let closestSenseboxID
-      this.boxData.forEach((box)=>{
+
+    function getClosestSensebox(e) {
+      let minDist = 100;
+      let closestSenseboxID;
+      this.boxData.forEach((box) => {
         let dist = distance(e.latlng, [parseFloat(box.currentLocation.coordinates[0]), parseFloat(box.currentLocation.coordinates[1])])
-        if (minDist> dist){
+        if (minDist > dist) {
           minDist = dist;
           closestSenseboxID = box._id;
         }
       });
       console.log(closestSenseboxID);
-      console.log('not the closest');
+      for (let box in this.boxLayer._layers) {
+        if (this.boxLayer._layers[box].feature.properties.id === closestSenseboxID) {
+          let selectedSenseBoxIcon = new leaflet.Icon({
+            iconSize: [40, 40],
+            iconAnchor: [13, 27],
+            popupAnchor: [1, -24],
+            iconUrl: '../assets/imgs/markerYellow.png'
+          });
+          this.boxLayer._layers[box].feature.properties.icon = selectedSenseBoxIcon;
+
+        }
+      }
     }
 
     function distance(latlng1, latlng2) {
       let distance;
-      if (latlng1[0] == latlng2[0] && latlng1[1] == latlng2[1]) {
-          distance = 0
+      if (latlng1.lat == latlng2[0] && latlng1.lng == latlng2[1]) {
+        distance = 0
       } else {
-          distance = Math.sqrt((Math.pow((latlng1[0] - latlng2[0]), 2) + Math.pow((latlng1[1] - latlng2[1]), 2)));
+        distance = Math.sqrt((Math.pow((latlng1.lat - latlng2[1]), 2) + Math.pow((latlng1.lng - latlng2[0]), 2)));
       }
       return distance;
-  }
+    }
 
     // add event listener to map
     this.map.on('locationfound', getClosestSensebox, this);
@@ -92,15 +103,6 @@ export class LeafletPage {
       autoCollapse: true,
       autoType: false,
       minLength: 2
-    }));
-
-    this.loadSenseboxLayer();
-  }
-
-  safeBoxId(e) {
-    //this.storage.set('preferenceBoxID', e.target.id);
-    let id = e.target.id.substring(2);
-    this.api.setBoxId(id);
     }).on('search:locationfound', function () {
       debugger;
       console.log("Location Found");
@@ -109,7 +111,6 @@ export class LeafletPage {
 
     this.loadSenseboxLayer();
   }
-
 
 
   safeBoxId(e) {
@@ -147,14 +148,6 @@ export class LeafletPage {
       this.boxLayer.on('popupopen', (e) => {
         this.elementRef.nativeElement.querySelector('#id' + e.popup._source.feature.properties.id)
           .addEventListener('click', this.safeBoxId.bind(this));
-
-      })
-        return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button><br><br></p>', layer.feature.properties);
-      });
-
-      this.boxLayer.on('popupopen', (e) => {
-        this.elementRef.nativeElement.querySelector('#id'+e.popup._source.feature.properties.id)
-          .addEventListener('click',this.safeBoxId.bind(this));
 
       })
     });

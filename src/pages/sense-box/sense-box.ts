@@ -36,7 +36,7 @@ export class SenseBoxPage {
           type: 'spline'
         },
         title: {
-          text: 'Acceleration on X-Axis'
+          text: 'Acceleration of senseBox'
         },
         xAxis: {
           title: {
@@ -57,57 +57,21 @@ export class SenseBoxPage {
           }
         },
         series: [{
-          data: this.xdatArray
-          }]
-      });
-
-      this.ychart = HighCharts.chart('yValues', {
-        chart: {
-          type: 'spline'
-        },
-        title: {
-          text: 'Acceleration on Y-Axis'
-        },
-        xAxis: {
-          title: {
-            text: 'Measurements'
-          }
-        },
-        yAxis: {
-          title: {
-            text: 'G-Force'
-          }
-        },
-        series: [{
-          data: this.ydatArray
-          }]
-      });
-
-      this.zchart = HighCharts.chart('zValues', {
-        chart: {
-          type: 'spline'
-        },
-        title: {
-          text: 'Acceleration on Z-Axis'
-        },
-        xAxis: {
-          title: {
-            text: 'Measurements'
-          }
-        },
-        yAxis: {
-          title: {
-            text: 'G-Force'
-          }
-        },
-        series: [{
-          data: this.zdatArray
+            name: "X-Axis",
+            data: this.xdatArray
+          },
+          {
+            name: "Y-Axis",
+            data: this.ydatArray},
+          {
+            name: "Z-Axis",
+            data: this.zdatArray
           }]
       });
     
 
     // Create a client instance
-    this.client = new Paho.MQTT.Client('10.0.1.71', 11883, "clienId");
+    this.client = new Paho.MQTT.Client('192.168.0.130', 11883, "clienId");
     
 
     // set callback handlers
@@ -168,11 +132,11 @@ export class SenseBoxPage {
     if(message.destinationName === "accelerometer/y") {
       this.ydatArray.push(+message.payloadString);
     }
-    this.ychart.series[0].setData(this.ydatArray);
+    this.xchart.series[1].setData(this.ydatArray);
     if(message.destinationName === "accelerometer/z") {
       this.zdatArray.push(+message.payloadString);
     }
-    this.zchart.series[0].setData(this.zdatArray);
+    this.xchart.series[2].setData(this.zdatArray);
     //this.datArray.push(+message.payloadString);
     // console.log(this.datArray);
     // this.chart.series[0].setData(this.datArray);

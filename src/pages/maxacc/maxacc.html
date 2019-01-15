@@ -1,0 +1,37 @@
+<!--
+  Generated template for the SenseBoxPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+    <ion-navbar>
+      <button ion-button menuToggle>
+        <ion-icon name="menu"></ion-icon>
+      </button>
+      <ion-title>How fast can you accelerate?</ion-title>
+    </ion-navbar>
+  </ion-header>
+  
+  <ion-content padding>
+    <div style="display: block;text-align: center;margin-bottom: 2%"> 
+      <h2> Compete against fellow players and try to accelerate faster than they do! </h2>
+      <p style="font-size: 1.3em; margin-left: 25%; margin-right: 25%">Hit <button ion-button color="secondary" style="font-size:0.5em">Start Player 1</button> and you will get about three seconds to accelerate the senseBox MCU as fast as possible.
+      Then it's your opponent's turn. Hand him the senseBox MCU and hit <button ion-button color="secondary" style="font-size:0.5em">Start Player 2</button> and you will see if your opponent can beat your acceleration record!</p>  
+      </div>
+    <div style="display: block;text-align: center;margin-bottom: 2%">
+      <button (click)="getData()"  ion-button color="secondary">
+          Start Player 1
+      </button>
+      <button (click)="stopData()" ion-button color="secondary">
+          Start Player 2
+      </button>
+      <button (click)="deleteData()" ion-button color="secondary">
+          Reset Game
+      </button>
+    </div>
+      <div id="maxOne" style="display: block;text-align: center;margin-bottom: 2%"> <h1>Maximum Player 1: {{maxOne}}        Maximum Player 2: {{maxTwo}}</h1> </div>
+      <div id="values" style="display: block;"></div>
+    <hr />
+  </ion-content>
+  

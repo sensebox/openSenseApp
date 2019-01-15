@@ -1,3 +1,4 @@
+
 import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
@@ -21,6 +22,7 @@ export class openSenseApp {
     { title: 'Accelerometer', component: 'AccelerometerPage'},
     { title: 'Gyroscope', component: 'GyroscopePage' },
     { title: 'senseBox', component: 'SenseBoxPage' },
+    { title: 'Maximum Acceleration', component: 'MaxaccPage' },
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

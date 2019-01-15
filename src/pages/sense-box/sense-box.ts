@@ -97,9 +97,9 @@ export class SenseBoxPage {
     this.xdatArray = [];
     this.xchart.series[0].setData(this.xdatArray);
     this.ydatArray = [];
-    this.ychart.series[0].setData(this.ydatArray);
+    this.xchart.series[1].setData(this.ydatArray);
     this.zdatArray = [];
-    this.zchart.series[0].setData(this.zdatArray);
+    this.xchart.series[2].setData(this.zdatArray);
   }
 
    // called when the this.client connects

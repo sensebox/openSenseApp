@@ -21,7 +21,8 @@ export class SenseBoxPage {
   message: any;
   xdatArray: number[] = [];
   ydatArray: number[] = []; 
-  zdatArray: number[] = []; 
+  zdatArray: number[] = [];
+  totDatArray: number[] = []; 
   xchart: any;
   ychart: any;
   zchart: any;
@@ -62,10 +63,14 @@ export class SenseBoxPage {
           },
           {
             name: "Y-Axis",
-            data: this.ydatArray},
+            data: this.ydatArray
+          },
           {
             name: "Z-Axis",
             data: this.zdatArray
+          },
+          { name: "Total",
+            data: this.totDatArray
           }]
       });
     
@@ -100,6 +105,8 @@ export class SenseBoxPage {
     this.xchart.series[1].setData(this.ydatArray);
     this.zdatArray = [];
     this.xchart.series[2].setData(this.zdatArray);
+    this.totDatArray = [];
+    this.xchart.series[3].setData(this.totDatArray);
   }
 
    // called when the this.client connects
@@ -107,11 +114,6 @@ export class SenseBoxPage {
     // Once a connection has been made, make a subscription and send a message.
     console.log("onConnect");
     console.log(this.client);
-    //this.client.subscribe("$SYS/#");
-    
-    this.message = new Paho.MQTT.Message('1');
-    this.message.destinationName = "/World";
-    this.client.send(this.message); 
   }
 
   // called when the this.client loses its connection
@@ -124,7 +126,7 @@ export class SenseBoxPage {
 
   // called when a message arrives
   onMessageArrived = (message) => {
-    console.log("onMessageArrived:", message.destinationName, message.payloadString);
+    // console.log("onMessageArrived:", message.destinationName, message.payloadString);
     if(message.destinationName === "accelerometer/x") {
       this.xdatArray.push(+message.payloadString);
     }
@@ -137,6 +139,10 @@ export class SenseBoxPage {
       this.zdatArray.push(+message.payloadString);
     }
     this.xchart.series[2].setData(this.zdatArray);
+    if(message.destinationName === "accelerometer/tot") {
+      this.totDatArray.push(+message.payloadString/9.81);
+    }
+    this.xchart.series[3].setData(this.totDatArray);
     //this.datArray.push(+message.payloadString);
     // console.log(this.datArray);
     // this.chart.series[0].setData(this.datArray);

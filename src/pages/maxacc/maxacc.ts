@@ -38,7 +38,7 @@ export class MaxaccPage {
           type: 'spline'
         },
         title: {
-          text: 'Your Acceleration series'
+          text: 'Accumulated Acceleration of senseBox MCU'
         },
         xAxis: {
           title: {

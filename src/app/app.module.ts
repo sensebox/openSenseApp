@@ -6,16 +6,13 @@ import { StatusBar } from '@ionic-native/status-bar';
 
 import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { PendulumPage } from '../pages/pendulum/pendulum';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
-import { GlobalProvider } from '../providers/global/global';
 
 @NgModule({
   declarations: [
     openSenseApp,
     HomePage,
-    PendulumPage,
   ],
   imports: [
     HttpClientModule,
@@ -25,15 +22,13 @@ import { GlobalProvider } from '../providers/global/global';
   bootstrap: [IonicApp],
   entryComponents: [
     openSenseApp,
-    HomePage,
-    PendulumPage
+    HomePage
   ],
   providers: [
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider,
-    GlobalProvider
+    ApiProvider
   ]
 })
 export class AppModule {}

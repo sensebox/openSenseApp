@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\resources",
+    "\\src",
+    "\\src\\app",
+    "\\src\\assets",
+    "\\src\\assets\\icon",
+    "\\src\\assets\\imgs",
+    "\\src\\pages",
+    "\\src\\pages\\gyroscope",
+    "\\src\\pages\\pendulum"
+  ],
+  "SelectedNode": "\\src\\pages\\pendulum\\pendulum.html",
+  "PreviewInSolutionExplorer": false
+}

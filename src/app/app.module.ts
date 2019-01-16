@@ -9,6 +9,7 @@ import { HomePage } from '../pages/home/home';
 import { PendulumPage } from '../pages/pendulum/pendulum';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
+import { GlobalProvider } from '../providers/global/global';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { HttpClientModule } from '@angular/common/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider
+    ApiProvider,
+    GlobalProvider
   ]
 })
 export class AppModule {}

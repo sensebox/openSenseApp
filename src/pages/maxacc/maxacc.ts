@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 import { Paho } from 'ng2-mqtt/mqttws31';
 import * as HighCharts from 'highcharts';
+import { GlobalProvider } from "../../providers/global/global";
+
 
 /**
  * Generated class for the MaxaccPage page.
@@ -23,12 +25,14 @@ export class MaxaccPage {
   message: any;
   pOneDatArray: number[] = [];
   pTwoDatArray: number[] = [];
+  pOneYDatArray: number[] = [];
+  pTwoYDatArray: number[] = [];
   maxOne: number = 0;
   maxTwo: number = 0;
   chart: any;
   player: any = "none";
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public global: GlobalProvider) {
   }
 
   ionViewDidLoad() {
@@ -63,15 +67,23 @@ export class MaxaccPage {
             data: this.pOneDatArray
           },
           {
+            name: "Player 1Y",
+            data: this.pOneYDatArray
+          },
+          {
             name: "Player 2",
             data: this.pTwoDatArray
+          },
+          {
+            name: "Player 2Y",
+            data: this.pTwoYDatArray
           }
           ]
       });
     
 
     // Create a client instance
-    this.client = new Paho.MQTT.Client('192.168.0.130', 11883, "clienId");
+    this.client = new Paho.MQTT.Client(this.global.mqttip, 11883, "clienId");
     
 
     // set callback handlers
@@ -87,9 +99,9 @@ export class MaxaccPage {
 
   getData() {
     this.player = "one";
-    this.client.subscribe("accelerometer/tot");
+    this.client.subscribe("accelerometer/#");
     setTimeout( () => {
-      this.client.unsubscribe("accelerometer/tot");
+      this.client.unsubscribe("accelerometer/#");
       this.player = "none";
     }, 5000);
     
@@ -97,9 +109,9 @@ export class MaxaccPage {
 
   stopData() {
     this.player = "two";
-    this.client.subscribe("accelerometer/tot");
+    this.client.subscribe("accelerometer/#");
     setTimeout( () => {
-      this.client.unsubscribe("accelerometer/tot");
+      this.client.unsubscribe("accelerometer/#");
       this.player = "none";
   }, 5000);
   }
@@ -107,8 +119,12 @@ export class MaxaccPage {
   deleteData() {
     this.pOneDatArray = [];
     this.chart.series[0].setData(this.pOneDatArray);
+    this.pOneYDatArray = [];
+    this.chart.series[1].setData(this.pOneYDatArray);
+    this.pTwoYDatArray = [];
+    this.chart.series[2].setData(this.pTwoYDatArray);
     this.pTwoDatArray = [];
-    this.chart.series[1].setData(this.pTwoDatArray);
+    this.chart.series[3].setData(this.pTwoDatArray);
     this.maxOne = 0;
     this.maxTwo = 0;
   }
@@ -131,19 +147,37 @@ export class MaxaccPage {
   // called when a message arrives
   onMessageArrived = (message) => {
     console.log("onMessageArrived:", message.destinationName, message.payloadString);
-    if(message.destinationName === "accelerometer/tot" && this.player === "one") {
-      this.pOneDatArray.push(+message.payloadString);
-      if(this.maxOne < +message.payloadString) {
-        this.maxOne = +message.payloadString;
+    if(this.player === "one") {
+      if(message.destinationName === "accelerometer/tot"){
+        this.pOneDatArray.push(+message.payloadString);
+        // if(this.maxOne < +message.payloadString) {
+        //   this.maxOne = +message.payloadString;
+        // }
+        // this.chart.series[0].setData(this.pOneDatArray);
+      }
+      else if(message.destinationName === "accelerometer/y") {
+        this.pOneYDatArray.push(+message.payloadString * 9.81);
+        this.chart.series[1].setData(this.pOneYDatArray);
+        if(this.maxOne < Math.abs(+message.payloadString * 9.81)) {
+          this.maxOne = Math.abs(+message.payloadString* 9.81);
+        }
       }
     }
-    this.chart.series[0].setData(this.pOneDatArray);
-    if(message.destinationName === "accelerometer/tot" && this.player === "two") {
-      this.pTwoDatArray.push(+message.payloadString);
-      if(this.maxTwo < +message.payloadString) {
-        this.maxTwo = +message.payloadString;
+    else if(this.player === "two") {
+      if(message.destinationName === "accelerometer/tot") {
+        this.pTwoDatArray.push(+message.payloadString);
+        // if(this.maxTwo < +message.payloadString) {
+        //   this.maxTwo = +message.payloadString;
+        // }
+        // this.chart.series[2].setData(this.pTwoDatArray);
+      }
+      else if(message.destinationName === "accelerometer/y") {
+        this.pTwoYDatArray.push(+message.payloadString * 9.81);
+        this.chart.series[3].setData(this.pTwoYDatArray);
+        if(this.maxTwo < Math.abs(+message.payloadString * 9.81)) {
+          this.maxTwo = Math.abs(+message.payloadString * 9.81);
+        }
       }
     }
-    this.chart.series[1].setData(this.pTwoDatArray);
   }
- }
+}

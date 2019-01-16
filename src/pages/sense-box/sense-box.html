@@ -9,22 +9,27 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Acceleration</ion-title>
+    <ion-title>senseBox</ion-title>
   </ion-navbar>
 </ion-header>
+  
+  
+
 
 <ion-content padding>
-    <button (click)="getData()"  ion-button color="secondary">
-        start
-    </button>
-    <button (click)="stopData()" ion-button color="secondary">
-        stop
-    </button>
-    <button (click)="deleteData()" ion-button color="secondary">
-        delete all data
-    </button>
 
-  <div id="xValues" style="display: block;"></div>
-  <hr />
-  <div id="container" style="display: block;"></div>
+  <button (click)="getData()" ion-button color="secondary">
+    get data
+  </button>
+
+  <div *ngIf="boxData">
+    <h1>{{boxData.name}}</h1>
+    <ion-list>
+      <div ion-item *ngFor="let sensor of boxData.sensors">
+        <h3>{{sensor.title}}</h3>
+        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+      </div>
+    </ion-list>
+  </div>
+
 </ion-content>

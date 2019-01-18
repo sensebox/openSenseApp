@@ -3,11 +3,15 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title> <ion-icon name="analytics"> Analytics</ion-icon></ion-title>
+    <ion-title> <ion-icon name="analytics">Analytics</ion-icon></ion-title>
   </ion-navbar>
 </ion-header>
 
-
 <ion-content padding>
+  <div>
+    <select id="dropDown" (change)="this.populateChart(selectField.value);" #selectField>
 
+    </select>
+  </div>
+  <canvas id="boxChart" width="400" height="400"></canvas>
 </ion-content>

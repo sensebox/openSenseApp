@@ -54,44 +54,8 @@ export class LeafletPage {
     function onLocationFound(e) {
       console.log("You were located!")
     }
-
-    function getClosestSensebox(e) {
-      let minDist = 100;
-      let closestSenseboxID;
-      this.boxData.forEach((box) => {
-        let dist = distance(e.latlng, [parseFloat(box.currentLocation.coordinates[0]), parseFloat(box.currentLocation.coordinates[1])])
-        if (minDist > dist) {
-          minDist = dist;
-          closestSenseboxID = box._id;
-        }
-      });
-      console.log(closestSenseboxID);
-      for (let box in this.boxLayer._layers) {
-        if (this.boxLayer._layers[box].feature.properties.id === closestSenseboxID) {
-          let selectedSenseBoxIcon = new leaflet.Icon({
-            iconSize: [40, 40],
-            iconAnchor: [13, 27],
-            popupAnchor: [1, -24],
-            iconUrl: '../assets/imgs/markerYellow.png'
-          });
-          this.boxLayer._layers[box].feature.properties.icon = selectedSenseBoxIcon;
-
-        }
-      }
-    }
-
-    function distance(latlng1, latlng2) {
-      let distance;
-      if (latlng1.lat == latlng2[0] && latlng1.lng == latlng2[1]) {
-        distance = 0
-      } else {
-        distance = Math.sqrt((Math.pow((latlng1.lat - latlng2[1]), 2) + Math.pow((latlng1.lng - latlng2[0]), 2)));
-      }
-      return distance;
-    }
-
     // add event listener to map
-    this.map.on('locationfound', getClosestSensebox, this);
+    this.map.on('locationfound', this.getClosestSensebox, this);
 
     //add search and event function
     this.map.addControl(new leaflet.Control.Search({
@@ -103,16 +67,49 @@ export class LeafletPage {
       autoCollapse: true,
       autoType: false,
       minLength: 2
-    }).on('search:locationfound', function () {
-      debugger;
+    }).on('search:locationfound', e =>{
       console.log("Location Found");
-      this.getClosestSensebox(this.boxData)
+      this.getClosestSensebox(e)
     }, this));
 
     this.loadSenseboxLayer();
   }
 
 
+  getClosestSensebox(e) {
+    let minDist = 100;
+    let closestSenseboxID;
+    this.boxData.forEach((box) => {
+      let dist = this.distance(e.latlng, [parseFloat(box.currentLocation.coordinates[0]), parseFloat(box.currentLocation.coordinates[1])])
+      if (minDist > dist) {
+        minDist = dist;
+        closestSenseboxID = box._id;
+      }
+    });
+    console.log(closestSenseboxID);
+    for (let box in this.boxLayer._layers) {
+      if (this.boxLayer._layers[box].feature.properties.id === closestSenseboxID) {
+        let selectedSenseBoxIcon = new leaflet.Icon({
+          iconSize: [40, 40],
+          iconAnchor: [13, 27],
+          popupAnchor: [1, -24],
+          iconUrl: '../assets/imgs/markerYellow.png'
+        });
+        this.boxLayer._layers[box].feature.properties.icon = selectedSenseBoxIcon;
+
+      }
+    }
+  };
+
+  distance(latlng1, latlng2) {
+    let distance;
+    if (latlng1.lat == latlng2[0] && latlng1.lng == latlng2[1]) {
+      distance = 0
+    } else {
+      distance = Math.sqrt((Math.pow((latlng1.lat - latlng2[1]), 2) + Math.pow((latlng1.lng - latlng2[0]), 2)));
+    }
+    return distance;
+  };
   safeBoxId(e) {
     //this.storage.set('preferenceBoxID', e.target.id);
     let id = e.target.id.substring(2);
@@ -128,8 +125,7 @@ export class LeafletPage {
     });
     this.api.getData().subscribe(data => {
       let jsonData = JSON.stringify(data);
-      jsonData = JSON.parse(jsonData);
-      this.boxData = jsonData;
+      this.boxData = JSON.parse(jsonData);
       this.boxLayer = leaflet.geoJSON('', {
         id: 'jsonLayer',
         pointToLayer: function (feature, latlng) {

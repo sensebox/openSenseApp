@@ -31,7 +31,7 @@ export class RadarMapPage {
   loadRainViewerMap() {
 
     this.rainviewerMap = leaflet.map('rainviewerMap').setView([52, 7], 5);
-    let currentSenseBox: any = this.api.getData();
+    let currentSenseBox: any = this.api.getSenseboxData();
     // set map view to the current selected sensebox && shows the current selected sensebox as a marker
     currentSenseBox.toPromise().then(res => {
       let senseBoxIcon = new leaflet.Icon({

@@ -25,14 +25,13 @@ export class GraphsPage {
 
   ionViewDidLoad() {
     this.loadDropDown();
-    this.loadChart();
   }
 
-  loadChart() {
+  /*loadChart() {
     let ctx = document.getElementById("boxChart");
     this.sensorChart = new chart(ctx, {
-      type: 'bar',
-      /*data:{
+      type: 'line',
+      data:{
        labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
         datasets: [{
           label: '# of Votes',
@@ -55,23 +54,23 @@ export class GraphsPage {
           ],
           borderWidth: 1
         }]
-      },*/
+      },
       options: {
         scales: {
           yAxes: [{
             ticks: {
-              beginAtZero:true
+              beginAtZero: true
             }
           }]
         }
       }
     });
-  }
+  }*/
 
-  loadDropDown(){
+  loadDropDown() {
     let drpDwnDv = document.getElementById("dropDown");
     this.api.getSenseboxData().subscribe(data => {
-      data.sensors.forEach( sensor =>{
+      data.sensors.forEach(sensor => {
         let opt = document.createElement("option");
         opt.innerHTML = sensor.title; // whatever property it has
         opt.value = sensor._id;
@@ -81,24 +80,110 @@ export class GraphsPage {
     })
   }
 
-  populateChart (value){
-    debugger;
-    this.api.setSensorId(value);
-    let data = this.api.getSensorData();
-    data.subscribe(sensorData =>{
-      let chartData = [];
-      sensorData.forEach(entry =>{
-        chartData.push(entry.value)
+  populateChart(value) {
+    console.log(value);
+    let data = this.api.getSensorData(value);
+    data.subscribe(sensorData => {
+      let splittedArray = this.splitIntoDaysArray(sensorData);
+      let chartData = this.getMinAndMax(splittedArray[0]);
+      let chartLabel = splittedArray[1];
+      let ctx = document.getElementById("boxChart");
+      ctx.innerHTML = "";
+      this.sensorChart = new chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartLabel,
+          datasets: [{
+            label: "Sensor Graph",
+            data: chartData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)',
+              'rgba(255, 99, 132, 0.2)',
+              'rgba(54, 162, 235, 0.2)',
+              'rgba(255, 206, 86, 0.2)',
+              'rgba(75, 192, 192, 0.2)',
+              'rgba(153, 102, 255, 0.2)',
+              'rgba(255, 159, 64, 0.2)'
+            ],
+            borderColor: [
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)',
+              'rgba(255,99,132,1)',
+              'rgba(54, 162, 235, 1)',
+              'rgba(255, 206, 86, 1)',
+              'rgba(75, 192, 192, 1)',
+              'rgba(153, 102, 255, 1)',
+              'rgba(255, 159, 64, 1)'
+            ],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            yAxes: [{
+              ticks: {
+                beginAtZero: true
+              }
+            }]
+          }
+        }
       });
+      /* this.sensorChart.data.datasets.data = chartData;
+       this.sensorChart.data.labels = chartLabel;
+       this.sensorChart.data.datasets.label = "Sensor Graph";
+       this.sensorChart.update(); */
+    });
+  }
 
-      let chartLabel = [];
-      sensorData.forEach(entry =>{
-        chartLabel.push(entry.createdAt)
+  splitIntoDaysArray(array) {
+    let arrayForCreatedAtArrays = [];
+    let createdAt = array[0].createdAt.split("T")[0];
+    let labelArray = [];
+    console.log(createdAt);
+    let tempArray = [];
+    array.forEach((entry) => {
+      if (entry.createdAt.split("T")[0] === createdAt) {
+        tempArray.push(entry)
+      } else {
+        arrayForCreatedAtArrays.push(tempArray);
+        tempArray = [];
+        labelArray.push(createdAt + " minValue");
+        labelArray.push(createdAt + " maxValue");
+        createdAt = entry.createdAt.split("T")[0];
+      }
+    });
+    return [arrayForCreatedAtArrays, labelArray];
+  }
+
+  getMinAndMax(arrays) {
+    let chartData = [];
+    let minValue = 55;
+    let maxValue = -50;
+    arrays.forEach(array => {
+      array.forEach(entry => {
+        if (entry.value < minValue) {
+          minValue = entry.value
+        }
+        if (entry.value > maxValue) {
+          maxValue = entry.value
+        }
       });
-      this.sensorChart.data.datasets.data=chartData;
-      this.sensorChart.data.datasets.labels=chartLabel;
-      this.sensorChart.update();
-    })
+      chartData.push(minValue);
+      chartData.push(maxValue);
+      minValue = 55;
+      maxValue = -50;
+    });
+
+    return chartData;
 
   }
 }

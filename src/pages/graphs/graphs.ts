@@ -70,7 +70,8 @@ export class GraphsPage {
   loadDropDown() {
     let drpDwnDv = document.getElementById("dropDown");
     this.api.getSenseboxData().subscribe(data => {
-      data.sensors.forEach(sensor => {
+      let sensorarray : any = data;
+      sensorarray.sensors.forEach(sensor => {
         let opt = document.createElement("option");
         opt.innerHTML = sensor.title; // whatever property it has
         opt.value = sensor._id;
@@ -84,13 +85,17 @@ export class GraphsPage {
     console.log(value);
     let data = this.api.getSensorData(value);
     data.subscribe(sensorData => {
+      let ctx = document.getElementById("boxChart");
+      if(sensorData===[]){
+        ctx.innerHTML = "No Data available for this sensor for the last week!";
+        return;
+      }
       let splittedArray = this.splitIntoDaysArray(sensorData);
       let chartData = this.getMinAndMax(splittedArray[0]);
       let chartLabel = splittedArray[1];
-      let ctx = document.getElementById("boxChart");
       ctx.innerHTML = "";
       this.sensorChart = new chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
           labels: chartLabel,
           datasets: [{

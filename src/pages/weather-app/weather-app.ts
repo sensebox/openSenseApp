@@ -38,7 +38,7 @@ export class WeatherAppPage {
   }
 
 refresh_data(){
-  this.api.getData().subscribe(res => {
+  this.api.getSenseboxData().subscribe(res => {
     console.log(res);
     this.boxData = res;
   console.log('Refresh was clicked');

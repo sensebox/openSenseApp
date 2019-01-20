@@ -7,7 +7,17 @@ page-leaflet {
         height: 82.3vh;
         width:100%;
     }
-    
+  button {
+    display: block;
+    background-color: #4EAF47;
+    text-align:center;
+    color: white;
+
+  }
+  button:active {
+    position: relative;
+    top: 1px;
+  }
 .scroll-content {
     overflow-y: auto !important;
   }
@@ -28,11 +38,11 @@ page-leaflet {
       }
     }
   }
-  
+
   .leafet-control-locate-location circle {
     animation: leaflet-control-locate-throb 4s ease infinite;
   }
-  
+
   @keyframes leaflet-control-locate-throb {
       0% { r: 9; stroke-width: 1; }
      50% { r: 7; stroke-width: 3; }

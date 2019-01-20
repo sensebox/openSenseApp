@@ -1,6 +1,5 @@
-import {Component, ViewChild, ElementRef} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
-import {Storage} from '@ionic/storage';
+import {Component, ViewChild, ElementRef, } from '@angular/core';
+import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
@@ -25,7 +24,7 @@ export class LeafletPage {
   boxData: any;
   boxLayer: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private storage: Storage, private elementRef: ElementRef, private api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private elementRef: ElementRef, public viewCtr: ViewController, private api: ApiProvider) {
   }
 
   ionViewDidLoad() {
@@ -111,9 +110,10 @@ export class LeafletPage {
     return distance;
   };
   safeBoxId(e) {
-    //this.storage.set('preferenceBoxID', e.target.id);
     let id = e.target.id.substring(2);
     this.api.setBoxId(id);
+    //closes popover after preference is selected
+    this.viewCtr.dismiss();
   };
 
   loadSenseboxLayer() {

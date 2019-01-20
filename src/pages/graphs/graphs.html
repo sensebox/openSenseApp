@@ -3,15 +3,20 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title> <ion-icon name="analytics">Analytics</ion-icon></ion-title>
+    <ion-title>
+      <ion-icon name="analytics">Analytics</ion-icon>
+    </ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
-  <div>
-    <select id="dropDown" (change)="this.populateChart(selectField.value);" #selectField>
-
-    </select>
+  <ion-item>
+    <ion-label>Sensor</ion-label>
+    <ion-select id="dropDown" (ionChange)="this.populateChart(selectField.value);" #selectField>
+      <ion-option *ngFor="let sensor of sensorData" value="{{sensor.value}}">{{sensor.title}}</ion-option>
+    </ion-select>
+  </ion-item>
+  <div style="position: relative; margin: auto; height:80vh; width:80vw">
+    <canvas id="boxChart"></canvas>
   </div>
-  <canvas id="boxChart" width="400" height="400"></canvas>
 </ion-content>

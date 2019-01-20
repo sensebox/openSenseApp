@@ -38,7 +38,7 @@ export class RadarMapPage {
         iconSize: [40, 40],
         iconAnchor: [13, 27],
         popupAnchor: [1, -24],
-        iconUrl: '../assets/imgs/markerGreen.png'
+        iconUrl: '../assets/imgs/markerBlue.png'
       });
       this.rainviewerMap.setView([res.currentLocation.coordinates[1], res.currentLocation.coordinates[0]], 5);
       let marker = new leaflet.marker([res.currentLocation.coordinates[1], res.currentLocation.coordinates[0]], {icon: senseBoxIcon});

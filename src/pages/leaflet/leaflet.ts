@@ -169,45 +169,53 @@ export class LeafletPage {
             .addEventListener('click', this.safeBoxId.bind(this));
         }
       });
+      this.changeMarkerColor();
+      //TODO: close popup after clicking 'set as preference'
+      //this.map.closePopup();
 
+    });
+  }
 
-      // set map view to the current selected sensebox && shows the current selected sensebox as a marker
-      this.currentSenseBox.toPromise().then(res => {
-        //create selected icon
-        let selectedSenseBoxIcon = new leaflet.Icon({
-          iconSize: [40, 40],
-          iconAnchor: [13, 27],
-          popupAnchor: [1, -24],
-          iconUrl: '../assets/imgs/markerBlue.png'
-        });
-        let layerID = res._id;
-        //find layer of selected sensebox
-        this.boxLayer.eachLayer(layer => {
-          if (layer.feature.properties.id === layerID) {
-            layer.setIcon(selectedSenseBoxIcon);
-          }
-        });
+  // change the marker color of the selected sensebox
+  //TODO: onclick change color
+  changeMarkerColor() {
+    // set map view to the current selected sensebox && shows the current selected sensebox as a marker
+    this.currentSenseBox.toPromise().then(res => {
+      //create selected icon
+      let selectedSenseBoxIcon = new leaflet.Icon({
+        iconSize: [40, 40],
+        iconAnchor: [13, 27],
+        popupAnchor: [1, -24],
+        iconUrl: '../assets/imgs/markerBlue.png'
+      });
+      let layerID = res._id;
+      //find layer of selected sensebox
+      this.boxLayer.eachLayer(layer => {
+        if (layer.feature.properties.id === layerID) {
+          layer.setIcon(selectedSenseBoxIcon);
+        }
       });
     });
   }
 }
 
+
 // function to create feature from json
 let _createGeojsonFeaturen = (entry) => {
 
-    let geojsonFeature = {
-      "type": "Feature",
-      "properties": {
-        "name": entry.name,
-        "id": entry._id,
-        "entry": entry,
-        "popupContent": 'GoodBox!'
-      },
+  let geojsonFeature = {
+    "type": "Feature",
+    "properties": {
+      "name": entry.name,
+      "id": entry._id,
+      "entry": entry,
+      "popupContent": 'GoodBox!'
+    },
 
-      "geometry": {
-        "type": "Point",
-        "coordinates": [parseFloat(entry.currentLocation.coordinates[0]), parseFloat(entry.currentLocation.coordinates[1])]
-      }
-    };
-    return geojsonFeature;
+    "geometry": {
+      "type": "Point",
+      "coordinates": [parseFloat(entry.currentLocation.coordinates[0]), parseFloat(entry.currentLocation.coordinates[1])]
+    }
   };
+  return geojsonFeature;
+};

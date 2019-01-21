@@ -1,5 +1,5 @@
-import { Component, ViewChild, ElementRef} from '@angular/core';
-import {ApiProvider} from '../../providers/api/api';
+import { Component} from '@angular/core';
+import { ApiProvider } from '../../providers/api/api';
 import { IonicPage, NavController, NavParams, PopoverController } from 'ionic-angular';
 import { LeafletPage } from '../leaflet/leaflet';
 import { RadarMapPage } from '../radar-map/radar-map';

@@ -16,7 +16,6 @@ import { DataProvider } from '../../providers/api/data';
 })
 export class AboutPage {
 
-  // Harini Push -------
   aboutlists: any;
   constructor(public navCtrl: NavController, public data: DataProvider) {
   }
@@ -28,4 +27,4 @@ export class AboutPage {
   itemClicked(item): void {
     this.navCtrl.push('InfoPage', item);
   }
-} // -----
+} 

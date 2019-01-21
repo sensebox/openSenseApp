@@ -1,11 +1,9 @@
 
 import {Component } from '@angular/core';
-import { ModalController,NavController, NavParams} from 'ionic-angular';
-import {SettingsPage} from '../settings/settings';
+import {ModalController,NavController} from 'ionic-angular';
 import {WeatherProvider} from '../../providers/api/weather';
 
 import 'rxjs/add/operator/map';
-import { Http } from '@angular/http';
 import {Storage} from '@ionic/storage';
 
 

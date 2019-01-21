@@ -9,7 +9,6 @@ import { AboutPage } from './about';
   imports: [
     IonicPageModule.forChild(AboutPage),
   ],
-  // Harini Push
   exports: [
     AboutPage
   ]

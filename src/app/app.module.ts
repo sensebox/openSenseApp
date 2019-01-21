@@ -13,7 +13,7 @@ import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
 import { RadarMapPage} from "../pages/radar-map/radar-map";
 import { RadarMapPageModule} from "../pages/radar-map/radar-map.module";
-import { Http} from '@angular/http'; // Harini Push
+//import { Http} from '@angular/http'; // Harini Push
 import { HttpModule} from '@angular/http'; // Harini Push
 import { DataProvider} from '../providers/api/data'; // Harini Push
 
@@ -30,7 +30,7 @@ import { DataProvider} from '../providers/api/data'; // Harini Push
     LeafletPageModule,
     RadarMapPageModule,
     HttpModule,
-    Http,
+    // Http,
   ],
   bootstrap: [IonicApp],
   entryComponents: [

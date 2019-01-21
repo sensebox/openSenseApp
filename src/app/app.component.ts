@@ -16,9 +16,7 @@ export class openSenseApp {
 
   pages: Array<{ title: string, component: any }> = [
     { title: 'Home', component: HomePage },
-    { title: 'About', component: 'AboutPage' },
-    { title: 'senseBox', component: 'SenseBoxPage' },
-    { title: 'WeatherApp', component: 'WeatherAppPage' },
+    { title: 'WeatherApp', component: 'LandingPage' },
   ];
   weatherPages: Array<{ title: string, component: any }> = [
     { title: 'WeatherApp', component: 'WeatherAppPage' },
@@ -44,7 +42,7 @@ export class openSenseApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
     if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage"
-      || page.component === "AboutPage" || page.component === "SettingsPage") {
+      || page.component === "AboutPage" || page.component === "SettingsPage" || page.component==="LandingPage") {
       document.getElementById('homeNavList').hidden = true;
       document.getElementById('navList').hidden = false;
 

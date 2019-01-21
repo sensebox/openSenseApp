@@ -1,4 +1,3 @@
-
 import {Component } from '@angular/core';
 import {ModalController,NavController} from 'ionic-angular';
 import {WeatherProvider} from '../../providers/api/weather';
@@ -7,21 +6,12 @@ import 'rxjs/add/operator/map';
 import {Storage} from '@ionic/storage';
 
 
-
-/**
- * Generated class for the InfoPage page.
- *
- * See https://ionicframework.com/docs/components/#navigation for more info on
- * Ionic pages and navigation.
- */
-
-
 @Component({
-  selector: 'page-about',
-  templateUrl: 'app_home.html',
+  selector: 'page-landing',
+  templateUrl: 'landing-page.html',
   providers:[WeatherProvider]
 })
-export class AppHomePage {
+export class LandingPage {
   weather: any;
   location:{
     city:string,

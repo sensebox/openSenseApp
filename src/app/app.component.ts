@@ -43,8 +43,8 @@ export class openSenseApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
-    if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage" || page.component === "AboutPage"
-      || page.component === "HelpPage" || page.component === "SettingsPage") {
+    if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage"
+      || page.component === "AboutPage" || page.component === "SettingsPage") {
       document.getElementById('homeNavList').hidden = true;
       document.getElementById('navList').hidden = false;
 

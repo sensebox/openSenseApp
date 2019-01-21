@@ -36,8 +36,6 @@ export class WeatherAppPage {
     this.refresh_data();
   }
 
-
-
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     this.api.getData().subscribe(res => {
@@ -92,6 +90,5 @@ export class WeatherAppPage {
   search_click() {
     console.log('Search was clicked');
   }
-
-
+  
 }

@@ -3,13 +3,18 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
+
     <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
-    <ion-buttons start>
+
+    <ion-buttons end>
+      <button ion-button (click)="showPopup()" icon-only>
+        <ion-icon name="share"></ion-icon>
+      </button>
+
       <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
         <ion-icon name="umbrella"></ion-icon>
       </button>
-    </ion-buttons>
-    <ion-buttons end>
+
       <button ion-button (click)="presentPopover($event)" icon-only>
         <ion-icon name="locate"></ion-icon>
       </button>
@@ -21,17 +26,12 @@
 <ion-content padding class="buttons-components-page">
   <ion-card>
     <ion-card-content>
-      <!-- <ion-img src="https://api.sat24.com/animated/DE/rainTMC/3/Central%20European%20Standard%20Time/9553668"></ion-img>
-         <img src="https://api.sat24.com/animated/EU/rainTMC/3/Central%20European%20Standard%20Time/5384757 " /> -->
-      <!-- <img src="{{api.sat24Url}}">
-       <iframe src="https://www.rainviewer.com/map.html?loc=51.9606649, 7.6261347,4&oFa=0&oC=0&oU=0&oCS=1&oF=0&oAP=1&rmt=2&c=5&o=100&lm=1&th=1" width="100%" frameborder="0" style="border:0;height:50vh;" allowfullscreen></iframe>
--->
+      <!-- Placeholder: Albert-->
     </ion-card-content>
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
-
 
     <ion-item>
       <ion-input [(ngModel)]="message" placeholder="enter message"></ion-input>

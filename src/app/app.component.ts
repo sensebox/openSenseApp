@@ -2,7 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
+import { IntroductionPage } from '../pages/introduction/introduction';
 import { HomePage } from '../pages/home/home';
 
 @Component({
@@ -12,7 +12,8 @@ export class openSenseApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  rootPage:any = HomePage;
+  rootPage:any = IntroductionPage;
+  rootHome:any = HomePage;
 
   pages: Array<{title: string, component: any}> = [
     { title: 'Home', component: HomePage },
@@ -25,7 +26,8 @@ export class openSenseApp {
     { title: 'WeatherApp', component:'WeatherAppPage' },
     { title: 'Forecast', component:'ForecastPage' },
     { title: 'Analytics', component:'GraphsPage' },
-    { title: 'About', component:'AboutWeatherPage' }
+    { title: 'About', component:'AboutWeatherPage' },
+    //{ title: 'Introduction', component:'IntroductionPage'}
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -42,7 +44,7 @@ export class openSenseApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
-    if(page.component==="WeatherAppPage" || page.component==="ForecastPage" || page.component==="GraphsPage" || page.component==="AboutWeatherPage"){
+    if(page.component==="WeatherAppPage" || page.component==="ForecastPage" || page.component==="GraphsPage" || page.component==="AboutWeatherPage" /*|| page.component==="IntroductionPage"*/){
       document.getElementById('homeNavList').hidden=true;
       document.getElementById('navList').hidden=false;
 

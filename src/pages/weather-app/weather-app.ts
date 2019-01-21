@@ -28,7 +28,8 @@ export class WeatherAppPage {
     this.api.getData().subscribe(res => {
       console.log(res);
       this.boxData = res;
-      console.log('Refresh was clicked');
+      console.log('doRefresh()');
+      this.refresh_data();
     });
 
     setTimeout(() => {
@@ -41,16 +42,10 @@ refresh_data(){
   this.api.getSenseboxData().subscribe(res => {
     console.log(res);
     this.boxData = res;
-  console.log('Refresh was clicked');
+  console.log('refresh_data()');
   })
 }
 
-/*
-auto update?
-task = setInterval(() => {
-  this.refresh_data();
-}, 1000000);
-*/
 
     presentPopover(myEvent){
       let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
@@ -69,14 +64,6 @@ task = setInterval(() => {
     });
   }
 
-  refresh_click() {
-    console.log('Refresh was clicked');
-  }
-
-
-  search_click() {
-    console.log('Search was clicked');
-  }
 
 
 }

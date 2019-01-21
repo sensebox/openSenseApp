@@ -25,6 +25,7 @@ export class openSenseApp {
     { title: 'WeatherApp', component:'WeatherAppPage' },
     { title: 'Forecast', component:'ForecastPage' },
     { title: 'Analytics', component:'GraphsPage' },
+    { title: 'Help', component:'HelpPage'},
     { title: 'About', component:'AboutPage' }
   ];
 

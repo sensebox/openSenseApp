@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component} from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 /**
- * Generated class for the AboutWeatherPage page.
+ * Generated class for the GraphsPage page.
+ * Generated class for the HelpPage page.
  *
  * See https://ionicframework.com/docs/components/#navigation for more info on
  * Ionic pages and navigation.
@@ -10,16 +11,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
 @IonicPage()
 @Component({
-  selector: 'page-about-weather',
-  templateUrl: 'about-weather.html',
+  selector: 'page-help',
+  templateUrl: 'help.html',
 })
-export class AboutWeatherPage {
+export class HelpPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AboutWeatherPage');
+    console.log('ionViewDidLoad HelpPage');
   }
 
 }

@@ -19,6 +19,7 @@
 </ion-header>
 
 
+
 <ion-content class="card-background-page">
   <ion-card  *ngIf="boxData">
     <img src="../../assets/imgs/raisingSun.jpg"/>
@@ -26,11 +27,29 @@
 <!--    <div class="card-subtitle"  *ngFor="let sensor of boxData.sensors" >
       <p>{{sensor.lastMeasurement.value}}}</p></div>-->
 
+
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
   </ion-card>
+  <!-- harini
+    <ion-item>
+      <ion-input [(ngModel)]="message" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="file" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="link" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="subject" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button full click (click)="share()">share</button> </ion-item>
+  </ion-card>
+-->
 
   <div *ngIf="boxData">
     <ion-list>
@@ -40,5 +59,6 @@
       </div>
     </ion-list>
   </div>
+
 
 </ion-content>

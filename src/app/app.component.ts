@@ -26,8 +26,14 @@ export class openSenseApp {
     { title: 'WeatherApp', component:'WeatherAppPage' },
     { title: 'Forecast', component:'ForecastPage' },
     { title: 'Analytics', component:'GraphsPage' },
+
     { title: 'About', component:'AboutWeatherPage' },
     //{ title: 'Introduction', component:'IntroductionPage'}
+
+    { title: 'Help', component:'HelpPage'},
+    { title: 'About', component:'AboutPage'},
+    { title: 'Settings', component:'SettingsPage'},
+
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {

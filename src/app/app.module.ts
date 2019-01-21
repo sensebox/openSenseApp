@@ -3,7 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { IonicStorageModule } from '@ionic/storage'
+import { IonicStorageModule } from '@ionic/storage';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -43,7 +44,8 @@ import { DataProvider} from '../providers/api/data'; // Harini Push
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     ApiProvider,
     DataProvider,
-    IonicStorageModule
+    IonicStorageModule,
+    SocialSharing
   ]
 })
 export class AppModule {}

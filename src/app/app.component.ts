@@ -12,22 +12,21 @@ export class openSenseApp {
 
   @ViewChild(Nav) nav: Nav;
 
-  rootPage:any = HomePage;
+  rootPage: any = HomePage;
 
-  pages: Array<{title: string, component: any}> = [
+  pages: Array<{ title: string, component: any }> = [
     { title: 'Home', component: HomePage },
     { title: 'About', component: 'AboutPage' },
     { title: 'senseBox', component: 'SenseBoxPage' },
-    { title: 'WeatherApp', component:'WeatherAppPage' },
+    { title: 'WeatherApp', component: 'WeatherAppPage' },
   ];
-  weatherPages: Array<{title: string, component: any}> = [
-    { title: 'OpenSensePage', component: HomePage },
-    { title: 'WeatherApp', component:'WeatherAppPage' },
-    { title: 'Forecast', component:'ForecastPage' },
-    { title: 'Analytics', component:'GraphsPage' },
-    { title: 'Help', component:'HelpPage'},
-    { title: 'About', component:'AboutPage'},
-    { title: 'Settings', component:'SettingsPage'},
+  weatherPages: Array<{ title: string, component: any }> = [
+    { title: 'WeatherApp', component: 'WeatherAppPage' },
+    { title: 'Forecast', component: 'ForecastPage' },
+    { title: 'Analytics', component: 'GraphsPage' },
+    { title: 'About', component: 'AboutPage' },
+    { title: 'Settings', component: 'SettingsPage' },
+    { title: 'Back', component: HomePage },
   ];
 
   constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
@@ -44,14 +43,15 @@ export class openSenseApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
-    if(page.component==="WeatherAppPage" || page.component==="ForecastPage" || page.component==="GraphsPage" || page.component==="AboutWeatherPage"){
-      document.getElementById('homeNavList').hidden=true;
-      document.getElementById('navList').hidden=false;
+    if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage" || page.component === "AboutPage"
+      || page.component === "HelpPage" || page.component === "SettingsPage") {
+      document.getElementById('homeNavList').hidden = true;
+      document.getElementById('navList').hidden = false;
 
-    }else {
+    } else {
 
-      document.getElementById('navList').hidden=true;
-      document.getElementById('homeNavList').hidden=false;
+      document.getElementById('navList').hidden = true;
+      document.getElementById('homeNavList').hidden = false;
     }
 
   }

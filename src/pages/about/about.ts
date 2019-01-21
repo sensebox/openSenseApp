@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController } from 'ionic-angular';
+import { DataProvider } from '../../providers/api/data';
 
 /**
  * Generated class for the AboutPage page.
@@ -15,11 +16,16 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
 })
 export class AboutPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
+  // Harini Push -------
+  aboutlists: any;
+  constructor(public navCtrl: NavController, public data: DataProvider) {
   }
 
   ionViewDidLoad() {
-    console.log('ionViewDidLoad AboutPage');
+    this.aboutlists = this.data.lists;
   }
 
-}
+  itemClicked(item): void {
+    this.navCtrl.push('InfoPage', item);
+  }
+} // -----

@@ -11,8 +11,11 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
-import {RadarMapPage} from "../pages/radar-map/radar-map";
-import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+import { RadarMapPage} from "../pages/radar-map/radar-map";
+import { RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+import { Http} from '@angular/http'; // Harini Push
+import { HttpModule} from '@angular/http'; // Harini Push
+import { DataProvider} from '../providers/api/data'; // Harini Push
 
 @NgModule({
   declarations: [
@@ -25,7 +28,9 @@ import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
     IonicModule.forRoot(openSenseApp),
     IonicStorageModule.forRoot(),
     LeafletPageModule,
-    RadarMapPageModule
+    RadarMapPageModule,
+    HttpModule,
+    Http,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,7 +43,9 @@ import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider
+    ApiProvider,
+    DataProvider,
+    IonicStorageModule
   ]
 })
 export class AppModule {}

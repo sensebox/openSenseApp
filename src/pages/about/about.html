@@ -15,13 +15,11 @@
 
 
 <ion-content padding>
-  <p>
-    These apps were made at IfGI 2018.
-  </p>
+  <!-- Harini Push-->
+  <ion-list>
+    <button clear ion-item *ngFor="let aboutlist of  aboutlists" (click)="itemClicked(aboutlist)">
+      {{aboutlist.itemName}}
 
-  <ul>
-    <li>Institut für Geoinformatik</li>
-    <li>Heisenbergstr. 2</li>
-    <li>48149 Münster</li>
-  </ul>
+    </button>
+  </ion-list>
 </ion-content>

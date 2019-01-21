@@ -35,7 +35,6 @@ import { DataProvider} from '../providers/api/data'; // Harini Push
     IonicStorageModule.forRoot(),
     LeafletPageModule,
     RadarMapPageModule,
-    introductionPage
     IntroductionPageModule,
 
 

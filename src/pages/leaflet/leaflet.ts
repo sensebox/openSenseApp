@@ -1,4 +1,4 @@
-import {Component, ViewChild, ElementRef, } from '@angular/core';
+import {Component, ViewChild, ElementRef,} from '@angular/core';
 import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
@@ -91,21 +91,16 @@ export class LeafletPage {
         minDist = dist;
         closestSenseboxID = box._id;
       }
+
     });
 
-    //TODO: chnage/fix icon
-    for (let box in this.boxLayer._layers) {
-      if (this.boxLayer._layers[box].feature.properties.id === closestSenseboxID) {
-        let selectedSenseBoxIcon = new leaflet.Icon({
-          iconSize: [40, 40],
-          iconAnchor: [13, 27],
-          popupAnchor: [1, -24],
-          iconUrl: '../assets/imgs/markerYellow.png'
-        });
-        this.boxLayer._layers[box].feature.properties.icon = selectedSenseBoxIcon;
+    let closestSenseBox: any = this.api.getSenseboxDataFromId(closestSenseboxID);
+    // set map view to the current selected sensebox && shows the current selected sensebox as a marker
+    closestSenseBox.toPromise().then(res => {
+      this.map.fitBounds([[res.currentLocation.coordinates[1], res.currentLocation.coordinates[0]], [e.latlng.lat, e.latlng.lng]]);
+    });
+    this.changeMarkerColor('black', closestSenseboxID);
 
-      }
-    }
   };
 
   // calculate distance of two points(sensebox, one's location or searched location)
@@ -170,7 +165,7 @@ export class LeafletPage {
             .addEventListener('click', this.safeBoxId.bind(this));
         }
       });
-      this.changeMarkerColor();
+      this.changeMarkerColor('blue', '');
       //TODO: close popup after clicking 'set as preference'
       //this.map.closePopup();
 
@@ -179,24 +174,43 @@ export class LeafletPage {
 
   // change the marker color of the selected sensebox
   //TODO: onclick change color
-  changeMarkerColor() {
+  changeMarkerColor(color, id) {
     // set map view to the current selected sensebox && shows the current selected sensebox as a marker
-    this.currentSenseBox.toPromise().then(res => {
-      //create selected icon
+    if (color === 'blue') {
+      this.currentSenseBox.toPromise().then(res => {
+        //create selected icon
+        let selectedSenseBoxIcon = new leaflet.Icon({
+          iconSize: [40, 40],
+          iconAnchor: [13, 27],
+          popupAnchor: [1, -24],
+          iconUrl: '../assets/imgs/markerBlue.png',
+          className: 'blinking'
+        });
+        let layerID = res._id;
+        //find layer of selected sensebox
+        this.boxLayer.eachLayer(layer => {
+          if (layer.feature.properties.id === layerID) {
+            layer.setIcon(selectedSenseBoxIcon);
+          }
+        });
+      });
+    }
+    if (color === 'black') {
       let selectedSenseBoxIcon = new leaflet.Icon({
         iconSize: [40, 40],
         iconAnchor: [13, 27],
         popupAnchor: [1, -24],
-        iconUrl: '../assets/imgs/markerBlue.png'
+        iconUrl: '../assets/imgs/markerBlack.png',
+        className: 'blinking'
       });
-      let layerID = res._id;
-      //find layer of selected sensebox
+      let layerID = id;
+      //find layer of nearest sensebox
       this.boxLayer.eachLayer(layer => {
         if (layer.feature.properties.id === layerID) {
           layer.setIcon(selectedSenseBoxIcon);
         }
       });
-    });
+    }
   }
 }
 

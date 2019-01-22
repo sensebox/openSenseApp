@@ -121,7 +121,7 @@ export class LeafletPage {
     let alert = this.alertCtrl.create({
       title: 'Box selected',
       subTitle: 'The box was saved as preference',
-      buttons: ['Dismiss']
+      buttons: ['Ok']
     });
     alert.present();
     //closes popover after preference is selected
@@ -134,7 +134,7 @@ export class LeafletPage {
     let alert = this.alertCtrl.create({
       title: 'Box selected',
       subTitle: 'The box was saved to compare statistics on the analytics page',
-      buttons: ['Dismiss']
+      buttons: ['Ok']
     });
     alert.present();
     //closes popover after preference is selected

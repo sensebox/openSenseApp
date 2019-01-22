@@ -44,10 +44,11 @@ export class GraphsPage {
   loadSensorDropDown() {
     this.api.getSenseboxData().subscribe(data => {
       let sensorarray: any = data;
+      this.sensorData = [];
       sensorarray.sensors.forEach(sensor => {
         this.sensorData.push({
           title: sensor.title,
-          value: sensor._id
+          value: sensor._id + "," + sensor.unit
         });
       });
     })
@@ -68,6 +69,7 @@ export class GraphsPage {
       this.addSenseboxDataToChart()
     } else {
       if (this.api.getGraphBoxId() != '') {
+        this.loadSensorDropDown();
         if(this.sensorChart.data.datasets.length >1){
           this.sensorChart.data.datasets.pop();
           this.sensorChart.update();
@@ -81,6 +83,9 @@ export class GraphsPage {
     if (this.api.getGraphBoxId() === '') {
       return;
     };
+    if (this.sensorChart) {
+      this.sensorChart.destroy();
+    }
     this.api.getGraphSenseboxData().subscribe(data => {
       let sensorarray: any = data;
       let sensorData = [];
@@ -89,7 +94,7 @@ export class GraphsPage {
           if (dropDownSensor.title === sensor.title) {
             sensorData.push({
               title: sensor.title,
-              value: dropDownSensor.value + "," + sensor.unit + ',' + sensor._id
+              value: dropDownSensor.value + ',' + sensor._id
             })
           }
         })
@@ -112,24 +117,34 @@ export class GraphsPage {
         if (this.sensorChart) {
           this.sensorChart.destroy();
         }
-        let canvas = ctx.getContext("2d");
-        canvas.font = "20px Ionicons";
-        canvas.fillStyle = "red";
-        canvas.textAlign = "justify";
-        canvas.fillText("No data available.", 10, 50);
+        let alert = this.alertCtrl.create({
+          title: 'No Data available',
+          subTitle: 'For the selected box is no data available for this sensor.',
+          buttons: ['Dismiss']
+        });
+        alert.present();
         return;
       }
       let splittedArray = this.splitIntoDaysArray(sensorDataArray);
       this.chartData = this.getMinAndMax(splittedArray[0]);
       let chartLabel = splittedArray[1];
       this.createChart(chartLabel, this.chartData, ctx);
-      if (this.api.getGraphBoxId() != '') {
+      if (this.api.getGraphBoxId() != '' && graphSensorId) {
         this.api.getGraphSensorData(graphSensorId).subscribe(sensorData => {
           let sensorsArray: any = sensorData;
+          if (sensorsArray.length < 1) {
+            let alert = this.alertCtrl.create({
+              title: 'No Data available',
+              subTitle: 'For the selected box is no data available for this sensor.',
+              buttons: ['Dismiss']
+            });
+            alert.present();
+            return;
+          }
           let splittedBoxArray = this.splitIntoDaysArray(sensorsArray);
           let chartBoxData: any = this.getMinAndMax(splittedBoxArray[0]);
           this.sensorChart.data.datasets.push({
-            label: "Data in " + this.unit + " of " + graphSensorId,
+            label: "Data in " + this.unit + " of compared Box",
             data: chartBoxData,
             backgroundColor: [
               'rgba(1, 177, 215, 0.5)'
@@ -155,7 +170,7 @@ export class GraphsPage {
       data: {
         labels: chartLabel,
         datasets: [{
-          label: "Data in " + this.unit,
+          label: "Data in " + this.unit + " of prefered box",
           data: chartData,
           backgroundColor: [
             'rgba(78, 175, 71, 0.5)'

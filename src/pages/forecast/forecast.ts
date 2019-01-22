@@ -27,16 +27,13 @@ export class ForecastPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ForecastPage');
+    this.checkName();
 
   }
 
   checkName() {
- 
-      let data = {
-          name: this.name
-      };
 
-      this.http.get('http://localhost:8080/checkname/' + this.name).subscribe(response => {
+      this.http.get('http://localhost:8080/forecast').subscribe(response => {
           console.log('GET Response:', response);
           this.item = response;
       });

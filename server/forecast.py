@@ -1,46 +1,10 @@
-##import sys, json
-##
-##def read_in():
-##    lines = sys.stdin.readlines()
-##    return json.loads(lines[0])
-##
-##def main():
-##
-##    lines = read_in()
-##
-####    # Sum  of all the items in the providen array
-####    for item in lines:
-####        for k,v in item.items():
-####            y = k.encode('utf-8')
-####            print type(y),y, "=>", type(v), v
-##
-####    for item in lines:
-####        print item.keys()
-####    x = item.keys()
-####    print type(x[0])
-####    print x
-##
-##    index = 1
-##    for item in lines:
-##        for key in sorted(item.iterkeys()):
-##        #if(index > 770 and index < 780):
-##            y = key.encode('utf-8')
-##            print type(y),y, "=>", type(item[key]), item[key]
-##        #index = index+1
-##        print len(item)
-##
-### Start process
-##if __name__ == '__main__':
-##    main()
-
-
-
-from pandas import Series
+import sys, json
 from statsmodels.tsa.arima_model import ARIMA
-from sklearn.metrics import mean_squared_error
-from math import sqrt
-import numpy as np #delete it when finish the example
-import sys #to get argument from js
+import numpy as np 
+
+def read_in():
+   	lines = sys.stdin.readlines()
+   	return json.loads(lines[0])
 
 def predict(coef, history):
 	yhat = 0.0
@@ -48,24 +12,56 @@ def predict(coef, history):
 		yhat += coef[i-1] * history[-i]
 	return yhat
 
-t9am=np.array(
-[[9.954666667, 10.89683333,13.61566667,8.7342,5.49804878,10.94830508,12.243,8.517966102,8.464,6.565833333], 
-[12.61466667,12.78811321,14.63516667,16.52516667,7.829761905,12.39824561,12.52733333,10.2945,12.08466667,8.913],
-[12.62853659,11.192,13.754,13.31041667,9.869636364,8.174259259,12.42616667,12.12146341,9.7775,10.05483333,6.707]])
+def main():
 
-i=0
-while(i<3): 
-	size = len(t9am[i])
-	train = t9am[i][0:size]
-	history = [x for x in train]
-	predictions = list()
-	for t in range(1):
-		model = ARIMA(history, order=(1,0,0))
-		model_fit = model.fit(trend='nc', disp=False)
-		ar_coef = model_fit.arparams
-		yhat = predict(ar_coef, history)
-		predictions.append(yhat)
-		obs = yhat
-		history.append(obs)
-		print('>predicted=%.3f' % (yhat))
-	i=i+1
+	lines = read_in()
+
+   # Sum  of all the items in the providen array
+   	value_dic = lines[0]
+	t9Clock = []
+	t12Clock = []
+	t15Clock = []
+
+	for k,v in sorted(value_dic.items()):
+		y = k.encode('utf-8')
+		
+		if(y[11:13]=="09"):
+			t9Clock.append(v)
+			#print "date ",y, "=>value:", v
+		elif (y[11:13]=="12"):
+			t12Clock.append(v)
+		elif (y[11:13]=="15"):
+			t15Clock.append(v)
+			#print "date ",y, "=>value:", v
+			
+
+	temp_array=np.array([t9Clock, t12Clock, t15Clock])
+
+	i=0
+	while(i<len(temp_array)): 
+		size = len(temp_array[i])
+		train = temp_array[i][0:size]
+		#print "l" , len(temp_array) , "size ",size, "=>train:", train
+		history = [x for x in train]
+		predictions = list()
+		for t in range(5):
+			model = ARIMA(history, order=(1,0,0))
+			model_fit = model.fit(trend='nc', disp=False)
+			ar_coef = model_fit.arparams
+			yhat = predict(ar_coef, history)
+			predictions.append(yhat)
+			obs = yhat
+			history.append(obs)
+			print('>predicted=%.3f' % (yhat))
+		i=i+1
+
+
+
+
+
+
+
+
+# Start process
+if __name__ == '__main__':
+   main()

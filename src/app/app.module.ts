@@ -56,10 +56,8 @@ import {IntroductionPage} from "../pages/introduction/introduction";
     HomePage,
     LeafletPage,
     RadarMapPage,
-
-    LandingPage
-
-    IntroductionPage
+    LandingPage,
+    IntroductionPage,
 
   ],
   providers: [

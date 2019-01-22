@@ -35,12 +35,15 @@ export class ApiProvider {
     return this.http.get(this.API_URL + "/" + this.boxId);
   }
 
+  getSenseboxDataFromId(boxId) {
+    return this.http.get(this.API_URL + "/" + boxId);
+  }
+
   getSensorData(sensorId) {
     let today = new Date();
     let oneWeekAgo = new Date();
     oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
     let urlString = this.API_URL + "/:" + this.boxId + "/data/" + sensorId + "?from-date=" + oneWeekAgo.toISOString() + "&to-date=" + today.toISOString() + "&format=json";
-    console.log(urlString);
     return this.http.get(urlString);
 
   }

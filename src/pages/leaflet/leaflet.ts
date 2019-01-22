@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef,} from '@angular/core';
-import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, ViewController, AlertController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
@@ -25,7 +25,7 @@ export class LeafletPage {
   boxLayer: any;
   currentSenseBox: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private elementRef: ElementRef, public viewCtr: ViewController, private api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private elementRef: ElementRef, public viewCtr: ViewController, private api: ApiProvider, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -118,6 +118,12 @@ export class LeafletPage {
   safeBoxId(e) {
     let id = e.target.id.substring(2);
     this.api.setBoxId(id);
+    let alert = this.alertCtrl.create({
+      title: 'Box selected',
+      subTitle: 'The box was saved as preference',
+      buttons: ['Dismiss']
+    });
+    alert.present();
     //closes popover after preference is selected
     this.viewCtr.dismiss();
   };
@@ -125,6 +131,12 @@ export class LeafletPage {
   safeGraphBoxId(e) {
     let id = e.target.id.substring(7);
     this.api.setGraphBoxId(id);
+    let alert = this.alertCtrl.create({
+      title: 'Box selected',
+      subTitle: 'The box was saved to compare statistics on the analytics page',
+      buttons: ['Dismiss']
+    });
+    alert.present();
     //closes popover after preference is selected
     this.viewCtr.dismiss();
   };

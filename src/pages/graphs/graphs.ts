@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController, AlertController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
 import {LeafletPage} from '../leaflet/leaflet';
 import Chart from 'chart.js/dist/Chart.js';
@@ -25,7 +25,7 @@ export class GraphsPage {
   box: boolean;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider, public popoverCtrl: PopoverController,) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider, public popoverCtrl: PopoverController, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -55,10 +55,24 @@ export class GraphsPage {
 
   checkForSenseboxData(){
     if(this.box){ //check if this works!!
+      if (this.api.getGraphBoxId() === ''){
+        let alert = this.alertCtrl.create({
+          title: 'No Box selected',
+          subTitle: 'Please select a box on the map to be able to compare the data as graph ',
+          buttons: ['Dismiss']
+        });
+        alert.present();
+        this.box=false;
+        return;
+      }
       this.addSenseboxDataToChart()
     } else {
-      this.sensorChart.data.datasets.splice(0, 1);
-      this.sensorChart.update();
+      if (this.api.getGraphBoxId() != '') {
+        if(this.sensorChart.data.datasets.length >1){
+          this.sensorChart.data.datasets.pop();
+          this.sensorChart.update();
+        }
+      }
     }
   }
 
@@ -88,7 +102,7 @@ export class GraphsPage {
   populateChart(sensorValue) {
     let sensorId = sensorValue.split(",")[0];
     this.unit = sensorValue.split(",")[1];
-    let graphSensorId = sensorValue.split(",")[3];
+    let graphSensorId = sensorValue.split(",")[2];
     let data = this.api.getSensorData(sensorId);
     data.subscribe(sensorData => {
       let sensorDataArray: any = sensorData;

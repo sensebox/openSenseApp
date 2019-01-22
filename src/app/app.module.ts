@@ -3,7 +3,8 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { StatusBar } from '@ionic-native/status-bar';
-import { IonicStorageModule } from '@ionic/storage'
+import { IonicStorageModule } from '@ionic/storage';
+import { SocialSharing } from '@ionic-native/social-sharing';
 
 import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -11,8 +12,10 @@ import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
 import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
-import {RadarMapPage} from "../pages/radar-map/radar-map";
-import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+import { RadarMapPage} from "../pages/radar-map/radar-map";
+import { RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+import { HttpModule} from '@angular/http'; // Harini Push
+import { DataProvider} from '../providers/api/data'; // Harini Push
 
 @NgModule({
   declarations: [
@@ -25,7 +28,8 @@ import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
     IonicModule.forRoot(openSenseApp),
     IonicStorageModule.forRoot(),
     LeafletPageModule,
-    RadarMapPageModule
+    RadarMapPageModule,
+    HttpModule,
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -38,7 +42,10 @@ import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    ApiProvider
+    ApiProvider,
+    DataProvider,
+    IonicStorageModule,
+    SocialSharing
   ]
 })
 export class AppModule {}

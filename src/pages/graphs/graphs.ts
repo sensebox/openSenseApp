@@ -19,7 +19,6 @@ export class GraphsPage {
   sensorChart: any;
   statisticData: any;
   sensorData: any = [];
-  unit: any;
 
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider) {
@@ -35,16 +34,14 @@ export class GraphsPage {
       sensorarray.sensors.forEach(sensor => {
         this.sensorData.push({
           title: sensor.title,
-          value: sensor._id + "," +sensor.unit
+          value: sensor._id
         });
       });
     })
   }
 
   //populate chart based on the selected sensor
-  populateChart(sensorValue) {
-    let sensorId = sensorValue.split(",")[0];
-    this.unit = sensorValue.split(",")[1];
+  populateChart(sensorId) {
     let data = this.api.getSensorData(sensorId);
     data.subscribe(sensorData => {
       let sensorDataArray : any = sensorData;
@@ -73,13 +70,13 @@ export class GraphsPage {
         data: {
           labels: chartLabel,
           datasets: [{
-            label: "Graph shows sensor data in " + this.unit,
+            label: "Sensor Graph",
             data: chartData,
             backgroundColor: [
-              'rgba(78, 175, 71, 0.5)'
+              'rgba(255, 99, 132, 0.2)'
             ],
             borderColor: [
-              'rgba(78, 175, 71,1)'
+              'rgba(255,99,132,1)'
             ],
             borderWidth: 1
           }]
@@ -109,6 +106,7 @@ export class GraphsPage {
     let arrayForCreatedAtArrays = [];
     let createdAt = array[0].createdAt.split("T")[0];
     let labelArray = [];
+    console.log(createdAt);
     let tempArray = [];
     array.forEach((entry) => {
       if (entry.createdAt.split("T")[0] === createdAt) {
@@ -116,8 +114,8 @@ export class GraphsPage {
       } else {
         arrayForCreatedAtArrays.push(tempArray);
         tempArray = [];
-        labelArray.push(createdAt.substring(5));
-        labelArray.push(createdAt.substring(5));
+        labelArray.push(createdAt.substring(5) + " minValue");
+        labelArray.push(createdAt.substring(5) + " maxValue");
         createdAt = entry.createdAt.split("T")[0];
       }
     });

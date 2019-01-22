@@ -2,7 +2,12 @@ import { Component, ViewChild } from '@angular/core';
 import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+
+
+import { LandingPage } from '../pages/landing-page/landing-page';
+
 import { IntroductionPage } from '../pages/introduction/introduction';
+
 import { HomePage } from '../pages/home/home';
 
 @Component({
@@ -12,39 +17,25 @@ export class openSenseApp {
 
   @ViewChild(Nav) nav: Nav;
 
+
+  landingPage: any = LandingPage;
   rootPage:any = IntroductionPage;
   rootHome:any = HomePage;
 
-  pages: Array<{title: string, component: any}> = [
-    { title: 'Home', component: HomePage },
-   // { title: 'About', component: 'AboutPage' },
-    { title: 'senseBox', component: 'SenseBoxPage' },
-    { title: 'WeatherApp', component:'WeatherAppPage' },
+
+  pages: Array<{ title: string, component: any }> = [
+
+    { title: 'WeatherApp', component: LandingPage },
   ];
-  weatherPages: Array<{title: string, component: any}> = [
-
-    { title: 'WeatherApp', component:'WeatherAppPage' },
-    { title: 'Forecast', component:'ForecastPage' },
-    { title: 'Analytics', component:'GraphsPage' },
-
-   // { title: 'About', component:'AboutWeatherPage' },
-    //{ title: 'Introduction', component:'IntroductionPage'}
-
-    //{ title: 'Help', component:'HelpPage'},
-    { title: 'About', component:'AboutPage'},
-    { title: 'Settings', component:'SettingsPage'},
-   // { title: 'OpenSensePage', component: HomePage },
-
+  weatherPages: Array<{ title: string, component: any }> = [
+    { title:'Home', component: LandingPage},
+    { title: 'WeatherApp', component: 'WeatherAppPage' },
+    { title: 'Forecast', component: 'ForecastPage' },
+    { title: 'Analytics', component: 'GraphsPage' },
     { title: 'About', component: 'AboutPage' },
-
+    { title: 'Settings', component: 'SettingsPage' },
+    //{ title: 'Introduction', component:'IntroductionPage'},
     { title: 'Back', component: HomePage },
-
-
-
-
-
-
-
 
   ];
 
@@ -62,16 +53,17 @@ export class openSenseApp {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
-    if(page.component==="WeatherAppPage" || page.component==="ForecastPage" || page.component==="GraphsPage" ||
-      page.component==="AboutWeatherPage" || page.component === "AboutPage" || page.component === "SettingsPage" ||
-      page.component==="LandingPage" /*|| page.component==="IntroductionPage"*/){
-      document.getElementById('homeNavList').hidden=true;
-      document.getElementById('navList').hidden=false;
 
-    }else {
+    if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage"
+      || page.component === "AboutPage" || page.component === "SettingsPage" || page.component==LandingPage /*|| page.component==="IntroductionPage"*/) {
+      document.getElementById('homeNavList').hidden = true;
+      document.getElementById('navList').hidden = false;
 
-      document.getElementById('navList').hidden=true;
-      document.getElementById('homeNavList').hidden=false;
+
+    } else {
+
+      document.getElementById('navList').hidden = true;
+      document.getElementById('homeNavList').hidden = false;
     }
 
   }

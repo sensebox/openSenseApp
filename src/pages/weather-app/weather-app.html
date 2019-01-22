@@ -4,13 +4,16 @@
       <ion-icon name="menu"></ion-icon>
     </button>
     <!--<ion-title *ngIf="boxData">{{boxData.name}}</ion-title>-->
-    <ion-title >WeatherBox</ion-title>
-    <ion-buttons start>
+    <ion-title>WeatherBox</ion-title>
+
+    <ion-buttons end>
+      <button ion-button icon-only>
+        <ion-icon name="share"></ion-icon>
+      </button>
       <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
         <ion-icon name="umbrella"></ion-icon>
       </button>
-    </ion-buttons>
-    <ion-buttons end>
+
       <button ion-button (click)="presentPopover($event)" icon-only>
         <ion-icon name="locate"></ion-icon>
       </button>
@@ -19,21 +22,22 @@
 </ion-header>
 
 
-
 <ion-content class="card-background-page">
-  <ion-card  *ngIf="boxData">
+  <ion-card *ngIf="boxData">
     <img src="../../assets/imgs/raisingSun.jpg"/>
     <div class="card-title">{{boxData.name}}</div>
-<!--    <div class="card-subtitle"  *ngFor="let sensor of boxData.sensors" >
-      <p>{{sensor.lastMeasurement.value}}}</p></div>-->
+    <!--    <div class="card-subtitle"  *ngFor="let sensor of boxData.sensors" >
+          <p>{{sensor.lastMeasurement.value}}}</p></div>-->
 
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
 
+
   </ion-card>
   <!-- harini
+
     <ion-item>
       <ion-input [(ngModel)]="message" placeholder="enter message"></ion-input>
     </ion-item>
@@ -55,7 +59,7 @@
     <ion-list>
       <div ion-item *ngFor="let sensor of boxData.sensors">
         <h2>{{sensor.title}}</h2>
-        <p *ngIf="sensor.lastMeasurement!=undefined">{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
       </div>
     </ion-list>
   </div>

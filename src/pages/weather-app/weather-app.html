@@ -10,6 +10,7 @@
       <button ion-button icon-only>
         <ion-icon name="share"></ion-icon>
       </button>
+
       <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
         <ion-icon name="umbrella"></ion-icon>
       </button>
@@ -55,10 +56,9 @@
     <ion-list>
       <div ion-item *ngFor="let sensor of boxData.sensors">
         <h2>{{sensor.title}}</h2>
-        <p *ngIf="sensor.lastMeasurement!=undefined">{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
       </div>
     </ion-list>
   </div>
-
 
 </ion-content>

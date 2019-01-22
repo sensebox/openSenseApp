@@ -43,7 +43,8 @@ export class WeatherAppPage {
     this.api.getData().subscribe(res => {
       console.log(res);
       this.boxData = res;
-      console.log('Refresh was clicked');
+      console.log('doRefresh()');
+      this.refresh_data();
     });
 
     setTimeout(() => {
@@ -52,30 +53,26 @@ export class WeatherAppPage {
     }, 2000);
   }
 
-  refresh_data() {
-    this.api.getSenseboxData().subscribe(res => {
-      console.log(res);
-      this.boxData = res;
-      console.log('Refresh was clicked');
-    })
-  }
 
-  /*
-  auto update?
-  task = setInterval(() => {
-    this.refresh_data();
-  }, 1000000);
-  */
+refresh_data(){
+  this.api.getSenseboxData().subscribe(res => {
+    console.log(res);
+    this.boxData = res;
+  console.log('refresh_data()');
+  })
+}
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(LeafletPage, {}, { cssClass: 'custom_popover' });
-    popover.present({
-      ev: myEvent
-    });
-    popover.onDidDismiss(() => {
-      this.refresh_data();
-    })
-  }
+
+    presentPopover(myEvent){
+      let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
+      popover.present({
+        ev: myEvent
+      });
+      popover.onDidDismiss(() =>{
+        this.refresh_data();
+      })
+    }
+
 
   presentPopoverRadarMap(myEvent) {
     let popover = this.popoverCtrl.create(RadarMapPage, {}, { cssClass: 'custom_popover' });
@@ -84,14 +81,6 @@ export class WeatherAppPage {
     });
   }
 
-  refresh_click() {
-    console.log('Refresh was clicked');
-  }
-
-
-  search_click() {
-    console.log('Search was clicked');
-  }
 
 
 }

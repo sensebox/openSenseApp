@@ -41,7 +41,8 @@ export class WeatherAppPage {
     this.api.getSenseboxData().subscribe(res => {
       console.log(res);
       this.boxData = res;
-      console.log('Refresh was clicked');
+      console.log('doRefresh()');
+      this.refresh_data();
     });
 
     setTimeout(() => {
@@ -55,29 +56,26 @@ refresh_data(){
   this.api.getSenseboxData().subscribe(res => {
     console.log(res);
     this.boxData = res;
-  console.log('Refresh was clicked');
+  console.log('refresh_data()');
   })
 }
 
 
-  presentPopover(myEvent) {
-    let popover = this.popoverCtrl.create(LeafletPage, {}, { cssClass: 'custom_popover' });
-    popover.present({
-      ev: myEvent
-    });
-    popover.onDidDismiss(() => {
-      this.refresh_data();
-    })
-  }
+    presentPopover(myEvent){
+      let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
+      popover.present({
+        ev: myEvent
+      });
+      popover.onDidDismiss(() =>{
+        this.refresh_data();
+      })
+    }
+
 
   presentPopoverRadarMap(myEvent) {
     let popover = this.popoverCtrl.create(RadarMapPage, {}, { cssClass: 'custom_popover' });
     popover.present({
       ev: myEvent
     });
-  }
-
-  refresh_click() {
-    console.log('Refresh was clicked');
   }
 }

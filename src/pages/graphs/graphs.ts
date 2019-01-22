@@ -214,8 +214,8 @@ export class GraphsPage {
       } else {
         arrayForCreatedAtArrays.push(tempArray);
         tempArray = [];
-        labelArray.push(createdAt.substring(5) + " minValue");
-        labelArray.push(createdAt.substring(5) + " maxValue");
+        labelArray.unshift(createdAt.substring(5) + " min");
+        labelArray.unshift(createdAt.substring(5) + " max");
         createdAt = entry.createdAt.split("T")[0];
       }
     });
@@ -236,8 +236,8 @@ export class GraphsPage {
           maxValue = entry.value
         }
       });
-      chartData.push(minValue);
-      chartData.push(maxValue);
+      chartData.unshift(minValue);
+      chartData.unshift(maxValue);
       minValue = 200;
       maxValue = -200;
     });

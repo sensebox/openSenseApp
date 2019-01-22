@@ -4,12 +4,15 @@
       <ion-icon name="menu"></ion-icon>
     </button>
 
-    <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
-
     <ion-buttons end>
       <button ion-button icon-only>
         <ion-icon name="share"></ion-icon>
       </button>
+
+
+    <!--<ion-title *ngIf="boxData">{{boxData.name}}</ion-title>-->
+    <ion-title >WeatherBox</ion-title>
+    <ion-buttons start>
 
       <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
         <ion-icon name="umbrella"></ion-icon>
@@ -23,17 +26,23 @@
 </ion-header>
 
 
-<ion-content padding class="buttons-components-page">
-  
-  <!-- hide social sharing stub
-  <ion-card>
-    <ion-card-content>
-      Placeholder: Albert
-    </ion-card-content>
+
+
+<ion-content class="card-background-page">
+  <ion-card  *ngIf="boxData">
+    <img src="../../assets/imgs/raisingSun.jpg"/>
+    <div class="card-title">{{boxData.name}}</div>
+<!--    <div class="card-subtitle"  *ngFor="let sensor of boxData.sensors" >
+      <p>{{sensor.lastMeasurement.value}}}</p></div>-->
+
 
     <ion-refresher (ionRefresh)="doRefresh($event)">
       <ion-refresher-content></ion-refresher-content>
     </ion-refresher>
+
+
+  </ion-card>
+  <!-- harini
 
     <ion-item>
       <ion-input [(ngModel)]="message" placeholder="enter message"></ion-input>
@@ -60,5 +69,6 @@
       </div>
     </ion-list>
   </div>
+
 
 </ion-content>

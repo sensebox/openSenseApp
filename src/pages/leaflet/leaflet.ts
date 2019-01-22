@@ -1,5 +1,5 @@
 import {Component, ViewChild, ElementRef,} from '@angular/core';
-import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, ViewController, AlertController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
 import leaflet from 'leaflet';
 import 'leaflet-search';
@@ -25,7 +25,7 @@ export class LeafletPage {
   boxLayer: any;
   currentSenseBox: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, private elementRef: ElementRef, public viewCtr: ViewController, private api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, private elementRef: ElementRef, public viewCtr: ViewController, private api: ApiProvider, private alertCtrl: AlertController) {
   }
 
   ionViewDidLoad() {
@@ -118,6 +118,25 @@ export class LeafletPage {
   safeBoxId(e) {
     let id = e.target.id.substring(2);
     this.api.setBoxId(id);
+    let alert = this.alertCtrl.create({
+      title: 'Box selected',
+      subTitle: 'The box was saved as preference',
+      buttons: ['Ok']
+    });
+    alert.present();
+    //closes popover after preference is selected
+    this.viewCtr.dismiss();
+  };
+
+  safeGraphBoxId(e) {
+    let id = e.target.id.substring(7);
+    this.api.setGraphBoxId(id);
+    let alert = this.alertCtrl.create({
+      title: 'Box selected',
+      subTitle: 'The box was saved to compare statistics on the analytics page',
+      buttons: ['Ok']
+    });
+    alert.present();
     //closes popover after preference is selected
     this.viewCtr.dismiss();
   };
@@ -151,9 +170,9 @@ export class LeafletPage {
       this.boxLayer.bindPopup((layer) => {
         //check if the popup that opens is from the selected sensebox
         if (layer.feature.properties.id != this.api.getBoxId()) {
-          return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button></p>', layer.feature.properties);
+          return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button><br><b><button id="graphId{id}" name="pref" data-id={id} value="prf">Save for graph</button></p>', layer.feature.properties);
         } else {
-          return '<p><b>Box: </b>' + layer.feature.properties.name + '<br><b>Selectet sensebox </b></p>';
+          return '<p><b>Box: </b>' + layer.feature.properties.name + '<br><b>Selected sensebox </b></p>';
         }
       });
 
@@ -163,6 +182,8 @@ export class LeafletPage {
         if (e.layer.feature.properties.id != this.api.getBoxId()) {
           this.elementRef.nativeElement.querySelector('#id' + e.popup._source.feature.properties.id)
             .addEventListener('click', this.safeBoxId.bind(this));
+          this.elementRef.nativeElement.querySelector('#graphId' + e.popup._source.feature.properties.id)
+            .addEventListener('click', this.safeGraphBoxId.bind(this));
         }
       });
       this.changeMarkerColor('blue', '');

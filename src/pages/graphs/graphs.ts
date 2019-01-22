@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
-import {IonicPage, NavController, NavParams} from 'ionic-angular';
+import {IonicPage, NavController, NavParams, PopoverController} from 'ionic-angular';
 import {ApiProvider} from '../../providers/api/api';
-import chart from 'chart.js/dist/Chart.js';
+import {LeafletPage} from '../leaflet/leaflet';
+import Chart from 'chart.js/dist/Chart.js';
 
 /**
  * Generated class for the LeafletPage page.
@@ -20,24 +21,66 @@ export class GraphsPage {
   statisticData: any;
   sensorData: any = [];
   unit: any;
+  chartData: any = [];
+  box: boolean;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public api: ApiProvider, public popoverCtrl: PopoverController,) {
   }
 
   ionViewDidLoad() {
-    this.loadDropDown();
+    this.loadSensorDropDown();
   }
-  //populate drop down based on available sensors of the selected sensebox
-  loadDropDown() {
+
+  //leaflet popover for changing sensebox for graphs
+  presentPopover(myEvent) {
+    let popover = this.popoverCtrl.create(LeafletPage, {}, {cssClass: 'custom_popover'});
+    popover.present({
+      ev: myEvent
+    });
+  }
+
+  //populate sensor drop down based on available sensors of the selected sensebox
+  loadSensorDropDown() {
     this.api.getSenseboxData().subscribe(data => {
-      let sensorarray : any = data;
+      let sensorarray: any = data;
       sensorarray.sensors.forEach(sensor => {
         this.sensorData.push({
           title: sensor.title,
-          value: sensor._id + "," +sensor.unit
+          value: sensor._id + "," + sensor.unit
         });
       });
+    })
+  }
+
+  checkForSenseboxData(){
+    if(this.box){ //check if this works!!
+      this.addSenseboxDataToChart()
+    } else {
+      this.sensorChart.data.datasets.splice(0, 1);
+      this.sensorChart.update();
+    }
+  }
+
+  //populate drop down based on available sensors of the selected sensebox
+  addSenseboxDataToChart() {
+    if (this.api.getGraphBoxId() === '') {
+      return;
+    };
+    this.api.getGraphSenseboxData().subscribe(data => {
+      let sensorarray: any = data;
+      let sensorData = [];
+      sensorarray.sensors.forEach(sensor => {
+        this.sensorData.forEach((dropDownSensor, index, object) => {
+          if (dropDownSensor.title === sensor.title) {
+            sensorData.push({
+              title: sensor.title,
+              value: dropDownSensor.value + "," + sensor.unit + ',' + sensor._id
+            })
+          }
+        })
+      });
+      this.sensorData = sensorData;
     })
   }
 
@@ -45,13 +88,14 @@ export class GraphsPage {
   populateChart(sensorValue) {
     let sensorId = sensorValue.split(",")[0];
     this.unit = sensorValue.split(",")[1];
+    let graphSensorId = sensorValue.split(",")[3];
     let data = this.api.getSensorData(sensorId);
     data.subscribe(sensorData => {
-      let sensorDataArray : any = sensorData;
-      let ctx :any = document.getElementById("boxChart");
+      let sensorDataArray: any = sensorData;
+      let ctx: any = document.getElementById("boxChart");
       //if no data is available print a hint on screen
-      if(sensorDataArray.length<1){
-        if(this.sensorChart){
+      if (sensorDataArray.length < 1) {
+        if (this.sensorChart) {
           this.sensorChart.destroy();
         }
         let canvas = ctx.getContext("2d");
@@ -62,48 +106,72 @@ export class GraphsPage {
         return;
       }
       let splittedArray = this.splitIntoDaysArray(sensorDataArray);
-      let chartData = this.getMinAndMax(splittedArray[0]);
+      this.chartData = this.getMinAndMax(splittedArray[0]);
       let chartLabel = splittedArray[1];
-      if(this.sensorChart){
-        this.sensorChart.destroy();
-      }
-      //create chart
-      this.sensorChart = new chart(ctx, {
-        type: 'line',
-        data: {
-          labels: chartLabel,
-          datasets: [{
-            label: "Graph shows sensor data in " + this.unit,
-            data: chartData,
+      this.createChart(chartLabel, this.chartData, ctx);
+      if (this.api.getGraphBoxId() != '') {
+        this.api.getGraphSensorData(graphSensorId).subscribe(sensorData => {
+          let sensorsArray: any = sensorData;
+          let splittedBoxArray = this.splitIntoDaysArray(sensorsArray);
+          let chartBoxData: any = this.getMinAndMax(splittedBoxArray[0]);
+          this.sensorChart.data.datasets.push({
+            label: "Data in " + this.unit + " of " + graphSensorId,
+            data: chartBoxData,
             backgroundColor: [
-              'rgba(78, 175, 71, 0.5)'
+              'rgba(1, 177, 215, 0.5)'
             ],
             borderColor: [
-              'rgba(78, 175, 71,1)'
+              'rgba(1, 175, 215,1)'
             ],
             borderWidth: 1
-          }]
-        },
-        options: {
-          maintainAspectRatio: false,
-          scales: {
-            yAxes: [{
-              stacked: true,
-              gridLines: {
-                display: true,
-                color: "rgba(255,99,132,0.2)"
-              }
-            }],
-            xAxes: [{
-              gridLines: {
-                display: false
-              }
-            }]
-          }
-        }
-      });
+          });
+          this.sensorChart.update();
+        })
+      }
     });
   }
+
+  //create chart
+  createChart(chartLabel, chartData, ctx) {
+    if (this.sensorChart) {
+      this.sensorChart.destroy();
+    }
+    this.sensorChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: chartLabel,
+        datasets: [{
+          label: "Data in " + this.unit,
+          data: chartData,
+          backgroundColor: [
+            'rgba(78, 175, 71, 0.5)'
+          ],
+          borderColor: [
+            'rgba(78, 175, 71,1)'
+          ],
+          borderWidth: 1
+        }]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          yAxes: [{
+            stacked: true,
+            gridLines: {
+              display: true,
+              color: "rgba(255,99,132,0.2)"
+            }
+          }],
+          xAxes: [{
+            gridLines: {
+              display: false
+            }
+          }]
+        }
+      }
+    });
+  }
+
   //split the sensor data into data for each day, find min and max values for each day and create labals for data
   splitIntoDaysArray(array) {
     let arrayForCreatedAtArrays = [];
@@ -127,8 +195,8 @@ export class GraphsPage {
   // get min and max values of data arrays
   getMinAndMax(arrays) {
     let chartData = [];
-    let minValue = 55;
-    let maxValue = -50;
+    let minValue = 200;
+    let maxValue = -200;
     arrays.forEach(array => {
       array.forEach(entry => {
         if (entry.value < minValue) {
@@ -140,15 +208,9 @@ export class GraphsPage {
       });
       chartData.push(minValue);
       chartData.push(maxValue);
-      minValue = 55;
-      maxValue = -50;
+      minValue = 200;
+      maxValue = -200;
     });
-
     return chartData;
-
   }
-
-
 }
-
-

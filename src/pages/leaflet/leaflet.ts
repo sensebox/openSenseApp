@@ -122,6 +122,13 @@ export class LeafletPage {
     this.viewCtr.dismiss();
   };
 
+  safeGraphBoxId(e) {
+    let id = e.target.id.substring(7);
+    this.api.setGraphBoxId(id);
+    //closes popover after preference is selected
+    this.viewCtr.dismiss();
+  };
+
   // function to load the sensebox layer
   loadSenseboxLayer() {
     //create general icon
@@ -151,9 +158,9 @@ export class LeafletPage {
       this.boxLayer.bindPopup((layer) => {
         //check if the popup that opens is from the selected sensebox
         if (layer.feature.properties.id != this.api.getBoxId()) {
-          return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button></p>', layer.feature.properties);
+          return leaflet.Util.template('<p><b>Box Name : </b>{name}<br><b><button id="id{id}" name="pref" data-id={id} value="prf">Set as preference</button><br><b><button id="graphId{id}" name="pref" data-id={id} value="prf">Save for graph</button></p>', layer.feature.properties);
         } else {
-          return '<p><b>Box: </b>' + layer.feature.properties.name + '<br><b>Selectet sensebox </b></p>';
+          return '<p><b>Box: </b>' + layer.feature.properties.name + '<br><b>Selected sensebox </b></p>';
         }
       });
 
@@ -163,6 +170,8 @@ export class LeafletPage {
         if (e.layer.feature.properties.id != this.api.getBoxId()) {
           this.elementRef.nativeElement.querySelector('#id' + e.popup._source.feature.properties.id)
             .addEventListener('click', this.safeBoxId.bind(this));
+          this.elementRef.nativeElement.querySelector('#graphId' + e.popup._source.feature.properties.id)
+            .addEventListener('click', this.safeGraphBoxId.bind(this));
         }
       });
       this.changeMarkerColor('blue', '');

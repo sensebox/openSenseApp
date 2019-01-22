@@ -16,12 +16,10 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list>
-    <ion-item>
-      <ion-label>Compare with another Box</ion-label>
-      <ion-checkbox [(ngModel)]="box" (ionChange)="checkForSenseboxData()"></ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <ion-item>
+    <ion-label>Compare with another Box</ion-label>
+    <ion-checkbox [(ngModel)]="box" (ionChange)="checkForSenseboxData()"></ion-checkbox>
+  </ion-item>
   <ion-item>
     <ion-label>Sensor</ion-label>
     <ion-select id="dropDown" (ionChange)="this.populateChart(selectField.value);" #selectField>

@@ -3,6 +3,7 @@ import { Nav, Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 
+import { LandingPage } from '../pages/landing-page/landing-page';
 import { HomePage } from '../pages/home/home';
 
 @Component({
@@ -13,12 +14,14 @@ export class openSenseApp {
   @ViewChild(Nav) nav: Nav;
 
   rootPage: any = HomePage;
+  landingPage: any = LandingPage;
 
   pages: Array<{ title: string, component: any }> = [
     { title: 'Home', component: HomePage },
-    { title: 'WeatherApp', component: 'LandingPage' },
+    { title: 'WeatherApp', component: LandingPage },
   ];
   weatherPages: Array<{ title: string, component: any }> = [
+    { title:'Home', component: LandingPage},
     { title: 'WeatherApp', component: 'WeatherAppPage' },
     { title: 'Forecast', component: 'ForecastPage' },
     { title: 'Analytics', component: 'GraphsPage' },
@@ -42,7 +45,7 @@ export class openSenseApp {
     // we wouldn't want the back button to show in this scenario
     this.nav.setRoot(page.component);
     if (page.component === "WeatherAppPage" || page.component === "ForecastPage" || page.component === "GraphsPage"
-      || page.component === "AboutPage" || page.component === "SettingsPage" || page.component==="LandingPage") {
+      || page.component === "AboutPage" || page.component === "SettingsPage" || page.component==LandingPage) {
       document.getElementById('homeNavList').hidden = true;
       document.getElementById('navList').hidden = false;
 

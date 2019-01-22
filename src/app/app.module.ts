@@ -10,17 +10,24 @@ import { openSenseApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ApiProvider } from '../providers/api/api';
 import { HttpClientModule } from '@angular/common/http';
+
 import { LeafletPage } from '../pages/leaflet/leaflet';
 import { LeafletPageModule } from '../pages/leaflet/leaflet.module';
 
-import {RadarMapPage} from "../pages/radar-map/radar-map";
-import {RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+import { LandingPage } from '../pages/landing-page/landing-page'
+import { LandingPageModule } from '../pages/landing-page/landing-page.module';
+import { RadarMapPage} from "../pages/radar-map/radar-map";
+import { RadarMapPageModule} from "../pages/radar-map/radar-map.module";
+
+import { HttpModule} from '@angular/http'; 
+import { DataProvider} from '../providers/api/data'; 
+
+
+
 import {IntroductionPageModule} from "../pages/introduction/introduction.module";
 import {IntroductionPage} from "../pages/introduction/introduction";
 
 
-import { HttpModule} from '@angular/http'; // Harini Push
-import { DataProvider} from '../providers/api/data'; // Harini Push
 
 
 @NgModule({
@@ -40,6 +47,8 @@ import { DataProvider} from '../providers/api/data'; // Harini Push
 
     HttpModule,
 
+    LandingPageModule,
+
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -47,7 +56,11 @@ import { DataProvider} from '../providers/api/data'; // Harini Push
     HomePage,
     LeafletPage,
     RadarMapPage,
+
+    LandingPage
+
     IntroductionPage
+
   ],
   providers: [
     StatusBar,

@@ -36,8 +36,6 @@ export class WeatherAppPage {
     this.refresh_data();
   }
 
-
-
   doRefresh(refresher) {
     console.log('Begin async operation', refresher);
     this.api.getData().subscribe(res => {
@@ -80,7 +78,5 @@ refresh_data(){
       ev: myEvent
     });
   }
-
-
 
 }

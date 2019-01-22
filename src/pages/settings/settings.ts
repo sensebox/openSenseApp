@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
-import { HomePage } from '../home/home';
+import { LandingPage } from '../landing-page/landing-page';
 import { Storage } from '@ionic/storage';
 
 
@@ -39,7 +39,6 @@ export class SettingsPage {
 
 }
 
-
 ionViewDidLoad(){
   console.log('ionViewDidLoad SettingsPage');
 }
@@ -52,6 +51,6 @@ saveForm(){
 
   }
   this.Storage.set('location', JSON.stringify(location));
-  this.navCtrl.push(HomePage);
+  this.navCtrl.push(LandingPage);
   }
 } 

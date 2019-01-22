@@ -47,7 +47,7 @@ export class GraphsPage {
       sensorarray.sensors.forEach(sensor => {
         this.sensorData.push({
           title: sensor.title,
-          value: sensor._id + "," + sensor.unit
+          value: sensor._id
         });
       });
     })
@@ -177,6 +177,7 @@ export class GraphsPage {
     let arrayForCreatedAtArrays = [];
     let createdAt = array[0].createdAt.split("T")[0];
     let labelArray = [];
+    console.log(createdAt);
     let tempArray = [];
     array.forEach((entry) => {
       if (entry.createdAt.split("T")[0] === createdAt) {
@@ -184,8 +185,8 @@ export class GraphsPage {
       } else {
         arrayForCreatedAtArrays.push(tempArray);
         tempArray = [];
-        labelArray.push(createdAt.substring(5));
-        labelArray.push(createdAt.substring(5));
+        labelArray.push(createdAt.substring(5) + " minValue");
+        labelArray.push(createdAt.substring(5) + " maxValue");
         createdAt = entry.createdAt.split("T")[0];
       }
     });

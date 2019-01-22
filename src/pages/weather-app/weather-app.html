@@ -49,11 +49,13 @@
       <button ion-button full click (click)="share()">share</button> </ion-item>
   </ion-card>
 
-  <div *ngIf="boxData">
-    <ion-list>
-      <div ion-item *ngFor="let sensor of boxData.sensors">
-        <h2>{{sensor.title}}</h2>
-        <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+      <div *ngIf="boxData">
+        <ion-list>
+          <div ion-item *ngFor="let sensor of boxData.sensors">
+            <h2>{{sensor.title}}</h2>
+            <p *ngIf="sensor.lastMeasurement!=undefined">{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+          </div>
+        </ion-list>
       </div>
     </ion-list>
   </div>

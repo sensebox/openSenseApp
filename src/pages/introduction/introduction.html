@@ -1,0 +1,65 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>WeatherBox</ion-title>
+  </ion-navbar>
+</ion-header>
+<ion-content>
+  <ion-slides pager (ionSlideDidChange)="slideChanged()" (ionSlideDrag)="slideMoved()">
+    <ion-slide>
+      <div class="diag" style="background: url('assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction"  name="locate" color="primary" ></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Location</h2>
+        <p class="paragraph">Find the sensebox you're looking for or select the closest one.</p>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="diag" style="background: url('assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction"  name="umbrella" color="primary" ></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Rain Radar</h2>
+        <p class="paragraph">Always stay dry with the radar map.</p>
+      </div>
+    </ion-slide>
+
+    <ion-slide>
+      <div class="diag" style="background: url('assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction"  name="calendar" color="primary" ></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Forecast</h2>
+        <p class="paragraph">Future weather prediction. </p>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="diag" style="background: url('assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction" ios="ios-analytics" md="md-analytics" color="primary" ></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Analytics</h2>
+        <p class="paragraph">Look at the change over the last few days.</p>
+      </div>
+    </ion-slide>
+   <ion-slide>
+      <div class="diag" style="background: url('../assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction" name="information-circle" color="primary"></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Information</h2>
+        <p class="paragraph">All about the app and frequently asked questions.</p>
+      </div>
+    </ion-slide>
+    <ion-slide>
+      <div class="diag" style="background: url('../assets/imgs/whitebg.svg') no-repeat">
+        <ion-icon class="iconIntroduction" ios="ios-happy" md="md-happy" color="primary" ></ion-icon>
+      </div>
+      <div>
+        <h2 class="h2">Thanks!</h2>
+        <p class="paragraph">Thank you for choosing us. Enjoy the app.</p>
+      </div>
+    </ion-slide>
+  </ion-slides>
+  <button (click)="skip()" id="skip">{{ skipMsg }}</button>
+</ion-content>

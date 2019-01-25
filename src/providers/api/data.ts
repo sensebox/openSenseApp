@@ -10,17 +10,8 @@ import 'rxjs/add/operator/map'
 @Injectable()
 export class DataProvider {
   lists: any = [
-    {itemName: 'APP',
+    {itemName: 'Metadata',
     size: 'weather app',
-  },
-    {itemName: 'VERSION',
-    size: '1.0.0'
-  },
-    {itemName: ' DESCRIPTION',
-    size: 'This weather app is the mobile application supportig the major iphone and android platform. Equipped with location based technology to detect user locality, the application can automatically display the latest weather forecast for cities '
-  },
-    {itemName: 'FAQ',
-    size: ' how do I manage my notifications?'
   },
   ];
 

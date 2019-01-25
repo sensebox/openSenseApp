@@ -15,13 +15,51 @@
 
 
 <ion-content padding>
-  <p>
-    These apps were made at IfGI 2018.
-  </p>
 
-  <ul>
-    <li>Institut für Geoinformatik</li>
-    <li>Heisenbergstr. 2</li>
-    <li>48149 Münster</li>
-  </ul>
+  <ion-list>
+
+    <ion-item class="logo">
+      <ion-icon name="logo-github"></ion-icon>
+      <a href="https://github.com/Albertios/openSenseApp" id="git_link">Albertios/openSenseApp</a>
+      <br><br>
+      <div style="font-size: 80%">Credits:</div>
+      <a href="https://github.com/hariniravi1102" class="credit">Harini Ravi</a>
+      <br>
+      <a href="https://github.com/SarahLechler" class="credit">Sarah Lechler</a>
+      <br>
+      <a href="https://github.com/Albertios" class="credit">Albert Hamzin</a>
+      <br>
+      <a href="https://github.com/YouQam" class="credit">Yousef Qamaz</a>
+      <br>
+      <a href="https://github.com/SHoltkamp" class="credit">Sebastian Holtkamp</a>
+    </ion-item>
+
+    <ion-item class="logo">
+      <br>
+      <div style="font-size: 80%">In Cooperation with: </div>
+      
+      <a href="https://reedu.de/" class="further_link">
+        <img class="link_logo" src="../../assets/icon/logo_red_reedu.svg" style="height:50px; width:50px">
+        <b>re:</b>edu</a>
+      <br>
+      <a href="https://sensebox.de/" class="further_link">
+        <img class="link_logo" src="../../assets/icon/sensebox_logo.svg" style="height:50px; width:50px">
+        senseBox</a>
+      <br>
+      <a href="https://www.uni-muenster.de/Geoinformatics/" class="further_link">
+        <img class="link_logo" src="../../assets/icon/logo-ifgi-text-de.png" style="height:60px; width:50px">
+        Institute for Geoinformatics</a>
+      <br>
+    </ion-item>
+
+  </ion-list>
+
+  <!--
+  <ion-list>
+    <button clear ion-item *ngFor="let aboutlist of  aboutlists" (click)="itemClicked(aboutlist)">
+      {{aboutlist.itemName}}
+    </button>
+  </ion-list>
+-->
+
 </ion-content>

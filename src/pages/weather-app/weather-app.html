@@ -3,51 +3,64 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title *ngIf="boxData">{{boxData.name}}</ion-title>
-    <ion-buttons start>
-      <button ion-button (click)="locate_click()" icon-only>
-        <ion-icon name="locate"></ion-icon>
-      </button>
-    </ion-buttons>
+    <!--<ion-title *ngIf="boxData">{{boxData.name}}</ion-title>-->
+    <ion-title>WeatherBox</ion-title>
+
     <ion-buttons end>
-      <button ion-button (click)="presentPopoverChart($event)" icon-only>
-        <ion-icon name="stats"></ion-icon>
+      <button ion-button icon-only>
+        <ion-icon name="share"></ion-icon>
       </button>
-    </ion-buttons>
-    <ion-buttons end>
+      <button ion-button (click)="presentPopoverRadarMap($event)" icon-only>
+        <ion-icon name="umbrella"></ion-icon>
+      </button>
+
       <button ion-button (click)="presentPopover($event)" icon-only>
-        <ion-icon name="search"></ion-icon>
+        <ion-icon name="locate"></ion-icon>
       </button>
     </ion-buttons>
   </ion-navbar>
 </ion-header>
 
 
-<ion-content padding class="buttons-components-page">
-  <ion-card>
-    <ion-card-content>
-      <!--  <ion-img src="https://api.sat24.com/animated/DE/rainTMC/3/Central%20European%20Standard%20Time/9553668"></ion-img>
-         <img src="https://api.sat24.com/animated/EU/rainTMC/3/Central%20European%20Standard%20Time/5384757 " /> -->
-       <img src="{{api.sat24Url}}">
-    </ion-card-content>
-
-       <ion-refresher (ionRefresh)="doRefresh($event)">
-         <ion-refresher-content></ion-refresher-content>
-       </ion-refresher>
+<ion-content class="card-background-page">
+  <ion-card *ngIf="boxData">
+    <img src="../../assets/imgs/raisingSun.jpg"/>
+    <div class="card-title">{{boxData.name}}</div>
+    <!--    <div class="card-subtitle"  *ngFor="let sensor of boxData.sensors" >
+          <p>{{sensor.lastMeasurement.value}}}</p></div>-->
 
 
-       <ion-item>
-         <button ion-button > <ion-icon name="share"></ion-icon> </button>
-       </ion-item>
-     </ion-card>
+    <ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
 
-     <div *ngIf="boxData">
-       <ion-list>
-         <div ion-item *ngFor="let sensor of boxData.sensors">
-           <h2>{{sensor.title}}</h2>
-           <p>{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
-         </div>
-       </ion-list>
-     </div>
 
-    </ion-content>
+  </ion-card>
+  <!-- harini
+
+    <ion-item>
+      <ion-input [(ngModel)]="message" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="file" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="link" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-input [(ngModel)]="subject" placeholder="enter message"></ion-input>
+    </ion-item>
+    <ion-item>
+      <button ion-button full click (click)="share()">share</button> </ion-item>
+  </ion-card>
+-->
+
+  <div *ngIf="boxData">
+    <ion-list>
+      <div ion-item *ngFor="let sensor of boxData.sensors">
+        <h2>{{sensor.title}}</h2>
+        <p *ngIf="sensor.lastMeasurement!=undefined">{{sensor.lastMeasurement.value}} &nbsp; {{sensor.unit}}</p>
+      </div>
+    </ion-list>
+  </div>
+</ion-content>

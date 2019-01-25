@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import {IonicPage, NavController, NavParams, ViewController} from 'ionic-angular';
 import { map } from 'rxjs/operators';
 // import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
+import {ApiProvider} from '../../providers/api/api';
 
 /**
  * Generated class for the ForecastPage page.
@@ -21,8 +22,9 @@ export class ForecastPage {
   name: string;
   item: any;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public http: HttpClient, private api: ApiProvider) {
     console.log('Hello ApiProvider Provider');
+    console.log("Yousef the id you are looking for: "+this.api.getBoxId());
   }
 
   ionViewDidLoad() {

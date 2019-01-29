@@ -15,35 +15,33 @@ def predict(coef, history):
 
 def main():
 
-	#print("1111")
+	#getting data from server
 	lines = read_in()
 
-   # Sum  of all the items in the providen array
    	value_dic = lines[0]
 	t9Clock = []
 	t12Clock = []
 	t15Clock = []
 
+	#storing the temprature measurements for three times (9:00, 12:00 and 15:00)
 	for k,v in sorted(value_dic.items()):
 		y = k.encode('utf-8')
 		
 		if(y[11:13]=="09"):
 			t9Clock.append(v)
-			#print "date ",y, "=>value:", v
 		elif (y[11:13]=="12"):
 			t12Clock.append(v)
 		elif (y[11:13]=="15"):
 			t15Clock.append(v)
-			#print "date ",y, "=>value:", v
 			
 
 	temp_array=np.array([t9Clock, t12Clock, t15Clock])
 
+	#apply the arima model to get the presdicted values
 	i=0
 	while(i<len(temp_array)): 
 		size = len(temp_array[i])
 		train = temp_array[i][0:size]
-		#print "l" , len(temp_array) , "size ",size, "=>train:", train
 		history = [x for x in train]
 		predictions = list()
 		for t in range(5):
@@ -56,13 +54,6 @@ def main():
 			history.append(obs)
 			print('>predicted=%.3f °C' % (yhat))
 		i=i+1
-
-
-
-
-
-
-
 
 # Start process
 if __name__ == '__main__':

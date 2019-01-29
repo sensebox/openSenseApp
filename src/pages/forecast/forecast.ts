@@ -29,20 +29,19 @@ export class ForecastPage {
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad ForecastPage');
-    //this.checkName();
     let headers = new Headers();
     headers.append('Content-Type', 'application/json')
 
+    //selected boxID
     let body = {
       BoxId: this.api.getBoxId()
     };
-
+    
+    //http request to get forcast result from server for the specified boxID
     this.http.post('http://localhost:8080/forecast/', JSON.stringify(body), {headers: headers})
     .map(res => res.json())
     .subscribe(data => {
       this.item = data;
-      //console.log((this.item))
-      //console.log(Object.keys(this.item).length);
     });
   }
 }
